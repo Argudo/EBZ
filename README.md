@@ -1,4 +1,4 @@
-# EBZ - Sistema de banca online 🏛
+# EBZ - Sistema de banca online
 ## Herramientas 🛠
 + Visual Studio Code
 ## Autores 👨‍💻
