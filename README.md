@@ -1,7 +1,7 @@
-# EBZ - Sistema de banca online
-## Herramientas
+# EBZ - Sistema de banca online 🏛
+## Herramientas 🛠
 + Visual Studio Code
-## Autores
+## Autores 👨‍💻
 + José Luis Argudo Garrido
 + Pedro José García Romera
 + Manuel Pérez Ruiz
