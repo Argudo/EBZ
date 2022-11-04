@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.Component"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.Icon"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.VaadinIcon"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H1"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.VerticalLayout"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H2"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Image"/>
+</qualifiedTypeNameHistroy>
