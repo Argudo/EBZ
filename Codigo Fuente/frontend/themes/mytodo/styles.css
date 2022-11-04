@@ -1,1 +1,9 @@
 @import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
+
+.navBarColor{
+    background-color: #051517;
+}
+
+.opacity{
+	opacity: 0.2;
+}

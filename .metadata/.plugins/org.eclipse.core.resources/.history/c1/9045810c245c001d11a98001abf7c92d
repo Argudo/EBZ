@@ -1,0 +1,59 @@
+package com.example.application.views.main;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+
+@PageTitle("Main")
+@Route(value = "")
+public class MainView extends VerticalLayout {
+
+    private TextField name;
+    private Button sayHello;
+
+    public MainView() {
+        name = new TextField("Your name");
+        sayHello = new Button("Say hello");
+        sayHello.addClickListener(e -> {
+            Notification.show("Hello " + name.getValue());
+        });
+        sayHello.addClickShortcut(Key.ENTER);
+
+        setMargin(true);
+
+        Component cHeader = CreateHeader();
+
+        add(cHeader);
+        add(name, sayHello);
+    }
+    
+    private Component CreateHeader() {
+    	HorizontalLayout cLayout = new HorizontalLayout();
+    	
+    	
+    	cLayout.setId("header");
+    	cLayout.setWidthFull();
+    	cLayout.getThemeList().set("light", true);
+        cLayout.setSpacing(true);
+        cLayout.setAlignItems(FlexComponent.Alignment.END);
+        cLayout.setHeight("15vh");
+    	
+        Icon vaadinIcon = new Icon(VaadinIcon.PHONE);
+        H1 hTitle = new H1("EBZ");
+        
+        cLayout.add(vaadinIcon);
+        cLayout.add(hTitle);
+        
+        return cLayout;
+    }
+}
