@@ -3,11 +3,13 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.Component"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.Icon"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.VaadinIcon"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H1"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.VerticalLayout"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H2"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Image"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H4"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Paragraph"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode"/>
 </qualifiedTypeNameHistroy>

@@ -5,11 +5,16 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
+import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -26,6 +31,7 @@ public class MainView extends VerticalLayout {
     public MainView() {
         setMargin(false);
         setPadding(false);
+        setSpacing(false);
 
         Component cHeader = CreateHeader();
         
@@ -34,12 +40,34 @@ public class MainView extends VerticalLayout {
         vlMain.setPadding(false);
         vlMain.setMargin(false);
         
-        Image imgBanner = new Image("images/banner.jpg", "Banner");
+        //Banner section
+        Image imgBanner = new Image("images/banner2.jpg", "Banner");
         imgBanner.setWidth("100%");
-        imgBanner.setHeight("70vh");
-        imgBanner.setClassName("opacity");
+        imgBanner.setHeight("40vh");
+        imgBanner.setClassName("banner");
+        //End Banner section
+        
+        //Functionalities section
+        FlexLayout flFunctionalities = new FlexLayout();
+        flFunctionalities.setWidthFull();
+        flFunctionalities.setFlexDirection(FlexDirection.ROW);
+        flFunctionalities.setFlexWrap(FlexWrap.WRAP);
+        flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
+        Component cTarjeta = CreateFunctionality("Tarjetas", "icons/tarjetas.svg", "Crédito, débito y prepago");
+        Component cEstadisticas = CreateFunctionality("Estadísticas", "icons/estadisticas.svg", "Ingresos, gastos y cuentas");
+        Component cDomiciliacion = CreateFunctionality("Domiciliación", "icons/domicialicion.svg", "Información sobre tus gastos periódicos");
+        Component cTransferencias = CreateFunctionality("Transferencias", "icons/transferencias.svg", "Reciba y ejecute transferencias");
+        flFunctionalities.add(
+        		cTarjeta,
+        		cEstadisticas,
+        		cDomiciliacion,
+        		cTransferencias
+        		);
+        //End functionalities section
         
         vlMain.add(imgBanner);
+        vlMain.add(flFunctionalities);
+        
         add(cHeader);
         add(vlMain);
        
@@ -69,6 +97,7 @@ public class MainView extends VerticalLayout {
         
         hlBrand.add(imgLogo);
         hlLogIn.add(btnLogIn);
+        
         hLayout.add(
         		hlBrand,
         		hlLogIn
@@ -78,5 +107,25 @@ public class MainView extends VerticalLayout {
         hlLogIn.setAlignItems(FlexComponent.Alignment.CENTER);
         
         return hLayout;
+    }
+    
+    private Component CreateFunctionality(String sName, String sURL, String sDescription) {
+    	VerticalLayout vlMain = new VerticalLayout();
+    	vlMain.setAlignItems(FlexComponent.Alignment.CENTER);
+    	vlMain.setSpacing(false);
+    	vlMain.setWidth("min-width");
+    	
+    	Image imgIcon = new Image(sURL, "Icono " + sName);
+    	H4 hTitle = new H4(sName);
+    	Paragraph pDescription = new Paragraph(sDescription);
+    	
+    	
+    	vlMain.add(
+    			imgIcon,
+    			hTitle,
+    			pDescription
+    			);
+    	
+    	return vlMain;
     }
 }
