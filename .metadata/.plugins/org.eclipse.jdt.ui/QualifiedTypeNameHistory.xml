@@ -6,10 +6,17 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H1"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.VerticalLayout"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H2"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Image"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H4"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Paragraph"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.charts.model.Responsive"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Hr"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.PasswordField"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H3"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment"/>
 </qualifiedTypeNameHistroy>
