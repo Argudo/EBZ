@@ -1,4 +1,4 @@
-package com.example.application.views.main;
+package es.uca.iw.ebz.views.main;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;

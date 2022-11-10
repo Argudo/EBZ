@@ -1,4 +1,4 @@
-package com.example.application;
+package es.uca.iw.ebz;
 
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
@@ -15,8 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-@Theme(value = "mytodo")
-@PWA(name = "My Todo", shortName = "My Todo", offlineResources = {})
+@Theme(value = "ebz")
+@PWA(name = "ebz", shortName = "ebz", offlineResources = {})
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class Application implements AppShellConfigurator {
 
