@@ -1,6 +1,7 @@
 package es.uca.iw.ebz.views.main;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
@@ -18,7 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @PageTitle("Home")
-@Route(value = "home")
+@Route(value = "home", layout = MainLayout.class)
 
 public class HomeView extends VerticalLayout{
 	 private TextField name;
@@ -28,8 +29,6 @@ public class HomeView extends VerticalLayout{
 	        setMargin(false);
 	        setPadding(false);
 	        setSpacing(false);
-
-	        Component cHeader = CreateHeader();
 	        
 	        VerticalLayout vlMain = new VerticalLayout();
 	        vlMain.setWidthFull();
@@ -64,45 +63,8 @@ public class HomeView extends VerticalLayout{
 	        vlMain.add(imgBanner);
 	        vlMain.add(flFunctionalities);
 	        
-	        add(cHeader);
 	        add(vlMain);
 	       
-	    }
-	    
-	    private static Component CreateHeader() {
-	    	HorizontalLayout hLayout = new HorizontalLayout();
-	    	HorizontalLayout hlBrand = new HorizontalLayout();
-	    	HorizontalLayout hlLogIn = new HorizontalLayout();
-	    	
-	    	
-	    	hLayout.setId("header");
-	    	hLayout.setWidthFull();
-	    	hLayout.getThemeList().set("dark", true);
-	        hLayout.setSpacing(true);
-	        hLayout.setPadding(true);
-	        hLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-	        hLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-	        hLayout.setHeight("10vh");
-	        hLayout.setClassName("navBarColor");
-	    	
-	        Icon vaadinIcon = new Icon(VaadinIcon.PHONE);
-	        Image imgLogo = new Image("images/brand.png", "Logo");
-	        imgLogo.setMaxHeight("10vh");
-	        imgLogo.setWidth("18vh");
-	        Button btnLogIn = new Button("Iniciar Sesión");
-	        
-	        hlBrand.add(imgLogo);
-	        hlLogIn.add(btnLogIn);
-	        
-	        hLayout.add(
-	        		hlBrand,
-	        		hlLogIn
-	        		);
-	        
-	        hlBrand.setAlignItems(FlexComponent.Alignment.CENTER);
-	        hlLogIn.setAlignItems(FlexComponent.Alignment.CENTER);
-	        
-	        return hLayout;
 	    }
 	    
 	    private Component CreateFunctionality(String sName, String sURL, String sDescription) {
