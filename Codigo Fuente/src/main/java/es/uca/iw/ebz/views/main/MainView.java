@@ -24,6 +24,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import cliente.Cliente;
+import cliente.ClienteService;
+
 @PageTitle("Inicio Sesión")
 @Route(value = "")
 
@@ -33,6 +36,9 @@ public class MainView extends VerticalLayout {
     private Button sayHello;
 
     public MainView() {
+    	Cliente c = new Cliente();
+    	ClienteService servCliente = new ClienteService();
+    	servCliente.save(c);
     	setHeight("100vh");
     	setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     	setAlignItems(FlexComponent.Alignment.CENTER);
