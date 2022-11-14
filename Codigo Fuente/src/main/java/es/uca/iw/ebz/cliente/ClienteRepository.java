@@ -1,4 +1,4 @@
-package cliente;
+package es.uca.iw.ebz.cliente;
 
 import java.util.UUID;
 

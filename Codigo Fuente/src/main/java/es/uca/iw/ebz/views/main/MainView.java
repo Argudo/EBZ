@@ -1,31 +1,18 @@
 package es.uca.iw.ebz.views.main;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import cliente.Cliente;
-import cliente.ClienteService;
+import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.cliente.ClienteService;
 
 @PageTitle("Inicio Sesión")
 @Route(value = "")
@@ -36,9 +23,6 @@ public class MainView extends VerticalLayout {
     private Button sayHello;
 
     public MainView() {
-    	Cliente c = new Cliente();
-    	ClienteService servCliente = new ClienteService();
-    	servCliente.save(c);
     	setHeight("100vh");
     	setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     	setAlignItems(FlexComponent.Alignment.CENTER);
