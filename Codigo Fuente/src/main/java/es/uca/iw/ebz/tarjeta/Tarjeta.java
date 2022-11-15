@@ -4,23 +4,35 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import com.google.common.hash.Hashing;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 class TipoTarjeta{
-	public enum Nombre {Debito, Credito, Prepago};
-	Nombre _tipoNombre;
+	public enum Tipo {Debito, Credito, Prepago};
+	Tipo _tipoNombre;
 	
 	TipoTarjeta(int iTipo){
 		_tipoNombre = IntToTipo(iTipo);
 	}
 	
-	Nombre IntToTipo(int iTipo){
+	TipoTarjeta(Tipo enumTipo){
+		_tipoNombre = enumTipo;
+	}
+	
+	Tipo getTipo() { return _tipoNombre; }
+	
+	Tipo IntToTipo(int iTipo){
 		switch(iTipo) {
 			case 1:
-				return Nombre.Debito;
+				return Tipo.Debito;
 			case 2:
-				return Nombre.Credito;
+				return Tipo.Credito;
 			case 3:
-				return Nombre.Prepago;
+				return Tipo.Prepago;
 			default:
 				return null;
 		}
@@ -34,23 +46,24 @@ public class Tarjeta {
 	Date fechaExpiracion;
 	Date fechaCreacion;
 	Date fechaCancelacion;
-	TipoTarjeta.Nombre _tipoTarjeta;
+	TipoTarjeta tipoTarjeta;
+	//TODO: Conexion relacional
+	String sNumCuenta;
 	
-	//Atributos relacionales
-	//TODO: Conexion
-	String _sNumCuenta;
-	
-	Tarjeta(){
-		
+	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta) {
+		super();
+		this.iPin = iPin;
+		this.tipoTarjeta = tipoTarjeta;
+		sNumTarjeta = GenerarNumTarjeta();
 	}
-	
+
 	private String GenerarNumTarjeta() {
-		String sNumTarjeta = "4161-80";
+		String sNumTarjeta = "416180";
 		//Tipo de tarjeta
-		switch(_tipoTarjeta) {
+		switch(tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				String sNumCuenta_sha256 = Hashing.sha256().hashString(_sNumCuenta, StandardCharsets.UTF_8).toString();
+				String sNumCuenta_sha256 = Hashing.sha256().hashString(sNumCuenta, StandardCharsets.UTF_8).toString();
 				sNumTarjeta += sNumCuenta_sha256.substring(0,8);
 				break;
 			case Credito:
@@ -64,6 +77,20 @@ public class Tarjeta {
 		}
 		sNumTarjeta += CalculateCheckDigit(sNumTarjeta);
 		return sNumTarjeta;
+	}
+	
+	public Component GenerarTarjetaComponent() {
+		VerticalLayout vlTarjeta = new VerticalLayout();
+        vlTarjeta.add(new H4("EBZ"),
+        			   new H5(sNumTarjeta),
+        			   new H6(fechaExpiracion.toString()));
+        vlTarjeta.setClassName("tarjeta-mid");
+        vlTarjeta.setWidth("300px");
+        vlTarjeta.setHeight("200px");
+        vlTarjeta.setPadding(false);
+        vlTarjeta.setAlignItems(FlexComponent.Alignment.CENTER);
+        vlTarjeta.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        return vlTarjeta;
 	}
 	
 	private static String CalculateCheckDigit(String card) {
