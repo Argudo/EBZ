@@ -11,3 +11,4 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 .metadata/
 *.log
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
