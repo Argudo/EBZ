@@ -100,6 +100,18 @@
             <!-- Replace artifactId with vaadin-core to use only free components -->
             <artifactId>vaadin</artifactId>
         </dependency>
+        <!-- Dependencia para SHA-256 -->
+        <dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>31.0.1-jre</version>
+		</dependency>
+		<!-- Dependencia para Luhn -->
+		<dependency>
+		    <groupId>commons-validator</groupId>
+		    <artifactId>commons-validator</artifactId>
+		    <version>1.5.1</version>
+		</dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>

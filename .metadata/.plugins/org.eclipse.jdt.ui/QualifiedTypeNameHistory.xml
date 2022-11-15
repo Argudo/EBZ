@@ -19,4 +19,5 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H3"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
 </qualifiedTypeNameHistroy>
