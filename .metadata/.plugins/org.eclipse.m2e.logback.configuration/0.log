@@ -5907,3 +5907,98 @@ org.eclipse.core.runtime.CoreException: Could not resolve artifact com.google.gu
 2022-11-15 11:01:50,526 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
 2022-11-15 11:01:50,536 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2022-11-15 11:01:50,536 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:05:29,520 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:05:29,521 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:05:29,522 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:05:29,528 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:05:29,528 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:06:29,172 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:29,176 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:06:29,180 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:06:29,189 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:29,189 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:06:37,051 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:37,052 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:06:37,056 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:06:37,063 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:37,063 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:06:50,276 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:50,278 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:06:50,281 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:06:50,289 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:50,289 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:06:51,330 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:51,330 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:06:51,331 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:06:51,333 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:06:51,333 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:07:00,239 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:00,241 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:07:00,243 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:07:00,246 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:00,246 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:07:28,146 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:28,148 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:07:28,151 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:07:28,159 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:28,159 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:07:29,188 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:29,188 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:07:29,188 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:07:29,190 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:29,190 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:07:52,793 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:52,795 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:07:52,797 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:07:52,800 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:07:52,800 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:08:44,055 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:08:44,057 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:08:44,059 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:08:44,064 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:08:44,065 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:08:45,134 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:08:45,134 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:08:45,134 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:08:45,136 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:08:45,137 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:09:00,405 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:00,408 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:09:00,412 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:09:00,418 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:00,419 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:09:01,450 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:01,451 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:09:01,451 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:09:01,453 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:01,454 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:09:35,527 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:35,528 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:09:35,530 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:09:35,533 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:35,533 [Worker-32: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:09:36,564 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:36,564 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:09:36,564 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:09:36,568 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:36,568 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:09:40,791 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:40,794 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:09:40,797 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:09:40,800 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:40,800 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:09:41,885 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:41,885 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:09:41,885 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:09:41,887 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:09:41,887 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:10:01,199 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:10:01,201 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-11-15 11:10:01,203 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 11 resources
+2022-11-15 11:10:01,209 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:10:01,209 [Worker-20: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-11-15 11:10:02,238 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:10:02,239 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:10:02,239 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-11-15 11:10:02,241 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-11-15 11:10:02,242 [Worker-30: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
