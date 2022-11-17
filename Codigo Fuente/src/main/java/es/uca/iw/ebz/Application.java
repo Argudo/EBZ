@@ -5,6 +5,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -14,7 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * and some desktop browsers.
  *
  */
-@SpringBootApplication
+
+@SpringBootApplication(scanBasePackages = {"es.uca.iw.ebz"})
 @Theme(value = "ebz")
 @PWA(name = "ebz", shortName = "ebz", offlineResources = {})
 @NpmPackage(value = "line-awesome", version = "1.3.0")
