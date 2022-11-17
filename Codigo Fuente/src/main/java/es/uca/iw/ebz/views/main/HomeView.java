@@ -71,18 +71,30 @@ public class HomeView extends VerticalLayout{
 	        vlMain.add(imgBanner);
 	        vlMain.add(flFunctionalities);
 	        
-	        
 	        VerticalLayout divTarjeta = new VerticalLayout();
-	        divTarjeta.add(new H4("EBZ"),
-	        			   new H5("4161   8000   XXXX   XXXX"),
-	        			   new H6("04/23"));
-	        divTarjeta.setClassName("tarjeta-mid");
-	        divTarjeta.setWidth("300px");
-	        divTarjeta.setHeight("200px");
+	        divTarjeta.add(new H5("EBZ"),
+	        		new H6("4161   8000   XXXX   XXXX"),
+	        		new Paragraph("04/23"));
+	        divTarjeta.setClassName("tarjeta-small");
+	        divTarjeta.setWidth("250px");
+	        divTarjeta.setHeight("150px");
 	        divTarjeta.setPadding(false);
 	        divTarjeta.setAlignItems(FlexComponent.Alignment.CENTER);
 	        divTarjeta.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 	        vlMain.add(divTarjeta);
+	        
+	        VerticalLayout divTarjetaMid = new VerticalLayout();
+	        divTarjetaMid.add(new H4("EBZ"),
+	        			   new H5("4161   8000   XXXX   XXXX"),
+	        			   new H6("04/23"));
+	        divTarjetaMid.setClassName("tarjeta-mid");
+	        divTarjetaMid.setWidth("300px");
+	        divTarjetaMid.setHeight("200px");
+	        divTarjetaMid.setPadding(false);
+	        divTarjetaMid.setAlignItems(FlexComponent.Alignment.CENTER);
+	        divTarjetaMid.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+	        vlMain.add(divTarjetaMid);
+	        
 	        
 	        add(vlMain);
 	       

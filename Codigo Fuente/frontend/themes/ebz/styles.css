@@ -1,5 +1,9 @@
 @import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
 
+.host{
+    margin: 0;
+}
+
 .navBarColor{
     background-color: #051517;
 }
@@ -18,6 +22,8 @@
 	background-image: url("/images/tarjeta.png");
 	background-repeat: no-repeat;
 	background-size: contain;
+	width: 300px;
+	height: 200px;
 }
 
 .tarjeta-mid h4{
@@ -34,6 +40,31 @@
 }
 
 .tarjeta-mid h6{
+	color: white;
+	transform: translate(90%, -50%);
+	font-family:ocr_a_std,sans-serif;
+}
+
+.tarjeta-small{
+	background-image: url("/images/tarjeta.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.tarjeta-small h5{
+	color: white;
+	transform: translate(180%, 0%);
+	font-family:ocr_a_std,sans-serif;
+}
+
+
+.tarjeta-small h6{
+	color: white;
+	transform: translate(0%, 50%);
+	font-family:ocr_a_std,sans-serif;
+}
+
+.tarjeta-small-fecha{
 	color: white;
 	transform: translate(90%, -50%);
 	font-family:ocr_a_std,sans-serif;
