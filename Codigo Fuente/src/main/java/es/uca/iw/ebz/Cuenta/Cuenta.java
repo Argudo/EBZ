@@ -2,7 +2,9 @@ package es.uca.iw.ebz.Cuenta;
 
 
 import javax.persistence.*;
-import java.sql.Date;
+import javax.validation.constraints.NotEmpty;
+
+import java.util.Date;
 
 @Entity
 public class Cuenta {
@@ -11,22 +13,32 @@ public class Cuenta {
     private int id;
 
     @Column(unique = true)
+    @NotEmpty
     private String sNumeroCuenta;
 
     @Column
-    private float fSaldo;
+    @NotEmpty
+    private float fSaldo = 0;
 
     @Column
+    @NotEmpty
     private Date fechaCreacion;
 
     @Column
     private Date fechaEliminacion;
 
+    //@ManyToOne
+    //private user;
     public Cuenta() {}
 
     public Cuenta(String sNumeroCuenta, float fSaldo, Date fechaCreacion, Date fechaEliminacion) {
         this.sNumeroCuenta = sNumeroCuenta;
         this.fSaldo = fSaldo;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaEliminacion = fechaEliminacion;
+    }
+
+    public Cuenta(Date fechaCreacion, Date fechaEliminacion) {
         this.fechaCreacion = fechaCreacion;
         this.fechaEliminacion = fechaEliminacion;
     }
