@@ -29,4 +29,9 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H6"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H5"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.Component"/>
+    <fullyQualifiedTypeName name="javax.persistence.Entity"/>
+    <fullyQualifiedTypeName name="org.springframework.data.annotation.Id"/>
+    <fullyQualifiedTypeName name="org.hibernate.annotations.Type"/>
+    <fullyQualifiedTypeName name="javax.persistence.ManyToOne"/>
+    <fullyQualifiedTypeName name="java.util.UUID"/>
 </qualifiedTypeNameHistroy>

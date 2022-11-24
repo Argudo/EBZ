@@ -2,6 +2,13 @@ package es.uca.iw.ebz.tarjeta;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.Id;
 
 import com.google.common.hash.Hashing;
 import com.vaadin.flow.component.Component;
@@ -11,8 +18,9 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+@Entity
 class TipoTarjeta{
-	public enum Tipo {Debito, Credito, Prepago};
+	public static enum Tipo {Debito, Credito, Prepago};
 	Tipo _tipoNombre;
 	
 	TipoTarjeta(int iTipo){
@@ -39,14 +47,22 @@ class TipoTarjeta{
 	}
 }
 
+@Entity
 public class Tarjeta {
+	@Id
+	@GeneratedValue
+	@Type(type = "uuid-char")
+	UUID iId;
+	
 	String sNumTarjeta;
-	int iId;
 	int iPin;
 	Date fechaExpiracion;
 	Date fechaCreacion;
 	Date fechaCancelacion;
+	
+	@ManyToOne
 	TipoTarjeta tipoTarjeta;
+	
 	//TODO: Conexion relacional
 	String sNumCuenta;
 	
@@ -123,30 +139,13 @@ public class Tarjeta {
 		digit = sum + "";
 		return digit.substring(digit.length() - 1);
 	}
-	public String getsNumTarjeta() {
-		return sNumTarjeta;
-	}
-	public void setsNumTarjeta(String sNumTarjeta) {
-		this.sNumTarjeta = sNumTarjeta;
-	}
-	public int getiPin() {
-		return iPin;
-	}
-	public void setiPin(int iPin) {
-		this.iPin = iPin;
-	}
-	public Date getFechaExpiracion() {
-		return fechaExpiracion;
-	}
-	public void setFechaExpiracion(Date fechaExpiracion) {
-		this.fechaExpiracion = fechaExpiracion;
-	}
-	public Date getFechaCreacion() {
-		return fechaCreacion;
-	}
-	public void setFechaCreacion(Date fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-	
-	
+
+	public String getsNumTarjeta() { return sNumTarjeta; }
+	public void setsNumTarjeta(String sNumTarjeta) { this.sNumTarjeta = sNumTarjeta; }
+	public int getiPin() { return iPin; }
+	public void setiPin(int iPin) { this.iPin = iPin; }
+	public Date getFechaExpiracion() { return fechaExpiracion; }
+	public void setFechaExpiracion(Date fechaExpiracion) { this.fechaExpiracion = fechaExpiracion; }
+	public Date getFechaCreacion() { return fechaCreacion; }
+	public void setFechaCreacion(Date fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 }
