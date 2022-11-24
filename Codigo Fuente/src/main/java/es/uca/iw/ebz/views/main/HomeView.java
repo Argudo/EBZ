@@ -1,6 +1,7 @@
 package es.uca.iw.ebz.views.main;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Image;
@@ -18,7 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @PageTitle("Home")
-@Route(value = "home")
+@Route(value = "home", layout = MainLayout.class)
 
 public class HomeView extends VerticalLayout{
 	 private TextField name;
@@ -28,8 +29,6 @@ public class HomeView extends VerticalLayout{
 	        setMargin(false);
 	        setPadding(false);
 	        setSpacing(false);
-
-	        Component cHeader = CreateHeader();
 	        
 	        VerticalLayout vlMain = new VerticalLayout();
 	        vlMain.setWidthFull();
@@ -49,61 +48,41 @@ public class HomeView extends VerticalLayout{
 	        flFunctionalities.setFlexDirection(FlexDirection.ROW);
 	        flFunctionalities.setFlexWrap(FlexWrap.WRAP);
 	        flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
-	        Component cTarjeta = CreateFunctionality("Tarjetas", "icons/tarjetas.svg", "Crédito, débito y prepago");
-	        Component cEstadisticas = CreateFunctionality("Estadísticas", "icons/estadisticas.svg", "Ingresos, gastos y cuentas");
-	        Component cDomiciliacion = CreateFunctionality("Domiciliación", "icons/domicialicion.svg", "Información sobre tus gastos periódicos");
-	        Component cTransferencias = CreateFunctionality("Transferencias", "icons/transferencias.svg", "Reciba y ejecute transferencias");
+			Button btnCard = new Button ("Tarjetas");
+			Button btnStats = new Button ("Estadísticas");
+			Button btnDomiciliation = new Button ("Domiciliaciones");
+			Button btnTransfer = new Button ("Tranferencias");
+
+	        //Component cTarjeta = CreateFunctionality("Tarjetas", "icons/tarjetas.svg", "Crédito, débito y prepago");
+			//Component cEstadisticas = CreateFunctionality("Estadísticas", "icons/estadisticas.svg", "Ingresos, gastos y cuentas");
+	        //Component cDomiciliacion = CreateFunctionality("Domiciliación", "icons/domicialicion.svg", "Información sobre tus gastos periódicos");
+	        //Component cTransferencias = CreateFunctionality("Transferencias", "icons/transferencias.svg", "Reciba y ejecute transferencias");
 	        flFunctionalities.add(
-	        		cTarjeta,
-	        		cEstadisticas,
-	        		cDomiciliacion,
-	        		cTransferencias
+	        		btnCard,
+					btnStats,
+					btnDomiciliation,
+					btnTransfer
 	        		);
 	        //End functionalities section
 	        
 	        vlMain.add(imgBanner);
 	        vlMain.add(flFunctionalities);
 	        
-	        add(cHeader);
 	        add(vlMain);
 	       
 	    }
-	    
-	    private static Component CreateHeader() {
-	    	HorizontalLayout hLayout = new HorizontalLayout();
-	    	HorizontalLayout hlBrand = new HorizontalLayout();
-	    	HorizontalLayout hlLogIn = new HorizontalLayout();
-	    	
-	    	
-	    	hLayout.setId("header");
-	    	hLayout.setWidthFull();
-	    	hLayout.getThemeList().set("dark", true);
-	        hLayout.setSpacing(true);
-	        hLayout.setPadding(true);
-	        hLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-	        hLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-	        hLayout.setHeight("10vh");
-	        hLayout.setClassName("navBarColor");
-	    	
-	        Icon vaadinIcon = new Icon(VaadinIcon.PHONE);
-	        Image imgLogo = new Image("images/brand.png", "Logo");
-	        imgLogo.setMaxHeight("10vh");
-	        imgLogo.setWidth("18vh");
-	        Button btnLogIn = new Button("Iniciar Sesión");
-	        
-	        hlBrand.add(imgLogo);
-	        hlLogIn.add(btnLogIn);
-	        
-	        hLayout.add(
-	        		hlBrand,
-	        		hlLogIn
-	        		);
-	        
-	        hlBrand.setAlignItems(FlexComponent.Alignment.CENTER);
-	        hlLogIn.setAlignItems(FlexComponent.Alignment.CENTER);
-	        
-	        return hLayout;
-	    }
+
+	/*Button btnLogIn = new Button("Iniciar Sesión");
+	VerticalLayout vlMid = new VerticalLayout();
+    	vlMid.add(tboxUser,
+	tboxPass,
+	btnLogIn
+    			);
+    	vlMid.setAlignItems(FlexComponent.Alignment.CENTER);
+    	btnLogIn.addClickListener( click -> {
+		btnLogIn.getUI().ifPresent(ui ->
+				ui.navigate("home"));
+	});*/
 	    
 	    private Component CreateFunctionality(String sName, String sURL, String sDescription) {
 	    	VerticalLayout vlMain = new VerticalLayout();
@@ -124,4 +103,5 @@ public class HomeView extends VerticalLayout{
 	    	
 	    	return vlMain;
 	    }
+
 }

@@ -45,7 +45,7 @@ public class MainView extends VerticalLayout {
 
 
     	Image imgLogo = new Image("images/brand.png", "Logo");
-    	imgLogo.setWidth("40%");
+    	imgLogo.setWidth("20%");
     	VerticalLayout vlImage = new VerticalLayout();
     	vlImage.setMargin(false);
     	vlImage.setPadding(false);
