@@ -48,20 +48,24 @@ public class HomeView extends VerticalLayout{
 	        flFunctionalities.setFlexDirection(FlexDirection.ROW);
 	        flFunctionalities.setFlexWrap(FlexWrap.WRAP);
 	        flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
-			Button btnCard = new Button ("Tarjetas");
-			Button btnStats = new Button ("Estadísticas");
-			Button btnDomiciliation = new Button ("Domiciliaciones");
-			Button btnTransfer = new Button ("Tranferencias");
+			//Button btnCard = new Button ("Tarjetas");
+			//Button btnStats = new Button ("Estadísticas");
+			//Button btnDomiciliation = new Button ("Domiciliaciones");
+			//Button btnTransfer = new Button ("Tranferencias");
 
-	        //Component cTarjeta = CreateFunctionality("Tarjetas", "icons/tarjetas.svg", "Crédito, débito y prepago");
-			//Component cEstadisticas = CreateFunctionality("Estadísticas", "icons/estadisticas.svg", "Ingresos, gastos y cuentas");
-	        //Component cDomiciliacion = CreateFunctionality("Domiciliación", "icons/domicialicion.svg", "Información sobre tus gastos periódicos");
-	        //Component cTransferencias = CreateFunctionality("Transferencias", "icons/transferencias.svg", "Reciba y ejecute transferencias");
+	        Component cTarjeta = CreateFunctionality("Tarjetas", VaadinIcon.CREDIT_CARD);
+			Component cEstadisticas = CreateFunctionality("Estadísticas", VaadinIcon.BAR_CHART_H);
+	        Component cDomiciliacion = CreateFunctionality("Movimientos", VaadinIcon.EXCHANGE);
+	        Component cTransferencias = CreateFunctionality("Transferencias", VaadinIcon.MONEY_EXCHANGE);
 	        flFunctionalities.add(
-	        		btnCard,
-					btnStats,
-					btnDomiciliation,
-					btnTransfer
+					cTarjeta,
+					cEstadisticas,
+					cDomiciliacion,
+					cTransferencias
+	        		//btnCard,
+					//btnStats,
+					//btnDomiciliation,
+					//btnTransfer
 	        		);
 	        //End functionalities section
 	        
@@ -84,20 +88,20 @@ public class HomeView extends VerticalLayout{
 				ui.navigate("home"));
 	});*/
 	    
-	    private Component CreateFunctionality(String sName, String sURL, String sDescription) {
+	    private Component CreateFunctionality(String sName, VaadinIcon vI) {
 	    	VerticalLayout vlMain = new VerticalLayout();
 	    	vlMain.setAlignItems(FlexComponent.Alignment.CENTER);
 	    	vlMain.setSpacing(false);
 	    	vlMain.setWidth("min-width");
-	    	
-	    	Image imgIcon = new Image(sURL, "Icono " + sName);
-	    	H4 hTitle = new H4(sName);
-	    	Paragraph pDescription = new Paragraph(sDescription);
+
+			Button btnFunc = new Button();
+			Icon icon = new Icon(vI);
+			btnFunc.getElement().appendChild(icon.getElement());
+	    	Paragraph pDescription = new Paragraph(sName);
 	    	
 	    	
 	    	vlMain.add(
-	    			imgIcon,
-	    			hTitle,
+	    			btnFunc,
 	    			pDescription
 	    			);
 	    	
