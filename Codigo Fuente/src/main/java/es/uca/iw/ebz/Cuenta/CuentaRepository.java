@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Repository
 public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
-    Cuenta findByNumeroCuenta(String sNumeroCuenta);
+    Cuenta findBysNumeroCuenta(String sNumeroCuenta);
     List<Cuenta> findByFechaEliminacionIsNull();
 
 }

@@ -17,13 +17,16 @@ public class CuentaService {
         _cuentaRepository = cuentaRepository;
     }
 
-    public void añadirCuenta(Cuenta cuenta) {
+    public Cuenta añadirCuenta(Cuenta cuenta) {
         //generar numero de cuenta aleatoria y comprobar que no existe
         String sNumeroCuenta = generarNumeroCuenta();
-        while (_cuentaRepository.findByNumeroCuenta(sNumeroCuenta) != null) {
+        while (_cuentaRepository.findBysNumeroCuenta(sNumeroCuenta) != null) {
             sNumeroCuenta = generarNumeroCuenta();
         }
-        _cuentaRepository.save(cuenta);
+        cuenta.setNumeroCuenta(sNumeroCuenta);
+        cuenta.setFechaCreacion(new Date());
+        return _cuentaRepository.save(cuenta);
+       // return cuenta;
     }
 
     public List<Cuenta> loadCuentas() {
@@ -36,9 +39,13 @@ public class CuentaService {
     }
 
     public void update(String sNumeroCuenta, float fSaldo) {
-        Cuenta cuenta = _cuentaRepository.findByNumeroCuenta(sNumeroCuenta);
+        Cuenta cuenta = _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
         cuenta.setSaldo(cuenta.getSaldo() + fSaldo);
         _cuentaRepository.save(cuenta);
+    }
+
+    public Cuenta findByNumeroCuenta(String sNumeroCuenta) {
+        return _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
     }
 
     private String generarNumeroCuenta() {

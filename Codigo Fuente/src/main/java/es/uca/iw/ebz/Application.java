@@ -16,7 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 
-@SpringBootApplication(scanBasePackages = {"es.uca.iw.ebz"})
+@SpringBootApplication
 @Theme(value = "ebz")
 @PWA(name = "ebz", shortName = "ebz", offlineResources = {})
 @NpmPackage(value = "line-awesome", version = "1.3.0")

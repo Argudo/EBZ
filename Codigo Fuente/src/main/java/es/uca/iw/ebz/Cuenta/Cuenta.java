@@ -10,7 +10,7 @@ import java.util.Date;
 public class Cuenta {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(unique = true)
     @NotEmpty
@@ -31,7 +31,7 @@ public class Cuenta {
     //private user;
     public Cuenta() {}
 
-    public Cuenta(String sNumeroCuenta, float fSaldo, Date fechaCreacion, Date fechaEliminacion) {
+    public Cuenta(String sNumeroCuenta, float fSaldo, Date fechaCreacion) {
         this.sNumeroCuenta = sNumeroCuenta;
         this.fSaldo = fSaldo;
         this.fechaCreacion = fechaCreacion;
@@ -45,6 +45,10 @@ public class Cuenta {
 
     //getters
     public int getId() {return id;}
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getNumeroCuenta() {return sNumeroCuenta;}
     public float getSaldo() {return fSaldo;}
     public Date getFechaCreacion() {return fechaCreacion;}
@@ -56,5 +60,30 @@ public class Cuenta {
     public void setFechaCreacion(Date fechaCreacion) {this.fechaCreacion = fechaCreacion;}
     public void setFechaEliminacion(Date fechaEliminacion) {this.fechaEliminacion = fechaEliminacion;}
 
+    @Override
+    public String toString() {
+        return "Cuenta{" +
+                "id=" + id +
+                ", sNumeroCuenta='" + sNumeroCuenta + '\'' +
+                ", fSaldo=" + fSaldo +
+                ", fechaCreacion=" + fechaCreacion +
+                ", fechaEliminacion=" + fechaEliminacion +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cuenta cuenta = (Cuenta) o;
+
+        if (id != cuenta.id) return false;
+        if (Float.compare(cuenta.fSaldo, fSaldo) != 0) return false;
+        if (sNumeroCuenta != null ? !sNumeroCuenta.equals(cuenta.sNumeroCuenta) : cuenta.sNumeroCuenta != null)
+            return false;
+        if (fechaCreacion != null ? !fechaCreacion.equals(cuenta.fechaCreacion) : cuenta.fechaCreacion != null)
+            return false;
+        return fechaEliminacion != null ? fechaEliminacion.equals(cuenta.fechaEliminacion) : cuenta.fechaEliminacion == null;
+    }
 }
