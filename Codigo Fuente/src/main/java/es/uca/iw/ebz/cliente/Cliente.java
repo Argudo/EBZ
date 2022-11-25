@@ -11,18 +11,23 @@ import org.hibernate.annotations.Type;
 public class Cliente {
 	@Id
 	@GeneratedValue
-	@Type(type = "uuid-char")
-	UUID Id;
+	private UUID Id;
 
-	String sUsuario;
-	String Contraseña;
+	//Atributos de inicio
+	private String sUsuario;
+	private String sContraseña;
 
-	String sNombre;
-	Date dFechaNacimiento;
-	Date dFechaRegistro;
-	Date dFechaEliminacion;
+	//Datos pertinentes
+	private String sNombre;
+	private Date dFechaNacimiento;
+	private Date dFechaRegistro;
+	private Date dFechaEliminacion;
 
-	public Cliente() {
-		
-	}
+	//Relaciones
+	@OneToMany
+	@JoinColumn(name = "cliente_id")
+	private List<Cuenta> aCuentas;
+	private TipoCliente eTipoCliente;
+
+	public Cliente(){}
 }
