@@ -3,25 +3,26 @@ package es.uca.iw.ebz.Cuenta;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 public class Cuenta {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue
+    private UUID id;
 
     @Column(unique = true)
     @NotEmpty
     private String sNumeroCuenta;
 
     @Column
-    @NotEmpty
     private float fSaldo = 0;
 
     @Column
-    @NotEmpty
+    @NotNull
     private Date fechaCreacion;
 
     @Column
@@ -44,8 +45,8 @@ public class Cuenta {
     }
 
     //getters
-    public int getId() {return id;}
-    public void setId(Integer id) {
+    public UUID getId() {return id;}
+    public void setId(UUID id) {
         this.id = id;
     }
 

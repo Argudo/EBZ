@@ -91,9 +91,5 @@ public class MainView extends VerticalLayout {
     	);
     	
     	add(vlCuadroInicio);
-
-		Cuenta cuenta = new Cuenta();
-
-		cuentaService.añadirCuenta(cuenta);
     }
 }
