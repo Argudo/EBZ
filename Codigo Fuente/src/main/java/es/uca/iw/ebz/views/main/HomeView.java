@@ -1,22 +1,20 @@
 package es.uca.iw.ebz.views.main;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
+import java.awt.*;
 
 @PageTitle("Home")
 @Route(value = "home", layout = MainLayout.class)
@@ -34,43 +32,44 @@ public class HomeView extends VerticalLayout{
 	        vlMain.setWidthFull();
 	        vlMain.setPadding(false);
 	        vlMain.setMargin(false);
+
 	        
 	        //Banner section
-	        Image imgBanner = new Image("images/banner2.jpg", "Banner");
-	        imgBanner.setWidth("100%");
-	        imgBanner.setHeight("40vh");
-	        imgBanner.setClassName("banner");
 	        //End Banner section
+
+			//Username section
+			Component userName = CreateUserNameBanner("Nombre y apellidos");
+			//End username section
+
+			//Account gallery section
+			//Title accountNumber = new Title("Título de prueba");
+			Component acGallery = ShowAccount("XXXX XXXX XXXX XXXX","100.000,45€");
+			//End account gallery section
 	        
 	        //Functionalities section
-	        FlexLayout flFunctionalities = new FlexLayout();
-	        flFunctionalities.setWidthFull();
-	        flFunctionalities.setFlexDirection(FlexDirection.ROW);
-	        flFunctionalities.setFlexWrap(FlexWrap.WRAP);
-	        flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
-			//Button btnCard = new Button ("Tarjetas");
-			//Button btnStats = new Button ("Estadísticas");
-			//Button btnDomiciliation = new Button ("Domiciliaciones");
-			//Button btnTransfer = new Button ("Tranferencias");
+	        FlexLayout flAccount = new FlexLayout();
+	        flAccount.setWidthFull();
+	        flAccount.setFlexDirection(FlexDirection.ROW);
+	        flAccount.setFlexWrap(FlexWrap.WRAP);
+	        flAccount.setJustifyContentMode(JustifyContentMode.EVENLY);
 
 	        Component cTarjeta = CreateFunctionality("Tarjetas", VaadinIcon.CREDIT_CARD);
 			Component cEstadisticas = CreateFunctionality("Estadísticas", VaadinIcon.BAR_CHART_H);
-	        Component cDomiciliacion = CreateFunctionality("Movimientos", VaadinIcon.EXCHANGE);
+	        Component cMovimientos = CreateFunctionality("Movimientos", VaadinIcon.EXCHANGE);
 	        Component cTransferencias = CreateFunctionality("Transferencias", VaadinIcon.MONEY_EXCHANGE);
-	        flFunctionalities.add(
+	        flAccount.add(
 					cTarjeta,
 					cEstadisticas,
-					cDomiciliacion,
+					cMovimientos,
 					cTransferencias
-	        		//btnCard,
-					//btnStats,
-					//btnDomiciliation,
-					//btnTransfer
 	        		);
 	        //End functionalities section
-	        
-	        vlMain.add(imgBanner);
-	        vlMain.add(flFunctionalities);
+
+			FlexLayout fl;
+
+			vlMain.add(userName);
+			vlMain.add(acGallery);
+	        vlMain.add(flAccount);
 	        
 	        add(vlMain);
 	       
@@ -107,5 +106,38 @@ public class HomeView extends VerticalLayout{
 	    	
 	    	return vlMain;
 	    }
+
+		//Componente de prueba para mostrar la información de la cuenta.
+		private Component ShowAccount(String acNumber, String acBalance) {
+			VerticalLayout vlMain = new VerticalLayout();
+			vlMain.setAlignItems(Alignment.CENTER);
+			vlMain.setSpacing(false);
+			vlMain.setWidth("100%");
+
+			H2 _acNumber = new H2(acNumber);
+			H3 _acBalance = new H3(acBalance);
+			vlMain.add(
+					_acNumber,
+					_acBalance
+			);
+
+			return vlMain;
+
+		}
+
+		//Componente para mostrar el nombre del usuario en la vista principal.
+		private Component CreateUserNameBanner(String userName){
+			VerticalLayout vlMain = new VerticalLayout();
+			vlMain.setAlignItems(Alignment.CENTER);
+			vlMain.setSpacing(false);
+			vlMain.setWidth("50%");
+
+			H1 _userName = new H1("Bienvenido, " + userName);
+
+			vlMain.add(_userName);
+
+			return vlMain;
+
+		}
 
 }
