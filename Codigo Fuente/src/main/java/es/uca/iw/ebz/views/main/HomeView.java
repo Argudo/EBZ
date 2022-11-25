@@ -48,15 +48,20 @@ public class HomeView extends VerticalLayout{
 	        flFunctionalities.setFlexDirection(FlexDirection.ROW);
 	        flFunctionalities.setFlexWrap(FlexWrap.WRAP);
 	        flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
-	        Component cTarjeta = CreateFunctionality("Tarjetas", "icons/tarjetas.svg", "Crédito, débito y prepago");
-	        Component cEstadisticas = CreateFunctionality("Estadísticas", "icons/estadisticas.svg", "Ingresos, gastos y cuentas");
-	        Component cDomiciliacion = CreateFunctionality("Domiciliación", "icons/domicialicion.svg", "Información sobre tus gastos periódicos");
-	        Component cTransferencias = CreateFunctionality("Transferencias", "icons/transferencias.svg", "Reciba y ejecute transferencias");
+			Button btnCard = new Button ("Tarjetas");
+			Button btnStats = new Button ("Estadísticas");
+			Button btnDomiciliation = new Button ("Domiciliaciones");
+			Button btnTransfer = new Button ("Tranferencias");
+
+	        //Component cTarjeta = CreateFunctionality("Tarjetas", "icons/tarjetas.svg", "Crédito, débito y prepago");
+			//Component cEstadisticas = CreateFunctionality("Estadísticas", "icons/estadisticas.svg", "Ingresos, gastos y cuentas");
+	        //Component cDomiciliacion = CreateFunctionality("Domiciliación", "icons/domicialicion.svg", "Información sobre tus gastos periódicos");
+	        //Component cTransferencias = CreateFunctionality("Transferencias", "icons/transferencias.svg", "Reciba y ejecute transferencias");
 	        flFunctionalities.add(
-	        		cTarjeta,
-	        		cEstadisticas,
-	        		cDomiciliacion,
-	        		cTransferencias
+	        		btnCard,
+					btnStats,
+					btnDomiciliation,
+					btnTransfer
 	        		);
 	        //End functionalities section
 	        
@@ -66,6 +71,18 @@ public class HomeView extends VerticalLayout{
 	        add(vlMain);
 	       
 	    }
+
+	/*Button btnLogIn = new Button("Iniciar Sesión");
+	VerticalLayout vlMid = new VerticalLayout();
+    	vlMid.add(tboxUser,
+	tboxPass,
+	btnLogIn
+    			);
+    	vlMid.setAlignItems(FlexComponent.Alignment.CENTER);
+    	btnLogIn.addClickListener( click -> {
+		btnLogIn.getUI().ifPresent(ui ->
+				ui.navigate("home"));
+	});*/
 	    
 	    private Component CreateFunctionality(String sName, String sURL, String sDescription) {
 	    	VerticalLayout vlMain = new VerticalLayout();
@@ -86,4 +103,5 @@ public class HomeView extends VerticalLayout{
 	    	
 	    	return vlMain;
 	    }
+
 }

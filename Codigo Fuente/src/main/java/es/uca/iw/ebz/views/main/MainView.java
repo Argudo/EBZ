@@ -10,19 +10,28 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.Cuenta.CuentaService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import es.uca.iw.ebz.cliente.Cliente;
 import es.uca.iw.ebz.cliente.ClienteService;
 
 @PageTitle("Inicio Sesión")
 @Route(value = "")
-
+@RouteAlias("")
 public class MainView extends VerticalLayout {
 
     private TextField name;
     private Button sayHello;
+	@Autowired
+	private CuentaService cuentaService;
 
-    public MainView() {
+    public MainView(CuentaService cuentaService) {
+		this.cuentaService = cuentaService;
+
+		//add(getContent());
     	setHeight("100vh");
     	setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     	setAlignItems(FlexComponent.Alignment.CENTER);
