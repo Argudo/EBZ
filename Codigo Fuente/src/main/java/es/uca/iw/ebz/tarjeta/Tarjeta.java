@@ -4,11 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.persistence.Entity;
 import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
 
 import com.google.common.hash.Hashing;
 import com.vaadin.flow.component.Component;
@@ -19,67 +18,47 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 @Entity
-class TipoTarjeta{
-	public static enum Tipo {Debito, Credito, Prepago};
-	Tipo _tipoNombre;
-	
-	TipoTarjeta(int iTipo){
-		_tipoNombre = IntToTipo(iTipo);
-	}
-	
-	TipoTarjeta(Tipo enumTipo){
-		_tipoNombre = enumTipo;
-	}
-	
-	Tipo getTipo() { return _tipoNombre; }
-	
-	Tipo IntToTipo(int iTipo){
-		switch(iTipo) {
-			case 1:
-				return Tipo.Debito;
-			case 2:
-				return Tipo.Credito;
-			case 3:
-				return Tipo.Prepago;
-			default:
-				return null;
-		}
-	}
-}
-
-@Entity
 public class Tarjeta {
 	@Id
 	@GeneratedValue
 	@Type(type = "uuid-char")
-	UUID iId;
+	@Column(name = "id")
+	private UUID _iId;
 	
-	String sNumTarjeta;
-	int iPin;
-	Date fechaExpiracion;
-	Date fechaCreacion;
-	Date fechaCancelacion;
+	@Column(name = "numTarjeta")
+	private String _sNumTarjeta;
+	@Column(name = "PIN")
+	private int _iPin;
+	@Column(name = "fechaExpiracion")
+	private Date _fechaExpiracion;
+	
+	@Column(name = "fechaCreacion")
+	private Date _fechaCreacion;
+	
+	@Column(name = "fechaCancelacion")
+	private Date _fechaCancelacion;
 	
 	@ManyToOne
-	TipoTarjeta tipoTarjeta;
+	private TipoTarjeta _tipoTarjeta;
 	
 	//TODO: Conexion relacional
-	String sNumCuenta;
+	@Column(name = "numCuenta")
+	String _sNumCuenta;
 	
 	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta) {
 		super();
-		this.iPin = iPin;
-		this.tipoTarjeta = tipoTarjeta;
-		sNumTarjeta = GenerarNumTarjeta();
+		_iPin = iPin;
+		_tipoTarjeta = tipoTarjeta;
+		_sNumTarjeta = GenerarNumTarjeta();
 	}
 
 	private String GenerarNumTarjeta() {
 		String sNumTarjeta = "416180";
 		//Tipo de tarjeta
-		switch(tipoTarjeta.getTipo()) {
+		switch(_tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				String sNumCuenta_sha256 = Hashing.sha256().hashString(sNumCuenta, StandardCharsets.UTF_8).toString();
+				String sNumCuenta_sha256 = Hashing.sha256().hashString(_sNumCuenta, StandardCharsets.UTF_8).toString();
 				sNumTarjeta += sNumCuenta_sha256.substring(0,8);
 				break;
 			case Credito:
@@ -93,20 +72,6 @@ public class Tarjeta {
 		}
 		sNumTarjeta += CalculateCheckDigit(sNumTarjeta);
 		return sNumTarjeta;
-	}
-	
-	public Component GenerarTarjetaComponent() {
-		VerticalLayout vlTarjeta = new VerticalLayout();
-        vlTarjeta.add(new H4("EBZ"),
-        			   new H5(sNumTarjeta),
-        			   new H6(fechaExpiracion.toString()));
-        vlTarjeta.setClassName("tarjeta-mid");
-        vlTarjeta.setWidth("300px");
-        vlTarjeta.setHeight("200px");
-        vlTarjeta.setPadding(false);
-        vlTarjeta.setAlignItems(FlexComponent.Alignment.CENTER);
-        vlTarjeta.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        return vlTarjeta;
 	}
 	
 	private static String CalculateCheckDigit(String card) {
@@ -140,12 +105,12 @@ public class Tarjeta {
 		return digit.substring(digit.length() - 1);
 	}
 
-	public String getsNumTarjeta() { return sNumTarjeta; }
-	public void setsNumTarjeta(String sNumTarjeta) { this.sNumTarjeta = sNumTarjeta; }
-	public int getiPin() { return iPin; }
-	public void setiPin(int iPin) { this.iPin = iPin; }
-	public Date getFechaExpiracion() { return fechaExpiracion; }
-	public void setFechaExpiracion(Date fechaExpiracion) { this.fechaExpiracion = fechaExpiracion; }
-	public Date getFechaCreacion() { return fechaCreacion; }
-	public void setFechaCreacion(Date fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+	public String getsNumTarjeta() { return _sNumTarjeta; }
+	public void setsNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
+	public int getiPin() { return _iPin; }
+	public void setiPin(int iPin) { this._iPin = iPin; }
+	public Date getFechaExpiracion() { return _fechaExpiracion; }
+	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
+	public Date getFechaCreacion() { return _fechaCreacion; }
+	public void setFechaCreacion(Date fechaCreacion) { this._fechaCreacion = fechaCreacion; }
 }

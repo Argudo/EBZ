@@ -2,7 +2,6 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.Icon"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.VaadinIcon"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.VerticalLayout"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H2"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Image"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H4"/>
@@ -29,9 +28,21 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H6"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H5"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.Component"/>
-    <fullyQualifiedTypeName name="javax.persistence.Entity"/>
-    <fullyQualifiedTypeName name="org.springframework.data.annotation.Id"/>
     <fullyQualifiedTypeName name="org.hibernate.annotations.Type"/>
     <fullyQualifiedTypeName name="javax.persistence.ManyToOne"/>
     <fullyQualifiedTypeName name="java.util.UUID"/>
+    <fullyQualifiedTypeName name="javax.persistence.OneToOne"/>
+    <fullyQualifiedTypeName name="javax.persistence.Entity"/>
+    <fullyQualifiedTypeName name="org.springframework.boot.CommandLineRunner"/>
+    <fullyQualifiedTypeName name="org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjetaRepository"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjeta"/>
+    <fullyQualifiedTypeName name="org.springframework.data.annotation.Id"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoCrediticioRepository"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoCrediticio"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.io.Serializable"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.VerticalLayout"/>
 </qualifiedTypeNameHistroy>
