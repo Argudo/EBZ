@@ -10,4 +10,8 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 .metadata/
+*.log
 .metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+.metadata/version.ini
+*.log
+*.ini

@@ -43,44 +43,52 @@ public class MainView extends VerticalLayout {
 
 		//add(getContent());
     	setHeight("100vh");
+	//Componentes esteticos
+	private VerticalLayout vlCuadroInicio = new VerticalLayout();
+	private VerticalLayout vlImage = new VerticalLayout();
+	private Image imgLogo = new Image("images/brand.png", "Logo");
+	private Hr hrLogIn = new Hr();
+
+	//Componentes campos usario y contraña
+	private VerticalLayout vlMid = new VerticalLayout();
+	private TextField tboxUser = new TextField("DNI");
+	private PasswordField tboxPass = new PasswordField("Contraseña");
+	
+	//Componente boton de login
+	private Button btnLogIn = new Button("Iniciar Sesión");
+
+    public MainView() {
+    	setSizeFull();
+    	setMargin(false);
+    	setSpacing(false);
+    	setPadding(false);
+    	setClassName("host");
     	setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     	setAlignItems(FlexComponent.Alignment.CENTER);
     	
-    	VerticalLayout vlCuadroInicio = new VerticalLayout();
+    	
     	vlCuadroInicio.setWidth("30vw");
     	vlCuadroInicio.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     	vlCuadroInicio.setClassName("box");
     	vlCuadroInicio.setPadding(true);
 
 
-    	Image imgLogo = new Image("images/brand.png", "Logo");
     	imgLogo.setWidth("20%");
-    	VerticalLayout vlImage = new VerticalLayout();
     	vlImage.setMargin(false);
     	vlImage.setPadding(false);
     	vlImage.setSpacing(false);
     	vlImage.add(imgLogo);
     	vlImage.setAlignItems(FlexComponent.Alignment.CENTER);
     	
-    	Hr hrLogIn = new Hr();
-    	Paragraph pUser = new Paragraph();
-    	TextField tboxUser = new TextField("DNI");
+
     	tboxUser.setWidth("80%");
-    	Paragraph pPass = new Paragraph();
-    	PasswordField tboxPass = new PasswordField("Contraseña");
     	tboxPass.setWidth("80%");
     	
-    	Button btnLogIn = new Button("Iniciar Sesión");
-    	VerticalLayout vlMid = new VerticalLayout();
     	vlMid.add(tboxUser,
     			  tboxPass,
     			  btnLogIn
     			);
     	vlMid.setAlignItems(FlexComponent.Alignment.CENTER);
-    	btnLogIn.addClickListener( click -> {
-    		btnLogIn.getUI().ifPresent(ui ->
-            ui.navigate("home"));
-    	});
     	setMargin(true);
     	setPadding(true);
     	
@@ -89,7 +97,14 @@ public class MainView extends VerticalLayout {
     			hrLogIn,
     			vlMid	
     	);
-    	
     	add(vlCuadroInicio);
+    	
+    	
+    	btnLogIn.addClickListener(event -> {
+    		String sUsername = tboxUser.getValue();
+    		String sPassword = tboxPass.getValue();
+    		if(true)//TODO: Verificar inicio sesión a través de la clase usuario
+    			btnLogIn.getUI().ifPresent(ui ->ui.navigate("home"));
+    	});
     }
 }

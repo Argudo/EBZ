@@ -51,6 +51,11 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        
+        <repository>
+		   <id>vaadin-addons</id>
+		   <url>https://maven.vaadin.com/vaadin-addons</url>
+		</repository>
     </repositories>
 
     <pluginRepositories>
@@ -72,6 +77,11 @@
 
     <dependencyManagement>
         <dependencies>
+			<dependency>
+			    <groupId>javax.xml.bind</groupId>
+			    <artifactId>jaxb-api</artifactId>
+			    <version>2.3.0</version>
+			</dependency>
             <dependency>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-bom</artifactId>
@@ -100,6 +110,24 @@
             <!-- Replace artifactId with vaadin-core to use only free components -->
             <artifactId>vaadin</artifactId>
         </dependency>
+        <!-- Dependencia para SHA-256 -->
+        <dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>31.0.1-jre</version>
+		</dependency>
+		<!-- Dependencia para Luhn -->
+		<dependency>
+		    <groupId>commons-validator</groupId>
+		    <artifactId>commons-validator</artifactId>
+		    <version>1.5.1</version>
+		</dependency>
+		<!-- Dependencia para el carrousel -->
+		<dependency>
+		   <groupId>de.mekaso.vaadin.addons</groupId>
+		   <artifactId>carousel</artifactId>
+		   <version>0.8.0</version>
+		</dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
