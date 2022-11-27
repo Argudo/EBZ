@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,11 @@ public class Movimiento {
     public Movimiento(Date fecha, TipoMoviento tipo) {
         Fecha = fecha;
         this.tipo = tipo;
+    }
+
+    public static List<Movimiento> sortByFechaASC(List<Movimiento> movimientos) {
+        movimientos.sort((m1, m2) -> m1.getFecha().compareTo(m2.getFecha()));
+        return movimientos;
     }
 
     //getters

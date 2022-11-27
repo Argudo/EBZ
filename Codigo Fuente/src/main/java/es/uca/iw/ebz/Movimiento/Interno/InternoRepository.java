@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface InternoRepository extends JpaRepository<Interno, UUID> {
     List<Interno> findByCuentaOrigen(Cuenta cuentaOrigen);
     List<Interno> findByCuentaDestino(Cuenta cuentaDestino);
-    List<Interno> findByCuentaOrigenAndAndCuentaDestino(Cuenta cuentaOrigen, Cuenta cuentaDestino);
+    List<Interno> findByCuentaOrigenOrCuentaDestino(Cuenta cuentaOrigen, Cuenta cuentaDestino);
+
+    Interno findByMovimiento(Movimiento movimiento);
 
 }
