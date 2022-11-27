@@ -16,6 +16,7 @@ public class Cliente {
 	@Id
 	@GeneratedValue
 	private UUID Id;
+	public UUID getId(){ return this.Id; }
 
 	//Atributos de inicio
 	@NotNull
@@ -33,23 +34,37 @@ public class Cliente {
 	@NotNull
 	@Column(name = "nombre")
 	private String sNombre;
+	public String getnombre(){ return this.sNombre; }
+
+	public void setNombre(String nombre) { this.sNombre = nombre; }
+
 	@NotNull
 	@Column(name = "fecha_nacimiento")
 	private Date dFechaNacimiento;
+	public Date getFechaNacimiento(){ return this.dFechaNacimiento; }
+	public void  setFechaNacimiento(Date fecha){ this.dFechaNacimiento = fecha; }
 	@NotNull
 	@Column(name = "fecha_registro")
 	private Date dFechaRegistro;
+	public Date getFechaRegistro(){ return this.dFechaRegistro; }
+	public void  setFechaRegitro(Date fecha){ this.dFechaRegistro = fecha; }
 	@Column(name = "fecha_eliminacion")
 	private Date dFechaEliminacion;
+	public Date getFechaEliminacion(){ return this.dFechaEliminacion; }
+	public void  setFechaEliminaciono(Date fecha){ this.dFechaEliminacion = fecha; }
 
 	//Relaciones
 	@OneToMany
 	@JoinColumn(name = "cliente_id")
 	@Column(name = "cuentas")
 	private List<Cuenta> aCuentas;
+	public List<Cuenta> getCuentas (){ return aCuentas; }
+	public  void steCuentas (Cuenta cuenta){ this.aCuentas.add(cuenta); }
 	@NotNull
 	@Column(name = "tipo_cliente")
 	private TipoCliente eTipoCliente;
+	public TipoCliente getTipoCliente (){ return this.eTipoCliente; }
+	public void setTipoCliente (TipoCliente tip){ this.eTipoCliente = tip; }
 
 
 	public Cliente(){}
