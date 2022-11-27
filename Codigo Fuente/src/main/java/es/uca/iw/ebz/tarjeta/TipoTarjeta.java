@@ -13,6 +13,8 @@ public class TipoTarjeta {
 	@Column(name = "Nombre")
 	String _sNombre;
 	
+	public TipoTarjeta(){}
+	
 	public TipoTarjeta(EnumTarjeta enumTipo){
 		_iId = EnumTarjeta.toInt(enumTipo);
 		_sNombre = enumTipo.name();

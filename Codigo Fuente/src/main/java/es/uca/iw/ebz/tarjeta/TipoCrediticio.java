@@ -17,6 +17,8 @@ public class TipoCrediticio {
 	@Column(name = "limite")
 	float _fLimite;
 
+	public TipoCrediticio(){}
+	
 	public TipoCrediticio(int iId, String sNombre, float fLimite) {
 		_iId = iId;
 		_sNombre = sNombre;

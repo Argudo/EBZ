@@ -28,8 +28,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @PWA(name = "ebz", shortName = "ebz", offlineResources = {})
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class Application implements AppShellConfigurator, CommandLineRunner {
-	
+	@Autowired
 	TipoTarjetaRepository tipoTarRepo;
+	@Autowired
 	TipoCrediticioRepository tipoCredRepo;
 
     public static void main(String[] args) {
@@ -38,16 +39,16 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		if(tipoTarRepo.count() != 0) {
+		if(tipoTarRepo.count() == 0) {
 			tipoTarRepo.save(new TipoTarjeta(1, "Debito"));
 			tipoTarRepo.save(new TipoTarjeta(2, "Crédito"));
 			tipoTarRepo.save(new TipoTarjeta(3, "Prepago"));
 		}
 		
-		if(tipoCredRepo.count() != 0) {
+		if(tipoCredRepo.count() == 0) {
 			tipoCredRepo.save(new TipoCrediticio(1, "Gold", 1000));
-			tipoCredRepo.save(new TipoCrediticio(1, "Platinum", 10000));
-			tipoCredRepo.save(new TipoCrediticio(1, "Black", 100000));
+			tipoCredRepo.save(new TipoCrediticio(2, "Platinum", 10000));
+			tipoCredRepo.save(new TipoCrediticio(3, "Black", 100000));
 			
 		}
 	}
