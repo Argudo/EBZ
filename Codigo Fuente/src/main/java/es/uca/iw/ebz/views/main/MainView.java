@@ -40,22 +40,21 @@ public class MainView extends VerticalLayout {
 
     public MainView(CuentaService cuentaService) {
 		this.cuentaService = cuentaService;
+    }
 
-		//add(getContent());
-    	setHeight("100vh");
 	//Componentes esteticos
-	private VerticalLayout vlCuadroInicio = new VerticalLayout();
-	private VerticalLayout vlImage = new VerticalLayout();
-	private Image imgLogo = new Image("images/brand.png", "Logo");
-	private Hr hrLogIn = new Hr();
-
-	//Componentes campos usario y contraña
-	private VerticalLayout vlMid = new VerticalLayout();
-	private TextField tboxUser = new TextField("DNI");
-	private PasswordField tboxPass = new PasswordField("Contraseña");
+		private VerticalLayout vlCuadroInicio = new VerticalLayout();
+		private VerticalLayout vlImage = new VerticalLayout();
+		private Image imgLogo = new Image("images/brand.png", "Logo");
+		private Hr hrLogIn = new Hr();
 	
-	//Componente boton de login
-	private Button btnLogIn = new Button("Iniciar Sesión");
+		//Componentes campos usario y contraña
+		private VerticalLayout vlMid = new VerticalLayout();
+		private TextField tboxUser = new TextField("DNI");
+		private PasswordField tboxPass = new PasswordField("Contraseña");
+		
+		//Componente boton de login
+		private Button btnLogIn = new Button("Iniciar Sesión");
 
     public MainView() {
     	setSizeFull();
