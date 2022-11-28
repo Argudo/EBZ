@@ -15,11 +15,11 @@ public class TarjetaService {
 		_tarjeta = tarjeta;
 	}
 	
-	public Component GenerarTarjeta() {
+	public Component GenerarTarjeta(Tarjeta t) {
 		VerticalLayout vlTarjeta = new VerticalLayout();
         vlTarjeta.add(new H4("EBZ"),
-        			   new H5(_tarjeta.getsNumTarjeta()),
-        			   new H6(_tarjeta.getFechaExpiracion().toString()));
+        			   new H5(t.getsNumTarjeta()),
+        			   new H6(t.getFechaExpiracion().toString()));
         vlTarjeta.setClassName("tarjeta-mid");
         vlTarjeta.setWidth("300px");
         vlTarjeta.setHeight("200px");

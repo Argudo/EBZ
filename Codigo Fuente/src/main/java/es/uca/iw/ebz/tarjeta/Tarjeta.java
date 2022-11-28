@@ -1,11 +1,15 @@
 package es.uca.iw.ebz.tarjeta;
 
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.*;
 
+import org.apache.commons.codec.binary.Hex;
 import org.hibernate.annotations.Type;
 import javax.persistence.Id;
 
@@ -49,7 +53,9 @@ public class Tarjeta {
 		super();
 		_iPin = iPin;
 		_tipoTarjeta = tipoTarjeta;
+		_sNumCuenta = "81732HAASKJDHA171872";
 		_sNumTarjeta = GenerarNumTarjeta();
+		_fechaExpiracion = GenerarFechaExpiracion();
 	}
 
 	private String GenerarNumTarjeta() {
@@ -58,8 +64,8 @@ public class Tarjeta {
 		switch(_tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				String sNumCuenta_sha256 = Hashing.sha256().hashString(_sNumCuenta, StandardCharsets.UTF_8).toString();
-				sNumTarjeta += sNumCuenta_sha256.substring(0,8);
+				String sNumCuenta_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_sNumCuenta, StandardCharsets.UTF_8).toString());
+				sNumTarjeta += sNumCuenta_sha256.substring(0,8).toUpperCase();
 				break;
 			case Credito:
 				sNumTarjeta += "1";
@@ -73,6 +79,25 @@ public class Tarjeta {
 		sNumTarjeta += CalculateCheckDigit(sNumTarjeta);
 		return sNumTarjeta;
 	}
+	
+	private static Date GenerarFechaExpiracion() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(Calendar.MONTH, calendar.MONTH);
+		calendar.set(Calendar.YEAR, calendar.YEAR);
+		return calendar.getTime();
+	}
+	
+	public static String StringToHexadecimal(String str) {
+	      StringBuffer sb = new StringBuffer();
+	      //Converting string to character array
+	      char ch[] = str.toCharArray();
+	      for(int i = 0; i < ch.length; i++) {
+	         String hexString = Integer.toHexString(ch[i]);
+	         sb.append(hexString);
+	      }
+	      return sb.toString();
+		}
 	
 	private static String CalculateCheckDigit(String card) {
 		if (card == null)
@@ -104,7 +129,27 @@ public class Tarjeta {
 		digit = sum + "";
 		return digit.substring(digit.length() - 1);
 	}
+	
+	public static Component GenerarTarjeta(Tarjeta t) {
+		UUID _id = t._iId;
+		VerticalLayout vlTarjeta = new VerticalLayout();
+        DateFormat dateFormat = new SimpleDateFormat("mm/yy");  
+        String fechaExpiracion = dateFormat.format(t.getFechaExpiracion());  
+        vlTarjeta.add(new H4("EBZ"),
+        			   new H5(t.getsNumTarjeta()),
+        			   new H6(fechaExpiracion)
+        			 );
+        vlTarjeta.setClassName("tarjeta-mid");
+        vlTarjeta.setWidth("300px");
+        vlTarjeta.setHeight("200px");
+        vlTarjeta.setPadding(false);
+        vlTarjeta.getStyle().set("display", "-webkit-box");
+        vlTarjeta.setAlignItems(FlexComponent.Alignment.CENTER);
+        vlTarjeta.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        return vlTarjeta;
+	}
 
+	public UUID getId() { return _iId; }
 	public String getsNumTarjeta() { return _sNumTarjeta; }
 	public void setsNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
 	public int getiPin() { return _iPin; }
