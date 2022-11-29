@@ -158,4 +158,5 @@ public class Tarjeta {
 	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
 	public Date getFechaCreacion() { return _fechaCreacion; }
 	public void setFechaCreacion(Date fechaCreacion) { this._fechaCreacion = fechaCreacion; }
+	public TipoTarjeta getTipoTarjeta() { return _tipoTarjeta; }
 }

@@ -46,6 +46,20 @@
   }
 }
 
+.detalleTarjeta{
+	padding: 10px;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	border-radius: 10px;
+}
+
+.detalleTarjeta h3{
+	padding-left: 40px;
+}
+
+.detalleTarjeta p{
+	padding-left: 40px;
+}
+
 .tarjeta-mid{
 	background-image: url("/images/tarjeta.png");
 	background-repeat: no-repeat;
