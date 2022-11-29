@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 
+import es.uca.iw.ebz.tarjeta.Tarjeta;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -59,12 +60,18 @@ public class Cliente {
 	@Column(name = "cuentas")
 	private List<Cuenta> aCuentas;
 	public List<Cuenta> getCuentas (){ return aCuentas; }
-	public  void steCuentas (Cuenta cuenta){ this.aCuentas.add(cuenta); }
+	public  void setCuentas (Cuenta cuenta){ this.aCuentas.add(cuenta); }
 	@NotNull
 	@Column(name = "tipo_cliente")
 	private TipoCliente eTipoCliente;
 	public TipoCliente getTipoCliente (){ return this.eTipoCliente; }
 	public void setTipoCliente (TipoCliente tip){ this.eTipoCliente = tip; }
+	@OneToMany
+	@JoinColumn(name = "cliente_id")
+	@Column(name = "tarjeta")
+	private List<Tarjeta> aTarjetas;
+	public List<Tarjeta> getTarjetas (){ return aTarjetas; }
+	public  void setTarjetas (Tarjeta tarjeta){ this.aTarjetas.add(tarjeta); }
 
 	public Cliente(){}
 }

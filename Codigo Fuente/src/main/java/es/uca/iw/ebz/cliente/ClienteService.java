@@ -1,11 +1,14 @@
 package es.uca.iw.ebz.cliente;
 
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.tarjeta.Tarjeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class ClienteService {
@@ -33,5 +36,6 @@ public class ClienteService {
 		if (cli.getContraseña() != codifica(contraseña)) throw  new ContraseñaIncorrecta("La contraseña no coincide con la de la base de datos " + contraseña);
 		return cli;
 	}
+
 
 }
