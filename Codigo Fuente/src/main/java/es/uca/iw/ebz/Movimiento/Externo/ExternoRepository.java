@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface ExternoRepository extends JpaRepository<Externo, UUID> {
-    public List<Externo> findByCuentaPropia(Cuenta cuenta);
+     List<Externo> findByCuentaPropia(Cuenta cuenta);
 
-    public Externo findByMovimiento(Movimiento movimiento);
+     Externo findByMovimiento(Movimiento movimiento);
 }
