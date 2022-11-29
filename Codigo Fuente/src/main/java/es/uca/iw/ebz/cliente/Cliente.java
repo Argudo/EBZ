@@ -66,6 +66,5 @@ public class Cliente {
 	public TipoCliente getTipoCliente (){ return this.eTipoCliente; }
 	public void setTipoCliente (TipoCliente tip){ this.eTipoCliente = tip; }
 
-
 	public Cliente(){}
 }
