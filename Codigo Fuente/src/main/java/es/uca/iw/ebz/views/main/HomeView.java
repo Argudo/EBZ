@@ -1,29 +1,26 @@
 package es.uca.iw.ebz.views.main;
 
+import java.util.concurrent.TimeUnit;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import de.mekaso.vaadin.addons.Carousel;
+
 @PageTitle("Home")
 @Route(value = "home", layout = MainLayout.class)
 
 public class HomeView extends VerticalLayout{
 	 private TextField name;
-	    private Button sayHello;
+    private Button sayHello;
 
 	    public HomeView() {
 	        setMargin(false);

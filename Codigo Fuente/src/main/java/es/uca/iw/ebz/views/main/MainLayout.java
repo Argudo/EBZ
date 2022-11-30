@@ -95,7 +95,8 @@ public class MainLayout extends AppLayout{
 
 	private Component[] createMenuItems() {
 	    return new Tab[] { createTab("Inicio", HomeView.class),
-	            createTab("Transferencias", HomeView.class) };
+	            createTab("Transferencias", HomeView.class),
+	            createTab("Tarjetas", TarjetaView.class)};
 	}
 
 	private static Tab createTab(String text,
