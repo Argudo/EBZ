@@ -19,3 +19,4 @@ buildNumber.properties
 .metadata/.plugins/org.eclipse.jdt.ui/QualifiedTypeNameHistory.xml
 .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.ui.prefs
 .metadata/version.ini
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
