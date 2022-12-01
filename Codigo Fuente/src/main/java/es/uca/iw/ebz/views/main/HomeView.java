@@ -5,10 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.textfield.TextField;
@@ -16,6 +13,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import java.awt.*;
+import java.text.NumberFormat;
 
 @PageTitle("Home")
 @Route(value = "home", layout = MainLayout.class)
@@ -31,16 +29,24 @@ public class HomeView extends VerticalLayout{
 			setWidthFull();
 			setAlignItems(FlexComponent.Alignment.CENTER);
 
-	        VerticalLayout vlMain = new VerticalLayout();
-	        vlMain.setWidth("80vw");
-	        vlMain.setPadding(false);
-			vlMain.setSpacing(false);
-	        vlMain.setMargin(true);
-			vlMain.setClassName("box");
+			//First layout section
+			HorizontalLayout hlMain = new HorizontalLayout();
+			hlMain.setWidth("80vw");
+			hlMain.setPadding(false);
+			hlMain.setSpacing(true);
+			hlMain.setMargin(true);
+			hlMain.setClassName("box");
+			//End first layout section
 
-	        
-	        //Banner section
-	        //End Banner section
+
+			//Account information and buttons section
+	        VerticalLayout vlAccount = new VerticalLayout();
+	        vlAccount.setWidth("70%");
+	        vlAccount.setPadding(false);
+			vlAccount.setSpacing(false);
+	        vlAccount.setMargin(false);
+			//End account information and buttons section
+
 
 			//Username section
 			Component userName = CreateUserNameBanner("Faliyo de San Roque");
@@ -71,9 +77,22 @@ public class HomeView extends VerticalLayout{
 	        //End button section
 
 			//Including name, account information and buttons to the first layout
-			vlMain.add(userName);
-			vlMain.add(acGallery);
-			vlMain.add(flAccountButtons);
+			vlAccount.add(userName);
+			vlAccount.add(acGallery);
+			vlAccount.add(flAccountButtons);
+			//End of including...
+
+			//List of accounts component
+
+			//Account list layout section
+			VerticalLayout vlAccountList = new VerticalLayout();
+			vlAccountList.setWidth("30%");
+			Scroller accountScroller = new Scroller();
+
+
+
+			hlMain.add(vlAccount);
+			hlMain.add(vlAccountList);
 
 			//Movements and notifications section
 			HorizontalLayout hlAccountMove = new HorizontalLayout();
@@ -82,8 +101,6 @@ public class HomeView extends VerticalLayout{
 			hlAccountMove.setPadding(false);
 			hlAccountMove.setMargin(true);
 			hlAccountMove.setWidth("80vw");
-
-			//Tengo que crear dos layouts verticales, uno con los primeros movimientos y otro con las primeras notificaciones.
 
 			FlexLayout flAccountMovements = new FlexLayout();
 			flAccountMovements.setWidthFull();
@@ -123,7 +140,7 @@ public class HomeView extends VerticalLayout{
 
 			//End movements and notifications section
 	        
-	        add(vlMain);
+	        add(hlMain);
 			add(hlAccountMove);
 
 	       
@@ -166,10 +183,10 @@ public class HomeView extends VerticalLayout{
 			vlMain.setSpacing(false);
 			vlMain.setWidth("100%");
 
-			String _sAux = acBalance + "€";
+			NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 
 			H2 _acNumber = new H2(acNumber);
-			H3 _acBalance = new H3(_sAux);
+			H3 _acBalance = new H3(formatImport.format(acBalance));
 			vlMain.add(
 					_acNumber,
 					_acBalance
@@ -185,7 +202,8 @@ public class HomeView extends VerticalLayout{
 			VerticalLayout vlMain = new VerticalLayout();
 			vlMain.setAlignItems(Alignment.CENTER);
 			vlMain.setSpacing(false);
-			vlMain.setWidth("50%");
+			vlMain.setPadding(true);
+			vlMain.setWidthFull();
 
 			H1 _userName = new H1("Bienvenido, " + userName);
 
