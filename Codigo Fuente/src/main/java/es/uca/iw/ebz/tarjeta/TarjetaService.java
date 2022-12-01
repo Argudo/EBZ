@@ -22,7 +22,7 @@ public class TarjetaService {
 	private TarjetaRepository _tarRepository;
 	
 	@Autowired
-	public TarjetaService(Tarjeta tarjeta, TarjetaRepository tarRepository) {
+	public TarjetaService(TarjetaRepository tarRepository) {
 		_tarRepository = tarRepository;
 	}
 	
