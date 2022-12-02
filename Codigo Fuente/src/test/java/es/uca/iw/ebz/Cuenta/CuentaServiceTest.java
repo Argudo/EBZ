@@ -25,7 +25,7 @@ public class CuentaServiceTest {
 
     @Test
     public void testAñadirCuenta() {
-        Cuenta cuenta;
+        Cuenta cuenta = ObjectMother.createTestCuenta();
         cuentaTest = new Cuenta();
         cuentaTest = cuentaService.añadirCuenta(cuentaTest);
         cuenta = cuentaService.findByNumeroCuenta(cuentaTest.getNumeroCuenta());

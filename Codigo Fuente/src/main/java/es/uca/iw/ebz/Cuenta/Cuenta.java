@@ -14,11 +14,12 @@ public class Cuenta {
     @GeneratedValue
     private UUID id;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "numero_cuenta")
     @NotEmpty
     private String sNumeroCuenta;
 
-    @Column
+    @Column(name = "saldo")
+    @NotNull
     private float fSaldo = 0;
 
     @Column
