@@ -19,15 +19,20 @@ public class Movimiento {
     @NotNull
     private Date Fecha;
 
+    @Column(name = "concepto")
+    @NotNull
+    private String sConcpeto;
+
     @Column
     @NotNull
     private TipoMoviento tipo;
 
     public Movimiento() {}
 
-    public Movimiento(Date fecha, TipoMoviento tipo) {
+    public Movimiento(Date fecha, String sConcpeto, TipoMoviento tipo) {
         Fecha = fecha;
         this.tipo = tipo;
+        this.sConcpeto = sConcpeto;
     }
 
     public static List<Movimiento> sortByFechaASC(List<Movimiento> movimientos) {
@@ -39,9 +44,11 @@ public class Movimiento {
     public UUID getId() {return id;}
     public Date getFecha() {return Fecha;}
     public TipoMoviento getTipo() {return tipo;}
+    public String getsConcpeto() {return sConcpeto;}
 
     //setters
     public void setId(UUID id) {this.id = id;}
     public void setFecha(Date fecha) {Fecha = fecha;}
     public void setTipo(TipoMoviento tipo) {this.tipo = tipo;}
+    public void setsConcpeto(String sConcpeto) {this.sConcpeto = sConcpeto;}
 }

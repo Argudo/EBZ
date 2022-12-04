@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.Cuenta;
 
+import es.uca.iw.ebz.cliente.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,10 @@ public class CuentaService {
 
     public Cuenta findByNumeroCuenta(String sNumeroCuenta) {
         return _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
+    }
+
+    public List<Cuenta> findByCliente(Cliente cliente) {
+        return _cuentaRepository.findByCliente(cliente);
     }
 
     private String generarNumeroCuenta() {
