@@ -10,7 +10,9 @@ import es.uca.iw.ebz.Movimiento.Interno.Interno;
 import es.uca.iw.ebz.Movimiento.Interno.InternoService;
 import es.uca.iw.ebz.Movimiento.RecargaTarjeta.RecargaTarjeta;
 import es.uca.iw.ebz.Movimiento.RecargaTarjeta.RecargaTarjetaService;
+import es.uca.iw.ebz.cliente.Cliente;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
+import es.uca.iw.ebz.tarjeta.TarjetaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +32,19 @@ public class MovimientoService {
 
     private CompraTarjetaService _compraTarjetaService;
 
+    private TarjetaService _tarjetaService;
+
     @Autowired
     public MovimientoService(MovimientoRepository movimientoRepository, InternoService internoService, ExternoService externoService,
-                             CuentaService cuentaService, RecargaTarjetaService recargaTarjetaService, CompraTarjetaService compraTarjetaService) {
+                             CuentaService cuentaService, RecargaTarjetaService recargaTarjetaService,
+                             CompraTarjetaService compraTarjetaService, TarjetaService tarjetaService) {
         _movimientoRepository = movimientoRepository;
         _internoService = internoService;
         _externoService = externoService;
         _cuentaService = cuentaService;
         _recargaTarjetaService = recargaTarjetaService;
         _compraTarjetaService = compraTarjetaService;
+        _tarjetaService = tarjetaService;
     }
 
     public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) {
@@ -146,5 +152,18 @@ public class MovimientoService {
                 break;
         }
         return datos;
+    }
+
+    public List<Movimiento> findByClienteByFechaASC(Cliente cliente) {
+        List<Movimiento> movimientos = new ArrayList<Movimiento>();
+        List<Cuenta> cuentas = cliente.getCuentas();
+        List<Tarjeta> tarjetas = cliente.getTarjetas();
+        for(Cuenta cuenta : cuentas) {
+            movimientos.addAll(findByCuentaOrderByFechaASC(cuenta));
+        }
+        for(Tarjeta tarjeta : tarjetas) {
+            movimientos.addAll(findByTarjetaOrderByASC(tarjeta));
+        }
+        return Movimiento.sortByFechaASC(movimientos);
     }
 }
