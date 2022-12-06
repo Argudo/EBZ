@@ -51,7 +51,6 @@ public class MovimientoService {
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
             case INTERNO:
-
                 Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaService.findByNumeroCuenta(cuentaDestino), mov);
                 _internoService.añadirInterno(interno);
                 break;
@@ -130,25 +129,27 @@ public class MovimientoService {
         switch (movimiento.getTipo()) {
             case INTERNO:
                 Interno interno = _internoService.findByMovimiento(movimiento);
-                datos.put("cuentaOrigen", interno.getCuentaOrigen().getNumeroCuenta());
-                datos.put("cuentaDestino", interno.getCuentaDestino().getNumeroCuenta());
-                datos.put("importe", interno.getImporte());
+                datos.put("Origen", interno.getCuentaOrigen().getNumeroCuenta());
+                datos.put("Destino", interno.getCuentaDestino().getNumeroCuenta());
+                datos.put("Importe", interno.getImporte());
                 break;
             case EXTERNO:
                 Externo externo = _externoService.findByMovimiento(movimiento);
-                datos.put("cuentaPropia", externo.getCuentaPropia().getNumeroCuenta());
-                datos.put("cuentaDestino", externo.getNumCuentaAjena());
-                datos.put("importe", externo.getImporte());
+                datos.put("Origen", externo.getCuentaPropia().getNumeroCuenta());
+                datos.put("Destino", externo.getNumCuentaAjena());
+                datos.put("Importe", externo.getImporte());
                 break;
             case COMPRATARJETA:
                 CompraTarjeta compraTarjeta = _compraTarjetaService.findByMovimiento(movimiento);
-                datos.put("tarjeta", compraTarjeta.getTarjeta().getsNumTarjeta());
-                datos.put("destino", compraTarjeta.getDestino());
-                datos.put("importe", compraTarjeta.getImporte());
+                datos.put("Origen", compraTarjeta.getTarjeta().getsNumTarjeta());
+                datos.put("Destino", compraTarjeta.getDestino());
+                datos.put("Importe", compraTarjeta.getImporte());
                 break;
             case RECARGATARJETA:
                 RecargaTarjeta recargaTarjeta = _recargaTarjetaService.findByMovimiento(movimiento);
-
+                datos.put("Origen", recargaTarjeta.getCuenta().getNumeroCuenta());
+                datos.put("Destino", recargaTarjeta.getTarjeta().getsNumTarjeta());
+                datos.put("Importe", recargaTarjeta.getImporte());
                 break;
         }
         return datos;
@@ -156,7 +157,8 @@ public class MovimientoService {
 
     public List<Movimiento> findByClienteByFechaASC(Cliente cliente) {
         List<Movimiento> movimientos = new ArrayList<Movimiento>();
-        List<Cuenta> cuentas = cliente.getCuentas();
+        List<Cuenta> cuentas = _cuentaService.findByCliente(cliente);
+        //List<Tarjeta> tarjetas = _tarjetaService.findByCliente(cliente);
         List<Tarjeta> tarjetas = cliente.getTarjetas();
         for(Cuenta cuenta : cuentas) {
             movimientos.addAll(findByCuentaOrderByFechaASC(cuenta));
