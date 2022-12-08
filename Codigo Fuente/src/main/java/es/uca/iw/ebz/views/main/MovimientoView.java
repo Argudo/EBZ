@@ -7,8 +7,10 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.stereotype.Component;
 
 @PageTitle("Movimiento")
+@Component
 @Route(value = "movimiento", layout = MainLayout.class)
 public class MovimientoView extends VerticalLayout {
     private VerticalLayout vlDetalleMovimiento = new VerticalLayout();
@@ -19,11 +21,11 @@ public class MovimientoView extends VerticalLayout {
     private H3 hConcepto = new H3("Concepto");
     private H3 hFecha = new H3("Fecha");
 
-    private Paragraph pOrigen = new Paragraph();
-    private Paragraph pDestino = new Paragraph();
-    private Paragraph pImporte = new Paragraph();
-    private Paragraph pConcepto = new Paragraph();
-    private Paragraph pFecha = new Paragraph();
+    public Paragraph pOrigen = new Paragraph();
+    public Paragraph pDestino = new Paragraph();
+    public Paragraph pImporte = new Paragraph();
+    public Paragraph pConcepto = new Paragraph();
+    public Paragraph pFecha = new Paragraph();
     public MovimientoView () {
         H1 hMovimiento = new H1("| Detalle del movimiento");
         hMovimiento.setClassName("title");

@@ -41,12 +41,11 @@ public class CuentaServiceTest {
 
     @Test
     public void testUpdate() {
-        Cuenta cuenta;
         cuentaTest = new Cuenta();
         cuentaTest.setNumeroCuenta("12345678901234567890");
         cuentaService.update(cuentaTest.getNumeroCuenta(), 10);
-        //cuenta = cuentaService.findByNumeroCuenta("12345678901234567890");
-        assertTrue(cuentaTest.getSaldo() == 10);
+        Optional<Cuenta> cuenta = cuentaService.findByNumeroCuenta("12345678901234567890");
+        assertTrue(cuenta.get().getSaldo() == 10);
     }
 
 }

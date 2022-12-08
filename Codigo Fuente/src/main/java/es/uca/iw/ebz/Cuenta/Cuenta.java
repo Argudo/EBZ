@@ -31,7 +31,7 @@ public class Cuenta {
     @Column
     private Date fechaEliminacion;
 
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
     private Cliente cliente;
     public Cuenta() {}
 
