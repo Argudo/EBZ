@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -21,12 +22,13 @@ public class CuentaService {
     public Cuenta añadirCuenta(Cuenta cuenta) {
         //generar numero de cuenta aleatoria y comprobar que no existe
         String sNumeroCuenta = generarNumeroCuenta();
-        while (_cuentaRepository.findBysNumeroCuenta(sNumeroCuenta) != null) {
+        while (_cuentaRepository.findBysNumeroCuenta(sNumeroCuenta).isPresent()) {
             sNumeroCuenta = generarNumeroCuenta();
         }
         cuenta.setNumeroCuenta(sNumeroCuenta);
         cuenta.setFechaCreacion(new Date());
-        return _cuentaRepository.save(cuenta);
+        _cuentaRepository.save(cuenta);
+        return cuenta;
        // return cuenta;
     }
 
@@ -40,12 +42,12 @@ public class CuentaService {
     }
 
     public void update(String sNumeroCuenta, float fSaldo) {
-        Cuenta cuenta = _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
-        cuenta.setSaldo(cuenta.getSaldo() + fSaldo);
-        _cuentaRepository.save(cuenta);
+        Optional<Cuenta> cuenta = _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
+        cuenta.get().setSaldo(cuenta.get().getSaldo() + fSaldo);
+        _cuentaRepository.save(cuenta.get());
     }
 
-    public Cuenta findByNumeroCuenta(String sNumeroCuenta) {
+    public Optional<Cuenta> findByNumeroCuenta(String sNumeroCuenta) {
         return _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
     }
 

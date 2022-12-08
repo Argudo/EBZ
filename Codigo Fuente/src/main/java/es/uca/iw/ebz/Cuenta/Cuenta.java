@@ -42,9 +42,8 @@ public class Cuenta {
         this.fechaEliminacion = fechaEliminacion;
     }
 
-    public Cuenta(Date fechaCreacion, Date fechaEliminacion) {
+    public Cuenta(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
-        this.fechaEliminacion = fechaEliminacion;
     }
 
     //getters

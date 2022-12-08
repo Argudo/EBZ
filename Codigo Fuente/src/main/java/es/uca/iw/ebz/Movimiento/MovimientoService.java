@@ -51,7 +51,7 @@ public class MovimientoService {
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
             case INTERNO:
-                Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaService.findByNumeroCuenta(cuentaDestino), mov);
+                Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaService.findByNumeroCuenta(cuentaDestino).get(), mov);
                 _internoService.añadirInterno(interno);
                 break;
             case EXTERNO:
@@ -69,7 +69,7 @@ public class MovimientoService {
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
             case RECARGATARJETA:
-                RecargaTarjeta recargaTarjeta = new RecargaTarjeta(_cuentaService.findByNumeroCuenta(sDestino), tarjeta, fimporte, mov);
+                RecargaTarjeta recargaTarjeta = new RecargaTarjeta(_cuentaService.findByNumeroCuenta(sDestino).get(), tarjeta, fimporte, mov);
                 _recargaTarjetaService.añadirRecargaTarjeta(recargaTarjeta);
                 break;
             case COMPRATARJETA:
