@@ -61,7 +61,7 @@ private Cliente _cliente;
 		HorizontalLayout hlMain = new HorizontalLayout();
 		hlMain.setAlignItems(Alignment.CENTER);
 		hlMain.setWidth("80vw");
-		hlMain.setHeight("24vw");
+		hlMain.setHeight("30%");
 		hlMain.setPadding(false);
 		hlMain.setSpacing(true);
 		hlMain.setMargin(true);
@@ -117,7 +117,7 @@ private Cliente _cliente;
 		Scroller accountScroller = new Scroller();
 		accountScroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
 		accountScroller.setWidth("28%");
-		accountScroller.setHeight("95%");
+		//accountScroller.setHeight("95%");
 
 
 		VerticalLayout vlAccountList = new VerticalLayout();
@@ -254,7 +254,6 @@ btnLogIn
 		vlMain.setAlignItems(FlexComponent.Alignment.CENTER);
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
-
 		Button btnFunc = new Button();
 		Icon icon = new Icon(vI);
 		btnFunc.getElement().appendChild(icon.getElement());
