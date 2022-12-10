@@ -20,6 +20,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import static es.uca.iw.ebz.usuario.UsuarioService.codifica;
+
 /**
  * The entry point of the Spring Boot application.
  *
@@ -62,7 +64,7 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 		}
 
 		if(usuario.count() == 0){
-			usuario.save(new Usuario("1234", "1234"));
+			usuario.save(new Usuario("1234", codifica("1234")));
 		}
 	}
 

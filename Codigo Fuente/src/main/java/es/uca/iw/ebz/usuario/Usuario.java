@@ -13,6 +13,10 @@ public class Usuario {
     @Id
     @GeneratedValue
     private UUID Id;
+
+    public Usuario() {
+    }
+
     public UUID getId(){ return this.Id; }
 
     //Atributos de inicio
