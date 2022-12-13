@@ -10,7 +10,7 @@ import es.uca.iw.ebz.Movimiento.Interno.Interno;
 import es.uca.iw.ebz.Movimiento.Interno.InternoService;
 import es.uca.iw.ebz.Movimiento.RecargaTarjeta.RecargaTarjeta;
 import es.uca.iw.ebz.Movimiento.RecargaTarjeta.RecargaTarjetaService;
-import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,13 +159,13 @@ public class MovimientoService {
         List<Movimiento> movimientos = new ArrayList<Movimiento>();
         List<Cuenta> cuentas = _cuentaService.findByCliente(cliente);
         //List<Tarjeta> tarjetas = _tarjetaService.findByCliente(cliente);
-        List<Tarjeta> tarjetas = cliente.getTarjetas();
+        //List<Tarjeta> tarjetas = cliente.getTarjetas();
         for(Cuenta cuenta : cuentas) {
             movimientos.addAll(findByCuentaOrderByFechaASC(cuenta));
         }
-        for(Tarjeta tarjeta : tarjetas) {
+        /*for(Tarjeta tarjeta : tarjetas) {
             movimientos.addAll(findByTarjetaOrderByASC(tarjeta));
-        }
+        }*/
         return Movimiento.sortByFechaASC(movimientos);
     }
 }
