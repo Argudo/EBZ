@@ -21,6 +21,8 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import es.uca.iw.ebz.cliente.Cliente;
+
 @Entity
 public class Tarjeta {
 	@Id
@@ -31,8 +33,10 @@ public class Tarjeta {
 	
 	@Column(name = "numTarjeta")
 	private String _sNumTarjeta;
+	
 	@Column(name = "PIN")
 	private int _iPin;
+	
 	@Column(name = "fechaExpiracion")
 	private Date _fechaExpiracion;
 	
@@ -44,6 +48,9 @@ public class Tarjeta {
 	
 	@ManyToOne
 	private TipoTarjeta _tipoTarjeta;
+	
+	@ManyToOne
+	private Cliente _clienteTitular;
 	
 	//TODO: Conexion relacional
 	@Column(name = "numCuenta")
