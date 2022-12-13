@@ -16,7 +16,7 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 
 @Service
 public class TarjetaService {

@@ -158,14 +158,14 @@ public class MovimientoService {
     public List<Movimiento> findByClienteByFechaASC(Cliente cliente) {
         List<Movimiento> movimientos = new ArrayList<Movimiento>();
         List<Cuenta> cuentas = _cuentaService.findByCliente(cliente);
-        //List<Tarjeta> tarjetas = _tarjetaService.findByCliente(cliente);
+        List<Tarjeta> tarjetas = _tarjetaService.findByCliente(cliente);
         //List<Tarjeta> tarjetas = cliente.getTarjetas();
         for(Cuenta cuenta : cuentas) {
             movimientos.addAll(findByCuentaOrderByFechaASC(cuenta));
         }
-        /*for(Tarjeta tarjeta : tarjetas) {
+        for(Tarjeta tarjeta : tarjetas) {
             movimientos.addAll(findByTarjetaOrderByASC(tarjeta));
-        }*/
+        }
         return Movimiento.sortByFechaASC(movimientos);
     }
 }
