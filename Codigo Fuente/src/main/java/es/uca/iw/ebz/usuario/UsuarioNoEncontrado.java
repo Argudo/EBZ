@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.cliente;
+package es.uca.iw.ebz.usuario;
 
 public class UsuarioNoEncontrado extends Throwable {
     private String error;
