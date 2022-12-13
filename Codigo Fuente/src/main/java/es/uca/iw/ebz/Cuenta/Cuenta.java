@@ -1,6 +1,8 @@
 package es.uca.iw.ebz.Cuenta;
 
 
+import es.uca.iw.ebz.cliente.Cliente;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -14,11 +16,12 @@ public class Cuenta {
     @GeneratedValue
     private UUID id;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "numero_cuenta")
     @NotEmpty
     private String sNumeroCuenta;
 
-    @Column
+    @Column(name = "saldo")
+    @NotNull
     private float fSaldo = 0;
 
     @Column
@@ -28,8 +31,8 @@ public class Cuenta {
     @Column
     private Date fechaEliminacion;
 
-    //@ManyToOne
-    //private user;
+    @ManyToOne(cascade=CascadeType.PERSIST)
+    private Cliente cliente;
     public Cuenta() {}
 
     public Cuenta(String sNumeroCuenta, float fSaldo, Date fechaCreacion) {
@@ -39,9 +42,8 @@ public class Cuenta {
         this.fechaEliminacion = fechaEliminacion;
     }
 
-    public Cuenta(Date fechaCreacion, Date fechaEliminacion) {
+    public Cuenta(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
-        this.fechaEliminacion = fechaEliminacion;
     }
 
     //getters
@@ -54,12 +56,14 @@ public class Cuenta {
     public float getSaldo() {return fSaldo;}
     public Date getFechaCreacion() {return fechaCreacion;}
     public Date getFechaEliminacion() {return fechaEliminacion;}
+    public Cliente getCliente() {return cliente;}
 
     //setters
     public void setNumeroCuenta(String sNumeroCuenta) {this.sNumeroCuenta = sNumeroCuenta;}
     public void setSaldo(float fSaldo) {this.fSaldo = fSaldo;}
     public void setFechaCreacion(Date fechaCreacion) {this.fechaCreacion = fechaCreacion;}
     public void setFechaEliminacion(Date fechaEliminacion) {this.fechaEliminacion = fechaEliminacion;}
+    public void setCliente(Cliente cliente) {this.cliente = cliente;}
 
     @Override
     public String toString() {
@@ -70,21 +74,5 @@ public class Cuenta {
                 ", fechaCreacion=" + fechaCreacion +
                 ", fechaEliminacion=" + fechaEliminacion +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Cuenta cuenta = (Cuenta) o;
-
-        if (id != cuenta.id) return false;
-        if (Float.compare(cuenta.fSaldo, fSaldo) != 0) return false;
-        if (sNumeroCuenta != null ? !sNumeroCuenta.equals(cuenta.sNumeroCuenta) : cuenta.sNumeroCuenta != null)
-            return false;
-        if (fechaCreacion != null ? !fechaCreacion.equals(cuenta.fechaCreacion) : cuenta.fechaCreacion != null)
-            return false;
-        return fechaEliminacion != null ? fechaEliminacion.equals(cuenta.fechaEliminacion) : cuenta.fechaEliminacion == null;
     }
 }
