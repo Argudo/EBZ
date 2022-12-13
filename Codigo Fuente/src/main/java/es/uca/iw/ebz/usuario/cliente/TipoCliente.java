@@ -1,4 +1,7 @@
-package es.uca.iw.ebz.cliente;
+package es.uca.iw.ebz.usuario.cliente;
+
+import javax.persistence.Entity;
+
 
 public enum TipoCliente {
     empresa, persona;
