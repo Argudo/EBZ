@@ -103,7 +103,7 @@ public class MainView extends VerticalLayout {
     		String sUsername = tboxUser.getValue();
     		String sPassword = tboxPass.getValue();
     		if(true)//TODO: Verificar inicio sesión a través de la clase usuario
-    			btnLogIn.getUI().ifPresent(ui ->ui.navigate("home"));
+    			btnLogIn.getUI().ifPresent(ui ->ui.navigate("Dashboard"));
     	});
     }
 }

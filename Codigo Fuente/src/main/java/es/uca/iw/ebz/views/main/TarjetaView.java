@@ -1,21 +1,17 @@
 package es.uca.iw.ebz.views.main;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import es.uca.iw.ebz.views.main.layout.MainLayout;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.Command;
 
-import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.tarjeta.*;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
 
