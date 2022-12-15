@@ -32,10 +32,10 @@ import es.uca.iw.ebz.Cuenta.CuentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @AnonymousAllowed
-@PageTitle("Login")
-@Route(value = "login")
+@PageTitle("")
+@Route(value = "")
 @RouteAlias("")
-public class MainView extends LoginOverlay {
+public class MainView extends LoginOverlay{
 
     private TextField name;
     private Button sayHello;

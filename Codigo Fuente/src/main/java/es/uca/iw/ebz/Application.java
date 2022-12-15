@@ -13,6 +13,7 @@ import es.uca.iw.ebz.tarjeta.TipoTarjetaRepository;
 
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioRepository;
+import es.uca.iw.ebz.usuario.UsuarioService;
 import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -28,6 +29,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 
+
 @SpringBootApplication
 @Theme(value = "ebz")
 @PWA(name = "ebz", shortName = "ebz", offlineResources = {})
@@ -40,7 +42,7 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 	TipoCrediticioRepository tipoCredRepo;
 
 	@Autowired
-	UsuarioRepository usuario;
+	UsuarioService usuario;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

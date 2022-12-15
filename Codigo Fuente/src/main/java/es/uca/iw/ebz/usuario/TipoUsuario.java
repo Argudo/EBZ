@@ -1,5 +1,8 @@
 package es.uca.iw.ebz.usuario;
 
+import java.util.Collection;
+import java.util.stream.DoubleStream;
+
 public enum TipoUsuario {
     cliente, empleado;
 
@@ -18,4 +21,5 @@ public enum TipoUsuario {
             default: throw new IllegalArgumentException("Error, dato fura del dominio");
         }
     }
+
 }
