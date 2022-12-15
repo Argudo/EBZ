@@ -16,6 +16,8 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+
 @Service
 public class TarjetaService {
 
@@ -51,11 +53,18 @@ public class TarjetaService {
 	public List<Tarjeta> findAllById(Iterable<UUID> aId){
 		List<Tarjeta> aT = new ArrayList<Tarjeta>();
 		_tarRepository.findAllById(aId).forEach(T -> {
-			if(T.getFechaCancelacion() != null) aT.add(T);
-		});;
+			if(T.getFechaCancelacion() == null) aT.add(T);
+		});
 		return aT;
 	}
 	
+	public List<Tarjeta> findByCliente(Cliente cliente){
+		List<Tarjeta> aT = new ArrayList<Tarjeta>();
+		_tarRepository.findBy_clienteTitular(cliente).forEach(T -> {
+			if(T.getFechaCancelacion() == null) aT.add(T);
+		});
+		return aT;
+	}
 	
 	
 	public Component GenerarTarjeta(Tarjeta t) {
