@@ -34,12 +34,14 @@ public class DashBoardView extends VerticalLayout {
         Button btnCuenta = new Button ("Gestion de Cuentas");
         Button btnNoticia = new Button ("Gestion Noticias");
         Button btnConsulta = new Button ("Gestion Consultas");
+        Button btnTarjeta = new Button("Gestión de tarjetas");
 
         flFunctionalities.add(
                 btnUsuario,
                 btnCuenta,
                 btnNoticia,
-                btnConsulta
+                btnConsulta,
+                btnTarjeta
         );
 
         vlDashboard.add(flFunctionalities);
