@@ -25,5 +25,5 @@ public class TipoTarjeta {
 		_sNombre = nombre; 
 	}
 
-	EnumTarjeta getTipo() { return EnumTarjeta.toTipo(_iId); }
+	public EnumTarjeta getTipo() { return EnumTarjeta.toTipo(_iId); }
 }

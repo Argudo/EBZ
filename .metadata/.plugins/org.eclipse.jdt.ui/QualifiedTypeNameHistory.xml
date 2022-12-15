@@ -11,9 +11,7 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Hr"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.PasswordField"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H3"/>
-    <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjeta.Tipo"/>
     <fullyQualifiedTypeName name="com.google.common.hash.Hashing"/>
     <fullyQualifiedTypeName name="java.nio.charset.StandardCharsets"/>
@@ -30,7 +28,6 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.Component"/>
     <fullyQualifiedTypeName name="org.hibernate.annotations.Type"/>
     <fullyQualifiedTypeName name="javax.persistence.ManyToOne"/>
-    <fullyQualifiedTypeName name="java.util.UUID"/>
     <fullyQualifiedTypeName name="javax.persistence.OneToOne"/>
     <fullyQualifiedTypeName name="javax.persistence.Entity"/>
     <fullyQualifiedTypeName name="org.springframework.boot.CommandLineRunner"/>
@@ -42,7 +39,15 @@
     <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoCrediticioRepository"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoCrediticio"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.io.Serializable"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.VerticalLayout"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="java.util.UUID"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.cliente.Cliente"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.TextField"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.PasswordField"/>
 </qualifiedTypeNameHistroy>

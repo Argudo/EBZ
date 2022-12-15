@@ -23,25 +23,38 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.Cuenta.CuentaService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Inicio Sesión")
 @Route(value = "")
-
+@RouteAlias("")
 public class MainView extends VerticalLayout {
 
-	//Componentes esteticos
-	private VerticalLayout vlCuadroInicio = new VerticalLayout();
-	private VerticalLayout vlImage = new VerticalLayout();
-	private Image imgLogo = new Image("images/brand.png", "Logo");
-	private Hr hrLogIn = new Hr();
+    private TextField name;
+    private Button sayHello;
+	@Autowired
+	private CuentaService cuentaService;
 
-	//Componentes campos usario y contraña
-	private VerticalLayout vlMid = new VerticalLayout();
-	private TextField tboxUser = new TextField("DNI");
-	private PasswordField tboxPass = new PasswordField("Contraseña");
+    public MainView(CuentaService cuentaService) {
+		this.cuentaService = cuentaService;
+    }
+
+	//Componentes esteticos
+		private VerticalLayout vlCuadroInicio = new VerticalLayout();
+		private VerticalLayout vlImage = new VerticalLayout();
+		private Image imgLogo = new Image("images/brand.png", "Logo");
+		private Hr hrLogIn = new Hr();
 	
-	//Componente boton de login
-	private Button btnLogIn = new Button("Iniciar Sesión");
+		//Componentes campos usario y contraña
+		private VerticalLayout vlMid = new VerticalLayout();
+		private TextField tboxUser = new TextField("DNI");
+		private PasswordField tboxPass = new PasswordField("Contraseña");
+		
+		//Componente boton de login
+		private Button btnLogIn = new Button("Iniciar Sesión");
 
     public MainView() {
     	setSizeFull();

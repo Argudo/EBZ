@@ -13,9 +13,55 @@
 	margin-bottom: 5vh;
 }
 
+.title{
+	padding: 10px;
+	color: #111; font-family: 'Open Sans Condensed', sans-serif; font-size: 46px; font-weight: 700; line-height: 46px; margin: 0 0 0; padding: 20px 30px; text-align: center; 
+}
+
 .box{
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 	border-radius: 10px;
+}
+
+@keyframes entryOp { 
+  0% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes outOp { 
+  0% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+.detalleTarjeta{
+	padding: 10px;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	border-radius: 10px;
+}
+
+.detalleTarjeta h3{
+	padding-left: 40px;
+}
+
+.detalleTarjeta p{
+	padding-left: 40px;
+}
+
+.padding40{
+	padding-left: 40px;
 }
 
 .tarjeta-mid{
@@ -24,24 +70,25 @@
 	background-size: contain;
 	width: 300px;
 	height: 200px;
+	opacity: 0.5;
 }
 
 .tarjeta-mid h4{
 	color: white;
-	transform: translate(220%, -70%);
+	transform: translate(600%, 0%);
 	font-family:ocr_a_std,sans-serif;
 }
 
 
 .tarjeta-mid h5{
 	color: white;
-	transform: translate(-4%, 50%);
+	transform: translate(-10%, 52%);
 	font-family:ocr_a_std,sans-serif;
 }
 
 .tarjeta-mid h6{
 	color: white;
-	transform: translate(90%, -50%);
+	transform: translate(-100%, 70%);
 	font-family:ocr_a_std,sans-serif;
 }
 

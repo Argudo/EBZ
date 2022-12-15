@@ -2,6 +2,7 @@ package es.uca.iw.ebz;
 
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
@@ -14,6 +15,7 @@ import org.hibernate.query.criteria.internal.expression.function.AggregationFunc
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -23,10 +25,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * and some desktop browsers.
  *
  */
+
 @SpringBootApplication
 @Theme(value = "ebz")
 @PWA(name = "ebz", shortName = "ebz", offlineResources = {})
 @NpmPackage(value = "line-awesome", version = "1.3.0")
+@Push
 public class Application implements AppShellConfigurator, CommandLineRunner {
 	@Autowired
 	TipoTarjetaRepository tipoTarRepo;
