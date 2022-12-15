@@ -11,7 +11,6 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Hr"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.PasswordField"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H3"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjeta.Tipo"/>
     <fullyQualifiedTypeName name="com.google.common.hash.Hashing"/>
@@ -49,4 +48,6 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.cliente.Cliente"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.TextField"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.PasswordField"/>
 </qualifiedTypeNameHistroy>
