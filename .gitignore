@@ -21,3 +21,4 @@ buildNumber.properties
 .metadata/version.ini
 .metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
 **/metadata/*
+.metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
