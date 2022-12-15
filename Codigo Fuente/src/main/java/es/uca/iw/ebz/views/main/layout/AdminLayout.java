@@ -6,10 +6,7 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -19,9 +16,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
-import es.uca.iw.ebz.views.main.AdminUserView;
-import es.uca.iw.ebz.views.main.HomeView;
-import es.uca.iw.ebz.views.main.TarjetaView;
+import es.uca.iw.ebz.views.main.*;
 
 
 public class AdminLayout  extends AppLayout{
@@ -96,10 +91,10 @@ public class AdminLayout  extends AppLayout{
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { createTab("Gestión Usuario", AdminUserView.class),
-                createTab("Gestión Cuentas", HomeView.class),
-                createTab("Gestión Noticias", TarjetaView.class),
-                createTab("Gestión Consultas", TarjetaView.class)};
+        return new Tab[] { createTab("Gestión Usuario", DashBoardUserView.class),
+                createTab("Gestión Cuentas", DashBoardCuentasView.class),
+                createTab("Gestión Noticias", DashBoardNoticasView.class),
+                createTab("Gestión Consultas", DashBoardConsultasView.class)};
     }
 
     private static Tab createTab(String text,

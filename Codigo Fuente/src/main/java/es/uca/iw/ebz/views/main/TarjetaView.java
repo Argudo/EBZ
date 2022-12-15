@@ -172,4 +172,7 @@ public class TarjetaView extends VerticalLayout{
 			});
 		}
 	}
+
+    public static class DashBoardCuentaView {
+    }
 }
