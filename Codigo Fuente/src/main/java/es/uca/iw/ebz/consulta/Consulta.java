@@ -1,7 +1,9 @@
 package es.uca.iw.ebz.consulta;
 
+//¿Faltan añadir los mensajes?
 
-import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.usuario.Usuario;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,38 +16,44 @@ public class Consulta {
 
     @Id
     @GeneratedValue
-    private UUID id;
+    @Column (name = "id")
+    private UUID _id;
 
-    @Column
+    @Column (name = "titulo")
     @NotNull
-    private String titulo;
+    private String _titulo;
 
-    @Column
+    @Column (name = "descripcion")
     @NotNull
-    private String descripcion;
+    private String _descripcion;
 
-    @Column
+    @Column (name = "fechaCreacion")
     @NotNull
-    private Date fechaCreacion;
+    private Date _fechaCreacion;
 
-    @Column
-    private Date fechaEliminacion;
+    @Column (name = "fechaEliminacion")
+    private Date _fechaEliminacion;
 
-    //@ManyToOne()
-    //private Usuario cliente;
+    @ManyToOne
+    private TipoEstado _tipoEstado;
 
-    //@ManyToOne()
-    //private Usuario admin;
+    @ManyToOne()
+    private Usuario _cliente;
 
+    @ManyToOne()
+    private Usuario _admin;
 
     public Consulta() {}
 
     //Falta añadir el cliente y el admin
-    public Consulta(String titulo, String descripcion, Date fechaCreacion){
+    public Consulta(String titulo, String descripcion, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente, Usuario admin){
 
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.fechaCreacion = fechaCreacion;
+        _titulo = titulo;
+        _descripcion = descripcion;
+        _fechaCreacion = fechaCreacion;
+        _tipoEstado = tipoEstado;
+        _cliente = cliente;
+        _admin = admin;
 
     }
 
@@ -55,25 +63,33 @@ public class Consulta {
     }
 
     //Getters
-    public UUID getId() {return id;}
+    public UUID getId() { return _id; }
 
-    public Date getFechaCreacion() {return fechaCreacion;}
+    public Date getFechaCreacion() { return _fechaCreacion; }
 
-    public Date getFechaEliminacion() {return fechaEliminacion;}
+    public Date getFechaEliminacion() { return _fechaEliminacion; }
 
-    public String getTitulo() {return titulo;}
+    public String getTitulo() { return _titulo; }
 
-    public String getDescripcion() {return descripcion;}
+    public String getDescripcion() { return _descripcion; }
+
+    public TipoEstado getTipoEstado() { return _tipoEstado; }
+
+    public Usuario getCliente() { return _cliente; }
+
+    public Usuario getAdmin() { return _admin; }
 
     //Setters
 
-    public void setId(UUID id) {this.id = id;}
+    public void setId(UUID id) { _id = id; }
 
-    public void setFechaEliminacion(Date fecha) {this.fechaEliminacion = fecha;}
+    public void setFechaEliminacion(Date fecha) { _fechaEliminacion = fecha; }
 
-    public void setTitulo(String titulo) {this.titulo = titulo;}
+    public void setTitulo(String titulo) { _titulo = titulo; }
 
-    public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
+    public void setDescripcion(String descripcion) { _descripcion = descripcion; }
+
+    public void set_tipoEstado(TipoEstado tipoEstado) { _tipoEstado = tipoEstado; }
 
 
 
