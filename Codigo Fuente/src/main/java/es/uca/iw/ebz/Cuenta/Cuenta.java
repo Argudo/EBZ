@@ -1,7 +1,7 @@
 package es.uca.iw.ebz.Cuenta;
 
 
-import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

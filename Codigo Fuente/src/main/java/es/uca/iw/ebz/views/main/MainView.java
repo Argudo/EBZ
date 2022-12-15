@@ -24,6 +24,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.VaadinService;
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.usuario.ContraseñaIncorrecta;
@@ -113,6 +114,7 @@ public class MainView extends VerticalLayout {
 			try {
 				if(usuarioService.inicioSesion(sUsername, sPassword)){
 					Cookie myCookie = new Cookie("user_id", usuarioService.findByUser(sUsername).toString());
+					VaadinService.getCurrentResponse().addCookie(myCookie);
 					btnLogIn.getUI().ifPresent(ui ->ui.navigate("home"));
 				}
 

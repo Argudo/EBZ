@@ -6,6 +6,8 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.Cuenta.CuentaRepository;
 import es.uca.iw.ebz.tarjeta.TipoCrediticio;
 import es.uca.iw.ebz.tarjeta.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
@@ -13,6 +15,8 @@ import es.uca.iw.ebz.tarjeta.TipoTarjetaRepository;
 
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioRepository;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
 import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -44,6 +48,12 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 	@Autowired
 	UsuarioRepository usuario;
 
+	@Autowired
+	ClienteRepository cliente;
+
+	@Autowired
+	CuentaRepository cuenta;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -64,7 +74,15 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 		}
 
 		if(usuario.count() == 0){
-			usuario.save(new Usuario("1234", codifica("1234")));
+			Usuario _usuario = new Usuario("1234", codifica("1234"));
+			usuario.save(_usuario);
+			Cliente _cliente = new Cliente();
+			_cliente.setUsuario(_usuario);
+			_cliente.setNombre("Carlos Cortés");
+			cliente.save(new Cliente());
+			Cuenta _cuenta = new Cuenta();
+			_cuenta.setId(_cliente.getId());
+			_cuenta.setSaldo((float)50.45);
 		}
 	}
 

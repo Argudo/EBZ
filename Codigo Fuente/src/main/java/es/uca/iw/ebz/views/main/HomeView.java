@@ -18,16 +18,25 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.Cuenta.CuentaService;
+import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
-import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.tarjeta.TarjetaService;
+import es.uca.iw.ebz.usuario.Usuario;
+import es.uca.iw.ebz.usuario.UsuarioService;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
+import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
+import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.Cookie;
 import java.awt.*;
 import java.text.NumberFormat;
 
@@ -39,15 +48,43 @@ public class HomeView extends VerticalLayout{
 @Autowired
 private MovimientoService _movimientoService;
 
+@Autowired
+private CuentaService _cuentaService;
+
+@Autowired
+private TarjetaService _tarjetaService;
+
+@Autowired
+private ClienteService _clienteService;
+
+@Autowired
+private UsuarioService _usuarioService;
+
+
 //La cuenta que usaremos para ir actualizando el primer layout.
-static Cuenta mainAccount = null;
+static Cuenta acSelected = null;
 
 private Cliente _cliente;
 
-	public HomeView(MovimientoService _movimientoService) {
+//Atributos del layout de la cuenta.
+H2 _acNumber = new H2();
+H3 _acBalance = new H3();
+
+
+	public HomeView(MovimientoService _movimientoService, CuentaService _cuentaService,
+					TarjetaService _tarjetaService, ClienteService _clienteService,
+					UsuarioService _usuarioService) {
 
 		//Services initialization section
 		this._movimientoService = _movimientoService;
+		this._cuentaService = _cuentaService;
+		this._tarjetaService = _tarjetaService;
+		this._clienteService = _clienteService;
+		this._usuarioService = _usuarioService;
+
+		Cookie myCookie = getCookieByName("user_id");
+
+		UUID idUser = _usuarioService.findByUser("");
 
 		//End services initialization section
 
@@ -79,12 +116,23 @@ private Cliente _cliente;
 
 
 		//Username section
-		Component userName = CreateUserNameBanner("Ángel Subiela");
+		Component userName = CreateUserNameBanner(_cliente.getnombre());
 		//End username section
 
 		//Account gallery section
-		//Title accountNumber = new Title("Título de prueba");
-		Component acGallery = ShowAccount("XXXX XXXX XXXX XXXX", (float) 100000.45);
+		List<Cuenta> accountList = _cuentaService.findByCliente(_cliente);
+		acSelected = accountList.get(0);
+		updateAccountInfo();
+		VerticalLayout vlShowAccount = new VerticalLayout();
+		vlShowAccount.setAlignItems(Alignment.CENTER);
+		vlShowAccount.setSpacing(false);
+		vlShowAccount.setWidth("100%");
+
+		vlShowAccount.add(
+				_acNumber,
+				_acBalance
+		);
+
 		//End account gallery section
 
 		//Button section
@@ -108,7 +156,7 @@ private Cliente _cliente;
 
 		//Including name, account information and buttons to the first layout
 		vlAccount.add(userName);
-		vlAccount.add(acGallery);
+		vlAccount.add(vlShowAccount);
 		vlAccount.add(flAccountButtons);
 		//End of including...
 
@@ -127,15 +175,15 @@ private Cliente _cliente;
 		vlAccountList.setSpacing(false);
 		vlAccountList.setAlignItems(Alignment.CENTER);
 
-		List<Component> accountList = Arrays.asList(CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement(), CreateAccountListElement());
-		for(Component c: accountList){
+		//Pendiente de arreglar
+
+		List<Component> accountListComponent = null;
+		for(Cuenta c: accountList) {
+			accountListComponent.add(CreateAccountListElement(c));
+		}
+		for(Component c: accountListComponent){
 			vlAccountList.add(c);
 		}
-
-		//List<Cuenta> lAccount
-
-		//mainAccount = lAccount.get(0);
-
 		accountScroller.setContent(vlAccountList);
 		//End account list layout section
 
@@ -167,18 +215,31 @@ private Cliente _cliente;
 		flAccountNotifications.setJustifyContentMode(JustifyContentMode.EVENLY);
 		flAccountNotifications.setClassName("box");
 
-		Component cMovement1 = CreateMovement();
-		Component cMovement2 = CreateMovement();
-		Component cMovement3 = CreateMovement();
+		List<Movimiento> mvList = _movimientoService.findByClienteByFechaASC(_cliente);
+
+		if(mvList.size() < 1){
+
+			Paragraph mvMessage = new Paragraph("No hay movimientos que mostrar");
+
+		}else{
+			int cont = 0;
+			List<Component> mvComponentList = null;
+			for(Movimiento m: mvList){
+				if(cont < 3){
+					mvComponentList.add(CreateMovement(m));
+					cont++;
+				}
+				if(cont >= 3) break;
+			}
+
+			for(Component c: mvComponentList){
+				flAccountMovements.add(c);
+			}
+		}
 
 		Component cNotification1 = CreateNotification();
 		Component cNotification2 = CreateNotification();
 		Component cNotification3 = CreateNotification();
-
-		flAccountMovements.add(
-				cMovement1,
-				cMovement2,
-				cMovement3);
 
 		flAccountNotifications.add(
 				cNotification1,
@@ -192,6 +253,7 @@ private Cliente _cliente;
 		//End movements and notifications section
 
 		//Credit cards section
+		List<Tarjeta> aTarjetas = _tarjetaService.findByCliente(_cliente);
 
 		VerticalLayout vlTarjeta = new VerticalLayout();
 		vlTarjeta.setWidth("80vw");
@@ -199,38 +261,39 @@ private Cliente _cliente;
 		vlTarjeta.setMargin(true);
 		vlTarjeta.setClassName("box");
 
-		Scroller scrollTarjeta = new Scroller();
-		scrollTarjeta.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
-		scrollTarjeta.setWidth("78vw");
-		scrollTarjeta.setHeight("100%");
-
-		HorizontalLayout hlTarjeta = new HorizontalLayout();
-		hlTarjeta.setWidthFull();
-		hlTarjeta.setHeight("100%");
-		hlTarjeta.setPadding(true);
-		hlTarjeta.setMargin(true);
-
-		//Creamos lista de tarjetas, lista de tarjetaComponent y metemos los elementos a través de un foreach
-		TipoTarjeta tpTarjeta = new TipoTarjeta(EnumTarjeta.Debito);
-		Tarjeta tarjeta = new Tarjeta(5000, tpTarjeta);
-		Tarjeta tarjeta2 = new Tarjeta(7000, tpTarjeta);
-		java.util.List<Tarjeta> aTarjetas = Arrays.asList(tarjeta2, tarjeta, tarjeta, tarjeta2, tarjeta, tarjeta2, tarjeta);
-		List<TarjetaComponent> aTarjetasComponent = new ArrayList<TarjetaComponent>();
-
-		for(Tarjeta t: aTarjetas){
-			aTarjetasComponent.add(new TarjetaComponent(t));
-		}
-
-		//Falta clickListener para las tarjetas con su vista detallada ¿?
-		for(TarjetaComponent tc: aTarjetasComponent) {
-			hlTarjeta.add(tc);
-		}
-
 		H1 tarjetaTitle = new H1("Tarjetas");
 		tarjetaTitle.setClassName("title");
 
-		scrollTarjeta.setContent(hlTarjeta);
-		vlTarjeta.add(tarjetaTitle, scrollTarjeta);
+		if(aTarjetas.size() > 0){
+			Scroller scrollTarjeta = new Scroller();
+			scrollTarjeta.setScrollDirection(Scroller.ScrollDirection.HORIZONTAL);
+			scrollTarjeta.setWidth("78vw");
+			scrollTarjeta.setHeight("100%");
+
+			HorizontalLayout hlTarjeta = new HorizontalLayout();
+			hlTarjeta.setWidthFull();
+			hlTarjeta.setHeight("100%");
+			hlTarjeta.setPadding(true);
+			hlTarjeta.setMargin(true);
+
+			List<TarjetaComponent> aTarjetasComponent = new ArrayList<TarjetaComponent>();
+
+			for(Tarjeta t: aTarjetas){
+				aTarjetasComponent.add(new TarjetaComponent(t));
+			}
+
+			//Falta clickListener para las tarjetas con su vista detallada ¿?
+			for(TarjetaComponent tc: aTarjetasComponent) {
+				hlTarjeta.add(tc);
+			}
+
+			scrollTarjeta.setContent(hlTarjeta);
+			vlTarjeta.add(tarjetaTitle, scrollTarjeta);
+
+		}else{
+			H2 tarMessage = new H2("No hay tarjetas asociadas.");
+			vlTarjeta.add(tarjetaTitle, tarMessage);
+		}
 		//End credit cards section
 
 		add(hlMain);
@@ -238,16 +301,6 @@ private Cliente _cliente;
 		add(vlTarjeta);
 
 	}
-
-/*Button btnLogIn = new Button("Iniciar Sesión");
-VerticalLayout vlMid = new VerticalLayout();
-	vlMid.add(tboxUser,
-tboxPass,
-btnLogIn
-			);
-	vlMid.setAlignItems(FlexComponent.Alignment.CENTER);
-	btnLogIn.addClickListener( click -> { btnLogIn.getUI().ifPresent(ui ->ui.navigate("home")); });
-			*/
 
 	private Component CreateButton(String sName, VaadinIcon vI) {
 		VerticalLayout vlMain = new VerticalLayout();
@@ -269,7 +322,7 @@ btnLogIn
 	}
 
 	//Componente de prueba para mostrar la información de la cuenta.
-	private Component ShowAccount(String acNumber, float acBalance) {
+	/*private Component ShowAccount(String acNumber, float acBalance) {
 		VerticalLayout vlMain = new VerticalLayout();
 		vlMain.setAlignItems(Alignment.CENTER);
 		vlMain.setSpacing(false);
@@ -286,7 +339,7 @@ btnLogIn
 
 		return vlMain;
 
-	}
+	}*/
 
 	//Componente para mostrar el nombre del usuario en la vista principal.
 	//Falta arreglar la situación del nombre
@@ -305,13 +358,13 @@ btnLogIn
 
 	}
 
-	private Component CreateMovement(){
+	private Component CreateMovement(Movimiento mv){
 		VerticalLayout vlMain = new VerticalLayout();
 		vlMain.setAlignItems(Alignment.CENTER);
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		Paragraph _mv1 = new Paragraph("Un farzerío total y absoluto");
+		Paragraph _mv1 = new Paragraph(mv.getsConcpeto() + "  " + _movimientoService.datosMovimiento(mv).get("Importe"));
 
 		//_mv1.addClickListener();
 
@@ -322,13 +375,13 @@ btnLogIn
 
 	}
 
-	private Component CreateAccountListElement(){
+	private Component CreateAccountListElement(Cuenta ac){
 		VerticalLayout vlMain = new VerticalLayout();
 		vlMain.setAlignItems(Alignment.CENTER);
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		Paragraph _ae1 = new Paragraph("XXXX XXXX XXXX XXXX   100.000,45€");
+		Paragraph _ae1 = new Paragraph(ac.getNumeroCuenta() + "  " + ac.getSaldo());
 
 		//_ae1.addClickListener();
 
@@ -355,7 +408,7 @@ btnLogIn
 
 	}
 
-	private Component AccountHorizontal(Cuenta account){
+	/*private Component AccountHorizontal(Cuenta account){
 
 		VerticalLayout vlMain = new VerticalLayout();
 		vlMain.setAlignItems(Alignment.CENTER);
@@ -371,6 +424,29 @@ btnLogIn
 		return vlMain;
 
 
+	}*/
+
+	//Función para actualizar la info de la cuenta que mostramos en el primer layout
+	private void updateAccountInfo() {
+		_acNumber.setText(acSelected.getNumeroCuenta());
+
+		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
+		_acBalance.setText(formatImport.format(acSelected.getSaldo()));
+
 	}
 
+	//Función para recibir la cookie con el id del usuario.
+	private Cookie getCookieByName(String name) {
+		// Fetch all cookies from the request
+		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
+
+		// Iterate to find cookie by its name
+		for (Cookie cookie : cookies) {
+			if (name.equals(cookie.getName())) {
+				return cookie;
+			}
+		}
+
+		return null;
+	}
 }

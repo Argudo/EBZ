@@ -10,7 +10,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class UsuarioService {
+public class
+UsuarioService {
 
     private UsuarioRepository repoUsuario;
 
