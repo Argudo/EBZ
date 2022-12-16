@@ -7,6 +7,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -91,16 +92,20 @@ public class AdminLayout  extends AppLayout{
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { createTab("Gestión Usuario", DashBoardUserView.class),
-                createTab("Gestión Cuentas", DashBoardCuentasView.class),
-                createTab("Gestión Noticias", DashBoardNoticasView.class),
-                createTab("Gestión Consultas", DashBoardConsultasView.class)};
+        return new Tab[] { 
+    		createTab("Usuario", DashBoardUserView.class, new Icon(VaadinIcon.USER_CARD)),
+            createTab("Cuentas", DashBoardCuentasView.class, new Icon(VaadinIcon.MONEY_EXCHANGE)),
+            createTab("Noticias", DashBoardNoticasView.class, new Icon(VaadinIcon.NEWSPAPER)),
+            createTab("Consultas", DashBoardConsultasView.class, new Icon(VaadinIcon.ENVELOPE_O)),
+    		createTab("Tarjetas", DashBoardTarjetasView.class, new Icon(VaadinIcon.CREDIT_CARD))
+        };
     }
 
-    private static Tab createTab(String text,
-                                 Class<? extends Component> navigationTarget) {
+    private static Tab createTab(String text, Class<? extends Component> navigationTarget, Icon icono) {
         final Tab tab = new Tab();
-        tab.add(new RouterLink(text, navigationTarget));
+        HorizontalLayout hlTab = new HorizontalLayout();
+        hlTab.add(icono, new RouterLink(text, navigationTarget));
+        tab.add(hlTab);	
         ComponentUtil.setData(tab, Class.class, navigationTarget);
         return tab;
     }
