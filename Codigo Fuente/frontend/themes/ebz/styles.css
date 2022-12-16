@@ -60,6 +60,10 @@
 	padding-left: 40px;
 }
 
+.padding40{
+	padding-left: 40px;
+}
+
 .tarjeta-mid{
 	background-image: url("/images/tarjeta.png");
 	background-repeat: no-repeat;
