@@ -2,11 +2,8 @@ package es.uca.iw.ebz.views.main;
 
 import java.math.BigDecimal;
 
-import com.flowingcode.vaadin.addons.simpletimer.SimpleTimer;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -26,9 +23,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private VerticalLayout vlInfo = new VerticalLayout();
 	private VerticalLayout vlSeparator = new VerticalLayout();
 	
-	private H2 hGrid = new H2("Tarjetas");
+	private H1 hGrid = new H1("| Tarjetas");
 	
-	private H2 hInfo = new H2("Buscar usuario");
+	private H1 hInfo = new H1("Buscador");
 	private HorizontalLayout hlBuscador = new HorizontalLayout();
 	private TextField txtDNI = new TextField();
 	private Button btnBuscar = new Button();
@@ -38,6 +35,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	
 	
 	public DashBoardTarjetasView() {
+		hGrid.setClassName("title");
+		hInfo.setClassName("title");
+		
 		vlGrid.setWidth("70%");
 		vlSeparator.setWidth("2px");
 		vlInfo.setWidth("30%");
