@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 
 import de.mekaso.vaadin.addons.Carousel;
 
+
 @PageTitle("Home")
 @Route(value = "home", layout = MainLayout.class)
 

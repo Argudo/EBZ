@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.usuario;
 
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.views.main.Security.SecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,5 +37,7 @@ public class UsuarioService {
         return repoUsuario.count();
     }
     //hacer añadir usuaruio cliente y admin si hay tiempo
+
+    public Usuario findBysUsuario (String use) { return repoUsuario.findBysUsuario(use); }
 
 }

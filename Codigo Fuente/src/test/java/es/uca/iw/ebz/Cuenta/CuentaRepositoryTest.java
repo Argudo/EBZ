@@ -1,7 +1,7 @@
 package es.uca.iw.ebz.Cuenta;
 
 import es.uca.iw.ebz.ObjectMother;
-import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

@@ -24,7 +24,7 @@ public class Cliente {
 	@NotNull
 	@Column(name = "nombre")
 	private String sNombre;
-	public String getnombre(){ return this.sNombre; }
+	public String getNombre(){ return this.sNombre; }
 
 	public void setNombre(String nombre) { this.sNombre = nombre; }
 
