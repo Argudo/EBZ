@@ -12,6 +12,7 @@ import com.vaadin.flow.router.Route;
 
 import es.uca.iw.ebz.views.main.layout.MainLayout;
 
+
 @PageTitle("Home")
 @Route(value = "home", layout = MainLayout.class)
 

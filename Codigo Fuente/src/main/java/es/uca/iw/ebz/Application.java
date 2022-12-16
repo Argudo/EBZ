@@ -11,6 +11,9 @@ import es.uca.iw.ebz.tarjeta.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.tarjeta.TipoTarjetaRepository;
 
+import es.uca.iw.ebz.usuario.Usuario;
+import es.uca.iw.ebz.usuario.UsuarioRepository;
+import es.uca.iw.ebz.usuario.UsuarioService;
 import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -26,6 +29,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 
+
 @SpringBootApplication
 @Theme(value = "ebz")
 @PWA(name = "ebz", shortName = "ebz", offlineResources = {})
@@ -36,6 +40,9 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 	TipoTarjetaRepository tipoTarRepo;
 	@Autowired
 	TipoCrediticioRepository tipoCredRepo;
+
+	@Autowired
+	UsuarioService usuario;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -54,6 +61,10 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			tipoCredRepo.save(new TipoCrediticio(2, "Platinum", 10000));
 			tipoCredRepo.save(new TipoCrediticio(3, "Black", 100000));
 			
+		}
+
+		if(usuario.count() == 0){
+			usuario.save(new Usuario("1234", "1234"));
 		}
 	}
 
