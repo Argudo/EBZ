@@ -18,11 +18,11 @@ public class CompraTarjetaTest {
     }
     @Test
     public void shouldProvideTarjeta() {
-        assertThat(compraTarjetaTest.getTarjeta().getsNumTarjeta().equals(ObjectMother.createTestTarjeta().getsNumTarjeta())).isTrue();
+        assertThat(compraTarjetaTest.getTarjeta().getNumTarjeta().equals(ObjectMother.createTestTarjeta().getNumTarjeta())).isTrue();
         Tarjeta tarjeta = ObjectMother.createTestTarjeta();
-        tarjeta.setsNumTarjeta("1234567890123456");
+        tarjeta.setNumTarjeta("1234567890123456");
         compraTarjetaTest.setTarjeta(tarjeta);
-        assertThat(compraTarjetaTest.getTarjeta().getsNumTarjeta() == "1234567890123456").isTrue();
+        assertThat(compraTarjetaTest.getTarjeta().getNumTarjeta() == "1234567890123456").isTrue();
     }
 
     @Test

@@ -154,7 +154,7 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
-			pNumCuenta.setText(tarSelected.getsNumTarjeta());
+			pNumCuenta.setText(tarSelected.getNumTarjeta());
 			pFechaCaducidad.setText(tarSelected.getFechaExpiracion().toString());
 			pPin.setText(String.valueOf(tarSelected.getiPin()));
 			textPin.setValue(String.valueOf(tarSelected.getiPin()));

@@ -74,4 +74,10 @@ public class Cliente {
 	public  void setTarjetas (Tarjeta tarjeta){ this.aTarjetas.add(tarjeta); }
 
 	public Cliente(){}
+	public Cliente(UUID uuid, String string, TipoCliente persona, Date date) {
+		this.Id = uuid;
+		this.setNombre(string);
+		this.setTipoCliente(persona);
+		this.setFechaNacimiento(date);
+	}
 }

@@ -70,7 +70,7 @@ public class TarjetaService {
 	public Component GenerarTarjeta(Tarjeta t) {
 		VerticalLayout vlTarjeta = new VerticalLayout();
         vlTarjeta.add(new H4("EBZ"),
-        			   new H5(t.getsNumTarjeta()),
+        			   new H5(t.getNumTarjeta()),
         			   new H6(t.getFechaExpiracion().toString()));
         vlTarjeta.setClassName("tarjeta-mid");
         vlTarjeta.setWidth("300px");

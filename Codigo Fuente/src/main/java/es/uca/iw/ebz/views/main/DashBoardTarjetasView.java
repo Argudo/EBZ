@@ -1,19 +1,38 @@
 package es.uca.iw.ebz.views.main;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.LitRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import es.uca.iw.ebz.cliente.Cliente;
+import es.uca.iw.ebz.cliente.ClienteService;
+import es.uca.iw.ebz.cliente.TipoCliente;
+import es.uca.iw.ebz.tarjeta.EnumTarjeta;
+import es.uca.iw.ebz.tarjeta.Tarjeta;
+import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
 @PageTitle("Gestión de tarjetas")
@@ -31,7 +50,11 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Button btnBuscar = new Button();
 	private Paragraph pDNI = new Paragraph("DNI");
 	private HorizontalLayout hlAviso = new HorizontalLayout();
-	private Boolean estadoBusqueda = true;
+	private Boolean estadoBusqueda = false;
+	private Grid<Cliente> gridCliente = new Grid<>(Cliente.class, false);
+	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
+	
+	@Autowired ClienteService _clienteService;
 	
 	
 	public DashBoardTarjetasView() {
@@ -46,7 +69,8 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		vlSeparator.getStyle().set("padding", "0");
 		
 		vlGrid.add(hGrid,
-				   new Hr());
+				   new Hr(),
+				   gridTarjeta);
 		
 		vlInfo.setAlignItems(FlexComponent.Alignment.CENTER);
 		hlBuscador.setAlignItems(FlexComponent.Alignment.END);
@@ -55,13 +79,30 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		hlAviso.setAlignItems(FlexComponent.Alignment.CENTER);
 		hlAviso.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 		hlAviso.setWidth("100%");
+		/*Grid cliente*/
+        gridCliente.addColumn(Cliente::getnombre);
+        gridCliente.addColumn(Cliente::getTipoCliente);
+        List<Tarjeta> aTarjeta = new ArrayList<Tarjeta>();
+		gridCliente.addColumn(createToggleDetailsRenderer(gridCliente, aTarjeta, gridTarjeta));
+        gridCliente.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+        gridCliente.setAllRowsVisible(true);
+        gridCliente.setItemDetailsRenderer(CrearDetallesClienteRenderer());
+        
+        List<Cliente> aClientes = new ArrayList<Cliente>();
+        gridCliente.setItems(aClientes);
+        /*Grid Tarjeta*/
+        gridTarjeta.addColumn(Tarjeta::getTipoTarjeta).setHeader("Tipo de tarjeta");
+        gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader("Número de tarjeta");
+        gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader("Fecha de expiración");
+        
 		hlBuscador.add(pDNI,
 					   txtDNI,
 				       btnBuscar);
 		vlInfo.add(hInfo,
 				   new Hr(),
 				   hlBuscador,
-				   hlAviso);
+				   hlAviso,
+				   gridCliente);
 		
 		setHeight("100%");
 		add(vlGrid,
@@ -70,6 +111,11 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		
 		btnBuscar.addClickListener(e -> {
 			estadoBusqueda = !estadoBusqueda;
+			aClientes.removeAll(aClientes);
+			aClientes.add(0, new Cliente(new UUID(54112323, 34123125), "Maria", TipoCliente.persona, new Date()));
+			aClientes.add(0, new Cliente(new UUID(98978312, 9231234), "Manuel", TipoCliente.persona, new Date()));
+			gridCliente.setItems(aClientes);
+			String dniCliente = txtDNI.getValue();
 			if(estadoBusqueda != null) {
 				hlAviso.removeAll();
 				if(estadoBusqueda) {
@@ -88,4 +134,55 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		});
 	}
 	
+	private static Renderer<Cliente> createToggleDetailsRenderer(Grid<Cliente> gridCliente, List<Tarjeta> aTarjetas, Grid<Tarjeta> gridTarjeta) {
+	    return LitRenderer.<Cliente> of(
+	            "<vaadin-button theme=\"tertiary\" @click=\"${handleClick}\">Ver tarjetas</vaadin-button>")
+	            .withFunction("handleClick",
+	                    cliente -> {	 
+	                    	if(cliente.getnombre() == "Manuel") {	                    		
+	                    		aTarjetas.removeAll(aTarjetas);
+	                    		aTarjetas.add(new Tarjeta(7425, new TipoTarjeta(EnumTarjeta.Debito)));
+	                    		aTarjetas.add(new Tarjeta(5432, new TipoTarjeta(EnumTarjeta.Debito)));
+	                    		aTarjetas.add(new Tarjeta(5432, new TipoTarjeta(EnumTarjeta.Debito)));
+	                    		gridTarjeta.setItems(aTarjetas);
+	                    	}
+	                    	else {
+	                    		aTarjetas.removeAll(aTarjetas);
+	                    		aTarjetas.add(new Tarjeta(1234, new TipoTarjeta(EnumTarjeta.Debito)));
+	                    		aTarjetas.add(new Tarjeta(5432, new TipoTarjeta(EnumTarjeta.Debito)));
+	                    		gridTarjeta.setItems(aTarjetas);
+	                    	}
+	                    });
+	}
+	
+	private static ComponentRenderer<ClienteDetallesFormLayout, Cliente> CrearDetallesClienteRenderer() {
+        return new ComponentRenderer<>(ClienteDetallesFormLayout::new,
+                ClienteDetallesFormLayout::setCliente);
+    }
+	
+	 private static class ClienteDetallesFormLayout extends FormLayout {
+	        //private final TextField txtId = new TextField("ID");
+	        private final TextField txtNombre = new TextField("Nombre");
+	        private final TextField txtFechaNacimiento = new TextField("Fecha Nacimiento");
+	        private final TextField txtTipoUsuario = new TextField("Tipo de usuario");
+
+	        public ClienteDetallesFormLayout() {
+	            Stream.of(txtNombre, txtFechaNacimiento, txtTipoUsuario).forEach(field -> {
+	                        field.setReadOnly(true);
+	                        add(field);
+	                    });
+	            
+	            setResponsiveSteps(new ResponsiveStep("0", 3));
+	            setColspan(txtNombre, 3);
+	            setColspan(txtTipoUsuario, 3);
+	            setColspan(txtFechaNacimiento, 3);
+	        }
+
+	        public void setCliente(Cliente cliente) {
+	            //txtId.setValue(cliente.getId().toString());
+	            txtNombre.setValue(cliente.getnombre());
+	            txtFechaNacimiento.setValue(cliente.getFechaNacimiento().toString());
+	            txtTipoUsuario.setValue(cliente.getTipoCliente().name());
+	        }
+	    }
 }
