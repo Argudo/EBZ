@@ -1,6 +1,6 @@
 package es.uca.iw.ebz.consulta;
 
-//¿Faltan añadir los mensajes?
+//¿Faltan añadir los mensajes? Sí
 
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
@@ -43,9 +43,10 @@ public class Consulta {
     @ManyToOne()
     private Usuario _admin;
 
+    //Añadir lista de mensajes (composición)
+
     public Consulta() {}
 
-    //Falta añadir el cliente y el admin
     public Consulta(String titulo, String descripcion, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente, Usuario admin){
 
         _titulo = titulo;
