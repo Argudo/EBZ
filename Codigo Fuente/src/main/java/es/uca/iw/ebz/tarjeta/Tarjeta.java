@@ -23,7 +23,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 
-
 @Entity
 public class Tarjeta {
 	@Id

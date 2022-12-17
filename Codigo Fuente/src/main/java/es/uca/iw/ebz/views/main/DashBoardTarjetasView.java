@@ -33,6 +33,9 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
+import javax.annotation.security.PermitAll;
+
+@PermitAll
 @PageTitle("Gestión de tarjetas")
 @Route(value = "Dashboard/tarjetas", layout = AdminLayout.class)
 @RolesAllowed("Empleado")
@@ -124,6 +127,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 					hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
 					hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
 					hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Se ha encontrado el siguiente cliente"));
+
 				}
 				else{
 					hlAviso.getStyle().set("font-size", "14px");
