@@ -37,8 +37,8 @@ import javax.servlet.http.Cookie;
 import java.security.NoSuchAlgorithmException;
 
 @PageTitle("Inicio Sesión")
-@Route(value = "")
-@RouteAlias("")
+@Route(value = "aa")
+@RouteAlias("aa")
 public class MainView extends VerticalLayout {
 
     private TextField name;
@@ -111,21 +111,6 @@ public class MainView extends VerticalLayout {
     		String sUsername = tboxUser.getValue();
     		String sPassword = tboxPass.getValue();
 
-			try {
-				if(usuarioService.inicioSesion(sUsername, sPassword)){
-					Cookie myCookie = new Cookie("user_id", usuarioService.findByUser(sUsername).toString());
-					VaadinService.getCurrentResponse().addCookie(myCookie);
-					btnLogIn.getUI().ifPresent(ui ->ui.navigate("home"));
-				}
-
-			} catch (UsuarioNoEncontrado e) {
-				throw new RuntimeException(e);
-			} catch (ContraseñaIncorrecta e) {
-				System.out.println(e.toString());
-				//throw e.toString();
-			} catch (NoSuchAlgorithmException e) {
-				throw new RuntimeException(e);
-			}
 		});
     }
 }

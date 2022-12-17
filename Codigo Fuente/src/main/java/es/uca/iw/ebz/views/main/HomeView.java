@@ -15,9 +15,7 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import es.uca.iw.ebz.Cuenta.Cuenta;
@@ -47,7 +45,7 @@ import java.text.NumberFormat;
 @Route(value = "", layout = MainLayout.class)
 @PermitAll
 
-public class HomeView extends VerticalLayout{
+public class HomeView extends VerticalLayout  {
 @Autowired
 private MovimientoService _movimientoService;
 
@@ -115,9 +113,11 @@ private AuthenticatedUser _authenticatedUser;
 		vlAccount.setMargin(false);
 		//End account information and buttons section
 
+		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
 
 		//Username section
 		Component userName = CreateUserNameBanner(_cliente.getNombre());
+		//Component userName = CreateUserNameBanner(_authenticatedUser.get().get().getUsuario());
 		//End username section
 
 		//Account gallery section
@@ -435,4 +435,11 @@ private AuthenticatedUser _authenticatedUser;
 		_acBalance.setText(formatImport.format(acSelected.getSaldo()));
 
 	}
+
+	/*@Override
+	public void beforeEnter(BeforeEnterEvent event) {
+		if(_authenticatedUser.get().isPresent()) _cliente = _clienteService.findByUsuario(_authenticatedUser.get().get());
+		else event.rerouteTo(LoginView.class);
+
+	}*/
 }
