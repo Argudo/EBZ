@@ -6,11 +6,16 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+@Entity
 public class Admin {
 
     @Id
     @GeneratedValue
     private UUID Id;
+
+    public Admin() {
+    }
+
     public UUID getId(){ return this.Id; }
 
     @NotNull
