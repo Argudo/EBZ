@@ -24,3 +24,8 @@ buildNumber.properties
 /metadata/
 *.log
 .metadata/.plugins/org.eclipse.m2e.logback.configuration/0.log
+*.prefs
+*.prefs
+.metadata/.plugins/org.eclipse.jdt.ui/QualifiedTypeNameHistory.xml
+*.log
+.metadata/version.ini

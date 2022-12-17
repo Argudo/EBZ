@@ -55,6 +55,8 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.data.renderer.Renderer"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.EnumTarjeta"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.cliente.Cliente"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.TipoUsuario"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.cliente.TipoCliente"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.Usuario"/>
 </qualifiedTypeNameHistroy>
