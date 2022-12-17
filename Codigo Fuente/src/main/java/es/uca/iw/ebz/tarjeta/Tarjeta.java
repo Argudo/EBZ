@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.persistence.*;
 
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.apache.commons.codec.binary.Hex;
 import org.hibernate.annotations.Type;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import es.uca.iw.ebz.cliente.Cliente;
+
 
 @Entity
 public class Tarjeta {
@@ -55,7 +56,10 @@ public class Tarjeta {
 	//TODO: Conexion relacional
 	@Column(name = "numCuenta")
 	String _sNumCuenta;
-	
+
+	public Tarjeta() {
+	}
+
 	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta) {
 		super();
 		_iPin = iPin;

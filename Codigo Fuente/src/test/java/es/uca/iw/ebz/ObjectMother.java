@@ -4,10 +4,11 @@ import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Movimiento.*;
 import es.uca.iw.ebz.Movimiento.CompraTarjeta.CompraTarjeta;
 import es.uca.iw.ebz.Movimiento.Interno.Interno;
-import es.uca.iw.ebz.cliente.Cliente;
 import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
+import es.uca.iw.ebz.usuario.Usuario;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 
 import java.util.Date;
 
@@ -20,8 +21,9 @@ public class ObjectMother {
 
     public static Cliente createTestCliente() {
         Cliente cliente = new Cliente();
+        Usuario usuario = new Usuario();
         cliente.setNombre("Test");
-        cliente.setUsuario("ROOT");
+        cliente.setUsuario(usuario);
         return cliente;
     }
 
