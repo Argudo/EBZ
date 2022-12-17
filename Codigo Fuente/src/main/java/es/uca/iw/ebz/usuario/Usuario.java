@@ -38,7 +38,10 @@ public class Usuario {
     @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
 
-    public TipoUsuario getTipoUsuario (){ return this.tipoUsuario; }
+    public String getTipoUsuario (){
+        if(tipoUsuario == TipoUsuario.Empleado) return "empleado";
+        else return "cliente";
+    }
     public void setTipoUsuario (TipoUsuario tipous){ this.tipoUsuario = tipous; }
 
     public Usuario(String usuario, String contraseña){

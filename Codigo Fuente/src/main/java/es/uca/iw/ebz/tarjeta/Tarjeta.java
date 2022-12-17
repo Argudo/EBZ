@@ -22,11 +22,6 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-<<<<<<< HEAD
-import es.uca.iw.ebz.cliente.Cliente;
-=======
-
->>>>>>> main
 
 @Entity
 public class Tarjeta {

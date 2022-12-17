@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import es.uca.iw.ebz.tarjeta.TarjetaService;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.usuario.cliente.TipoCliente;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
@@ -27,14 +31,14 @@ import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import es.uca.iw.ebz.cliente.Cliente;
-import es.uca.iw.ebz.cliente.ClienteService;
-import es.uca.iw.ebz.cliente.TipoCliente;
 import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
+import javax.annotation.security.PermitAll;
+
+@PermitAll
 @PageTitle("Gestión de tarjetas")
 @Route(value = "Dashboard/tarjetas", layout = AdminLayout.class)
 public class DashBoardTarjetasView extends HorizontalLayout{
@@ -54,8 +58,11 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Grid<Cliente> gridCliente = new Grid<>(Cliente.class, false);
 	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
 	
-	@Autowired ClienteService _clienteService;
-	
+	@Autowired
+	ClienteService _clienteService;
+
+	@Autowired
+	TarjetaService _tarjetaService;
 	
 	public DashBoardTarjetasView() {
 		hGrid.setClassName("title");
@@ -80,7 +87,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		hlAviso.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 		hlAviso.setWidth("100%");
 		/*Grid cliente*/
-        gridCliente.addColumn(Cliente::getnombre);
+        gridCliente.addColumn(Cliente::getNombre);
         gridCliente.addColumn(Cliente::getTipoCliente);
         List<Tarjeta> aTarjeta = new ArrayList<Tarjeta>();
 		gridCliente.addColumn(createToggleDetailsRenderer(gridCliente, aTarjeta, gridTarjeta));
@@ -112,10 +119,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		btnBuscar.addClickListener(e -> {
 			estadoBusqueda = !estadoBusqueda;
 			aClientes.removeAll(aClientes);
-			aClientes.add(0, new Cliente(new UUID(54112323, 34123125), "Maria", TipoCliente.persona, new Date()));
-			aClientes.add(0, new Cliente(new UUID(98978312, 9231234), "Manuel", TipoCliente.persona, new Date()));
 			gridCliente.setItems(aClientes);
 			String dniCliente = txtDNI.getValue();
+			Cliente cliente = _clienteService.findByDNI(dniCliente);
 			if(estadoBusqueda != null) {
 				hlAviso.removeAll();
 				if(estadoBusqueda) {
@@ -123,6 +129,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 					hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
 					hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
 					hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Se ha encontrado el siguiente cliente"));
+
 				}
 				else{
 					hlAviso.getStyle().set("font-size", "14px");
@@ -139,7 +146,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	            "<vaadin-button theme=\"tertiary\" @click=\"${handleClick}\">Ver tarjetas</vaadin-button>")
 	            .withFunction("handleClick",
 	                    cliente -> {	 
-	                    	if(cliente.getnombre() == "Manuel") {	                    		
+	                    	if(cliente.getNombre() == "Manuel") {
 	                    		aTarjetas.removeAll(aTarjetas);
 	                    		aTarjetas.add(new Tarjeta(7425, new TipoTarjeta(EnumTarjeta.Debito)));
 	                    		aTarjetas.add(new Tarjeta(5432, new TipoTarjeta(EnumTarjeta.Debito)));
@@ -180,7 +187,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 
 	        public void setCliente(Cliente cliente) {
 	            //txtId.setValue(cliente.getId().toString());
-	            txtNombre.setValue(cliente.getnombre());
+	            txtNombre.setValue(cliente.getNombre());
 	            txtFechaNacimiento.setValue(cliente.getFechaNacimiento().toString());
 	            txtTipoUsuario.setValue(cliente.getTipoCliente().name());
 	        }

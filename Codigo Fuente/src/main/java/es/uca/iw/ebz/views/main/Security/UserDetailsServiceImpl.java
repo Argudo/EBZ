@@ -36,11 +36,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
-    private static List<GrantedAuthority> getAuthorities(Usuario user) {
+    private List<GrantedAuthority> getAuthorities(Usuario user) {
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-        list.add(new SimpleGrantedAuthority("ROLE_" + user.getTipoUsuario()));
+        list.add(new SimpleGrantedAuthority("ROLE_" + user.getTipoUsuario().toString()));
         return list;
-
     }
 
 }

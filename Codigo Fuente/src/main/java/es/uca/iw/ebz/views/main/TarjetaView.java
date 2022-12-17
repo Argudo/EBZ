@@ -163,7 +163,7 @@ public class TarjetaView extends VerticalLayout{
 					child.setVisible(true);
 				}
 			});
-			if(tarSelected.getTipoTarjeta().getTipo() == EnumTarjeta.Prepago) {
+			if(tarSelected.getTipoTarjeta()== EnumTarjeta.Prepago) {
 				pSaldo.setText("1000€");
 			}
 			else {
