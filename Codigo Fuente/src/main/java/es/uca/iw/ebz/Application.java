@@ -1,5 +1,12 @@
 package es.uca.iw.ebz;
 
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
@@ -10,16 +17,13 @@ import es.uca.iw.ebz.tarjeta.TipoCrediticio;
 import es.uca.iw.ebz.tarjeta.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.tarjeta.TipoTarjetaRepository;
-
+import es.uca.iw.ebz.usuario.TipoUsuario;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioRepository;
 import es.uca.iw.ebz.usuario.UsuarioService;
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
+import es.uca.iw.ebz.usuario.cliente.TipoCliente;
 
 /**
  * The entry point of the Spring Boot application.
@@ -40,6 +44,10 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 	TipoTarjetaRepository tipoTarRepo;
 	@Autowired
 	TipoCrediticioRepository tipoCredRepo;
+	@Autowired
+	UsuarioRepository userRepo;
+	@Autowired
+	ClienteRepository clienteRepo;
 
 	@Autowired
 	UsuarioService usuario;
@@ -63,8 +71,14 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			
 		}
 
-		if(usuario.count() == 0){
+		if(usuario.count() < 2){
 			usuario.save(new Usuario("1234", "1234"));
+			Usuario cli = new Usuario("32093905", "1234");
+			cli.setTipoUsuario(TipoUsuario.Cliente);
+			usuario.save(cli);
+			Cliente c = new Cliente("Juán del Marqués", new Date(), new Date(), null, TipoCliente.Persona, cli);
+			clienteRepo.save(c);
+			
 		}
 	}
 

@@ -4,20 +4,20 @@ import javax.persistence.Entity;
 
 
 public enum TipoCliente {
-    empresa, persona;
+    Empresa, Persona;
 
     public int ToInt(){
         switch (this){
-            case empresa: return 0;
-            case persona: return 1;
+            case Empresa: return 0;
+            case Persona: return 1;
             default: throw new IllegalArgumentException("Error, dato fura del dominio");
         }
     }
 
     public static TipoCliente intToEnum(int i){
         switch (i){
-            case 0: return TipoCliente.empresa;
-            case 1: return TipoCliente.persona;
+            case 0: return TipoCliente.Empresa;
+            case 1: return TipoCliente.Persona;
             default: throw new IllegalArgumentException("Error, dato fura del dominio");
         }
     }

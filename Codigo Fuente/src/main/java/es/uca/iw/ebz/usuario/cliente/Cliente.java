@@ -53,7 +53,7 @@ public class Cliente {
 	@NotNull
 	//@Column(name = "id_usuario")
 	@ManyToOne
-	//@JoinColumn(name = "usuarios_id")
+	//@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 	public Usuario getUsuario (){ return this.usuario; }
 	public void setUsuario(Usuario user){ this.usuario = user; }

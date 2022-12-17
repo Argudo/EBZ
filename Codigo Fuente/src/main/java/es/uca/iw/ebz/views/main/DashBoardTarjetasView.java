@@ -1,10 +1,10 @@
 package es.uca.iw.ebz.views.main;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Stream;
+
+import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,16 +27,15 @@ import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import es.uca.iw.ebz.cliente.Cliente;
-import es.uca.iw.ebz.cliente.ClienteService;
-import es.uca.iw.ebz.cliente.TipoCliente;
-import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
-import es.uca.iw.ebz.tarjeta.TipoTarjeta;
+import es.uca.iw.ebz.tarjeta.TarjetaService;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
 @PageTitle("Gestión de tarjetas")
 @Route(value = "Dashboard/tarjetas", layout = AdminLayout.class)
+@RolesAllowed("Empleado")
 public class DashBoardTarjetasView extends HorizontalLayout{
 	private VerticalLayout vlGrid = new VerticalLayout();
 	private VerticalLayout vlInfo = new VerticalLayout();
@@ -54,7 +53,10 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Grid<Cliente> gridCliente = new Grid<>(Cliente.class, false);
 	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
 	
-	@Autowired ClienteService _clienteService;
+	@Autowired 
+	private ClienteService _clienteService;
+	@Autowired
+	private static TarjetaService _tarService;
 	
 	
 	public DashBoardTarjetasView() {
@@ -80,7 +82,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		hlAviso.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 		hlAviso.setWidth("100%");
 		/*Grid cliente*/
-        gridCliente.addColumn(Cliente::getnombre);
+        gridCliente.addColumn(Cliente::getNombre);
         gridCliente.addColumn(Cliente::getTipoCliente);
         List<Tarjeta> aTarjeta = new ArrayList<Tarjeta>();
 		gridCliente.addColumn(createToggleDetailsRenderer(gridCliente, aTarjeta, gridTarjeta));
@@ -110,12 +112,11 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 			vlInfo);
 		
 		btnBuscar.addClickListener(e -> {
-			estadoBusqueda = !estadoBusqueda;
-			aClientes.removeAll(aClientes);
-			aClientes.add(0, new Cliente(new UUID(54112323, 34123125), "Maria", TipoCliente.persona, new Date()));
-			aClientes.add(0, new Cliente(new UUID(98978312, 9231234), "Manuel", TipoCliente.persona, new Date()));
 			gridCliente.setItems(aClientes);
 			String dniCliente = txtDNI.getValue();
+			aClientes.add(_clienteService.findByUsuario(dniCliente));
+			System.out.println("Cliente: " + _clienteService.findByUsuario(dniCliente) + " - Nombre: " + _clienteService.findByUsuario(dniCliente).getNombre());
+			estadoBusqueda = aClientes.size() != 0; 
 			if(estadoBusqueda != null) {
 				hlAviso.removeAll();
 				if(estadoBusqueda) {
@@ -139,19 +140,8 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	            "<vaadin-button theme=\"tertiary\" @click=\"${handleClick}\">Ver tarjetas</vaadin-button>")
 	            .withFunction("handleClick",
 	                    cliente -> {	 
-	                    	if(cliente.getnombre() == "Manuel") {	                    		
-	                    		aTarjetas.removeAll(aTarjetas);
-	                    		aTarjetas.add(new Tarjeta(7425, new TipoTarjeta(EnumTarjeta.Debito)));
-	                    		aTarjetas.add(new Tarjeta(5432, new TipoTarjeta(EnumTarjeta.Debito)));
-	                    		aTarjetas.add(new Tarjeta(5432, new TipoTarjeta(EnumTarjeta.Debito)));
-	                    		gridTarjeta.setItems(aTarjetas);
-	                    	}
-	                    	else {
-	                    		aTarjetas.removeAll(aTarjetas);
-	                    		aTarjetas.add(new Tarjeta(1234, new TipoTarjeta(EnumTarjeta.Debito)));
-	                    		aTarjetas.add(new Tarjeta(5432, new TipoTarjeta(EnumTarjeta.Debito)));
-	                    		gridTarjeta.setItems(aTarjetas);
-	                    	}
+	                    	aTarjetas.removeAll(aTarjetas);
+	                    	aTarjetas.addAll(_tarService.findByCliente(cliente));
 	                    });
 	}
 	
@@ -180,7 +170,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 
 	        public void setCliente(Cliente cliente) {
 	            //txtId.setValue(cliente.getId().toString());
-	            txtNombre.setValue(cliente.getnombre());
+	            txtNombre.setValue(cliente.getNombre());
 	            txtFechaNacimiento.setValue(cliente.getFechaNacimiento().toString());
 	            txtTipoUsuario.setValue(cliente.getTipoCliente().name());
 	        }

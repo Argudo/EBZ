@@ -7,10 +7,6 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-<<<<<<< HEAD
-import es.uca.iw.ebz.cliente.Cliente;
-=======
->>>>>>> main
 
 @Repository
 public interface TarjetaRepository extends JpaRepository<Tarjeta, UUID>{
