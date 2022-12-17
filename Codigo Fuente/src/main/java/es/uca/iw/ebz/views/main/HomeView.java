@@ -33,17 +33,19 @@ import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.Cookie;
 import java.awt.*;
 import java.text.NumberFormat;
 
 
-@PageTitle("Home")
-@Route(value = "home", layout = MainLayout.class)
-
+@PageTitle("")
+@Route(value = "", layout = MainLayout.class)
+@PermitAll
 
 public class HomeView extends VerticalLayout{
 @Autowired
@@ -71,10 +73,12 @@ private Cliente _cliente;
 H2 _acNumber = new H2();
 H3 _acBalance = new H3();
 
+@Autowired
+private AuthenticatedUser _authenticatedUser;
 
 	public HomeView(MovimientoService _movimientoService, CuentaService _cuentaService,
 					TarjetaService _tarjetaService, ClienteService _clienteService,
-					UsuarioService _usuarioService) {
+					UsuarioService _usuarioService, AuthenticatedUser _authenticatedUser) {
 
 		//Services initialization section
 		this._movimientoService = _movimientoService;
@@ -82,11 +86,7 @@ H3 _acBalance = new H3();
 		this._tarjetaService = _tarjetaService;
 		this._clienteService = _clienteService;
 		this._usuarioService = _usuarioService;
-
-		Cookie myCookie = getCookieByName("user_id");
-
-		UUID idUser = _usuarioService.findByUser("");
-
+		this._authenticatedUser = _authenticatedUser;
 		//End services initialization section
 
 		setMargin(false);
@@ -117,7 +117,7 @@ H3 _acBalance = new H3();
 
 
 		//Username section
-		Component userName = CreateUserNameBanner(_cliente.getnombre());
+		Component userName = CreateUserNameBanner(_cliente.getNombre());
 		//End username section
 
 		//Account gallery section
@@ -434,20 +434,5 @@ H3 _acBalance = new H3();
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 		_acBalance.setText(formatImport.format(acSelected.getSaldo()));
 
-	}
-
-	//Función para recibir la cookie con el id del usuario.
-	private Cookie getCookieByName(String name) {
-		// Fetch all cookies from the request
-		Cookie[] cookies = VaadinService.getCurrentRequest().getCookies();
-
-		// Iterate to find cookie by its name
-		for (Cookie cookie : cookies) {
-			if (name.equals(cookie.getName())) {
-				return cookie;
-			}
-		}
-
-		return null;
 	}
 }
