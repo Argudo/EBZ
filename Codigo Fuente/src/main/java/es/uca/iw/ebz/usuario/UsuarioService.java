@@ -27,10 +27,22 @@ public class UsuarioService {
         return user.getId();
     }
 
-    public void save(Usuario user){
+    public Usuario save(Usuario user){
         user.setContraseña(passwordEncoder.encode(user.getContraseña()));
 
         repoUsuario.save(user);
+        return user;
+    }
+
+    public Usuario CambiarContraseña(Usuario user, String Contraseña){
+        user.setContraseña(passwordEncoder.encode(user.getContraseña()));
+
+        repoUsuario.save(user);
+        return user;
+    }
+
+    public String Cifrar (String s){
+        return passwordEncoder.encode(s);
     }
 
     public long count(){

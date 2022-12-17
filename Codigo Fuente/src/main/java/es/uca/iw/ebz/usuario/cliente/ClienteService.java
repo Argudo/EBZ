@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.usuario.cliente;
 
+import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
@@ -16,6 +17,15 @@ public class ClienteService {
 
 	public Cliente save(Cliente cliente) {
 		return repoCliente.save(cliente);
+	}
+
+	public Cliente crearCliente(Cliente cliente) {
+		Usuario user = cliente.getUsuario();
+		servUsuario.CambiarContraseña(user, user.getContraseña());
+		cliente.setUsuario(user);
+
+		return repoCliente.save(cliente);
+
 	}
 
 	public Cliente findByDNI(String DNI) {

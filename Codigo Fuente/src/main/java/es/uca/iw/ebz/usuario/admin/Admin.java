@@ -14,23 +14,24 @@ public class Admin {
     public UUID getId(){ return this.Id; }
 
     @NotNull
-    @Column( name = "nif")
-    private String sNif;
-    public String getNif(){ return this.sNif; }
-    public void setNif (String nif){ this.sNif = nif; }
+    @Column( name = "dni")
+    private String sDNI;
+    public String getNif(){ return this.sDNI; }
+    public void setNif (String DNI){ this.sDNI = DNI; }
 
     @NotNull
     @Column( name = "nombre")
     private String sNombre;
-    public String getUsuario(){ return this.sNombre; }
-    public void setUsuario (String nombre){ this.sNombre = nombre; }
+    public String getnombre(){ return this.sNombre; }
+    public void setnombre (String nombre){ this.sNombre = nombre; }
 
     @ManyToOne
     private Usuario Usuario;
-
+    public Usuario getUsuario(){ return this.Usuario; }
+    public void setUsuario (Usuario user){ this.Usuario = user; }
     public Admin(String sNif, String sNombre, Usuario usuario){
         this.sNombre = sNombre;
-        this.sNif = sNif;
+        this.sDNI = sDNI;
         this.Usuario = usuario;
     }
 
