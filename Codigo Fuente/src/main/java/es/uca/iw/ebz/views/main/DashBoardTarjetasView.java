@@ -1,9 +1,11 @@
 package es.uca.iw.ebz.views.main;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +35,6 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
-import javax.annotation.security.PermitAll;
-
 @PermitAll
 @PageTitle("Gestión de tarjetas")
 @Route(value = "Dashboard/tarjetas", layout = AdminLayout.class)
@@ -59,7 +59,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	@Autowired 
 	private ClienteService _clienteService;
 	@Autowired
-	private static TarjetaService _tarService;
+	private TarjetaService _tarService;
 	
 	
 	public DashBoardTarjetasView() {
@@ -117,7 +117,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		btnBuscar.addClickListener(e -> {
 			gridCliente.setItems(aClientes);
 			String dniCliente = txtDNI.getValue();
-			System.out.println("Cliente: " + _clienteService.findByUsuario(dniCliente) + " - Nombre: " + _clienteService.findByUsuario(dniCliente).getNombre());
+			System.out.println("Cliente: " + _clienteService.findByDNI(dniCliente) + " - Nombre: " + _clienteService.findByDNI(dniCliente).getNombre());
 			aClientes.add(_clienteService.findByDNI(dniCliente));
 			estadoBusqueda = aClientes.size() != 0; 
 			if(estadoBusqueda != null) {
@@ -139,13 +139,14 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		});
 	}
 	
-	private static Renderer<Cliente> createToggleDetailsRenderer(Grid<Cliente> gridCliente, List<Tarjeta> aTarjetas, Grid<Tarjeta> gridTarjeta) {
+	private Renderer<Cliente> createToggleDetailsRenderer(Grid<Cliente> gridCliente, List<Tarjeta> aTarjetas, Grid<Tarjeta> gridTarjeta) {
 	    return LitRenderer.<Cliente> of(
 	            "<vaadin-button theme=\"tertiary\" @click=\"${handleClick}\">Ver tarjetas</vaadin-button>")
 	            .withFunction("handleClick",
 	                    cliente -> {	 
 	                    	aTarjetas.removeAll(aTarjetas);
-	                    	aTarjetas.addAll(_tarService.findByCliente(cliente));
+	                    	aTarjetas.addAll((Collection<Tarjeta>) _tarService.findByCliente(cliente));
+	                    	gridTarjeta.setItems(aTarjetas);
 	                    });
 	}
 	

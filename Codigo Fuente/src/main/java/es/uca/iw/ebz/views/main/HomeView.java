@@ -1,37 +1,42 @@
 package es.uca.iw.ebz.views.main;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.security.PermitAll;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.*;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.theme.lumo.LumoUtility;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
+import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
-import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
-import es.uca.iw.ebz.tarjeta.EnumTarjeta;
-import es.uca.iw.ebz.tarjeta.Tarjeta;
-import es.uca.iw.ebz.tarjeta.TipoTarjeta;
-import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
-import org.springframework.beans.factory.annotation.Autowired;
-import javax.annotation.security.PermitAll;
-import javax.servlet.http.Cookie;
-import java.awt.*;
-import java.text.NumberFormat;
 import es.uca.iw.ebz.views.main.layout.MainLayout;
 
 
@@ -107,7 +112,7 @@ private AuthenticatedUser _authenticatedUser;
 		vlAccount.setSpacing(false);
 		vlAccount.setMargin(false);
 		//End account information and buttons section
-
+		System.out.println("Auth: " + _authenticatedUser.get().get() + "| Cli: " + _clienteService.findByUsuario(_authenticatedUser.get().get()));
 		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
 
 		//Username section

@@ -26,15 +26,17 @@ public class Admin {
     @NotNull
     @Column( name = "nombre")
     private String sNombre;
-    public String getUsuario(){ return this.sNombre; }
-    public void setUsuario (String nombre){ this.sNombre = nombre; }
+    public String getNombre(){ return this.sNombre; }
+    public void setNombre (String nombre){ this.sNombre = nombre; }
 
     @ManyToOne
     private Usuario Usuario;
+    public Usuario getUsuario(){ return this.Usuario; }
+    public void setUsuario (Usuario usuario){ this.Usuario = usuario; }
 
     public Admin(String sNif, String sNombre, Usuario usuario){
         this.sNombre = sNombre;
-        this.sNif = sNif;
+        this.sDNI = sNif;
         this.Usuario = usuario;
     }
 

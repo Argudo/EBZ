@@ -13,8 +13,9 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
-import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
+import es.uca.iw.ebz.tarjeta.Tarjeta;
+import es.uca.iw.ebz.tarjeta.TarjetaService;
 import es.uca.iw.ebz.tarjeta.TipoCrediticio;
 import es.uca.iw.ebz.tarjeta.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
@@ -24,14 +25,9 @@ import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioRepository;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.usuario.cliente.TipoCliente;
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * The entry point of the Spring Boot application.
@@ -65,6 +61,9 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 
 	@Autowired
 	ClienteService clienteService;
+	
+	@Autowired
+	TarjetaService tarService;
 
 	@Autowired
 	CuentaService cuentaService;
@@ -88,13 +87,32 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 		}
 
 		if(usuario.count() < 2){
-			usuario.save(new Usuario("1234", "1234"));
-			Usuario cli = new Usuario("32093905", "1234");
+			Usuario empleado = new Usuario("1234", "1234");
+			empleado.setTipoUsuario(TipoUsuario.Empleado);
+			usuario.save(empleado);
+			Usuario cli = new Usuario("32093905B", "1234");
+			Usuario cli2 = new Usuario("12267004T", "1234");
 			cli.setTipoUsuario(TipoUsuario.Cliente);
+			cli2.setTipoUsuario(TipoUsuario.Cliente);
 			usuario.save(cli);
-			Cliente c = new Cliente("Juán del Marqués", new Date(), new Date(), TipoCliente.Persona, cli);
-			clienteRepo.save(c);
-			
+			usuario.save(cli2);
+			clienteRepo.save(new Cliente("Juán del Marqués", new Date(), new Date(), TipoCliente.Persona, cli));
+			clienteRepo.save(new Cliente("Natalia Reina", new Date(), new Date(), TipoCliente.Persona, cli2));
+		}
+		
+		if(tarService.Count() < 4) {
+			Tarjeta T1 = new Tarjeta(4321, new TipoTarjeta(1, "Debito"));
+			Tarjeta T2 = new Tarjeta(4321, new TipoTarjeta(1, "Debito"));
+			Tarjeta T3 = new Tarjeta(4321, new TipoTarjeta(1, "Debito"));
+			Tarjeta T4 = new Tarjeta(1234, new TipoTarjeta(1, "Debito"));
+			T1.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("12267004T")));
+			T2.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("12267004T")));
+			T3.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("12267004T")));
+			T4.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("32093905B")));
+			tarService.Save(T1);
+			tarService.Save(T2);
+			tarService.Save(T3);
+			tarService.Save(T4);
 		}
 	}
 

@@ -171,4 +171,6 @@ public class Tarjeta {
 	public Enum getTipoTarjeta() { return _tipoTarjeta.getTipo(); }
 	public Date getFechaCancelacion() { return _fechaCancelacion; }
 	public void setFechaCancelacion(Date fechaCancelacion) { _fechaCancelacion = fechaCancelacion; }
+	public void setCliente(Cliente cliente) {this._clienteTitular = cliente; }
+	public Cliente getCliente() { return this._clienteTitular; }
 }

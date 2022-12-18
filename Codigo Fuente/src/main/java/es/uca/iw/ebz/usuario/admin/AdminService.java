@@ -23,7 +23,6 @@ public class AdminService {
         admin.setUsuario(user);
 
         return repoAdmin.save(admin);
-
     }
 
     public Admin findByDNI(String DNI) {

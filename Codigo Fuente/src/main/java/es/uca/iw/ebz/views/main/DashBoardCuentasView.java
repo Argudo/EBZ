@@ -1,12 +1,14 @@
 package es.uca.iw.ebz.views.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.security.PermitAll;
+
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -14,19 +16,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import es.uca.iw.ebz.usuario.TipoUsuario;
-import es.uca.iw.ebz.usuario.Usuario;
+
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.usuario.cliente.TipoCliente;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
-
-import javax.annotation.security.PermitAll;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @PageTitle("Dashboard/cuentas")
 @PermitAll

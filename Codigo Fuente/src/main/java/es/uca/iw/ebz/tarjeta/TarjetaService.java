@@ -61,9 +61,14 @@ public class TarjetaService {
 	public List<Tarjeta> findByCliente(Cliente cliente){
 		List<Tarjeta> aT = new ArrayList<Tarjeta>();
 		_tarRepository.findBy_clienteTitular(cliente).forEach(T -> {
+			System.out.println("Tarjeta: " + T.getNumTarjeta());
 			if(T.getFechaCancelacion() == null) aT.add(T);
 		});
 		return aT;
+	}
+	
+	public long Count() {
+		return _tarRepository.count();
 	}
 	
 	

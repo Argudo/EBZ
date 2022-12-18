@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.usuario.cliente;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,15 +35,15 @@ public class ClienteService {
 	}
 
 	public Cliente findByDNI(String DNI) {
-		return repoCliente.findByUsuario(servUsuario.findBysUsuario(DNI));
-	}
-
-	public Cliente findByNIF(String NIF) {
-		return repoCliente.findByUsuario(servUsuario.findBysUsuario(NIF));
+		return repoCliente.findByusuario(servUsuario.findBysUsuario(DNI));
 	}
 
 	public Cliente findByUsuario(Usuario user) {
-		return repoCliente.findByUsuario(user);
+		return repoCliente.findByusuario(user);
+	}
+	
+	public List<Cliente> findAll() {
+		return repoCliente.findAll();
 	}
 
 }
