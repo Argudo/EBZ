@@ -1,4 +1,3 @@
-package es.uca.iw.ebz.usuario.cliente;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +8,14 @@ import org.springframework.stereotype.Service;
 
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
+
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
+
+
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ClienteService {
@@ -22,6 +29,7 @@ public class ClienteService {
 	}
 
 	public Cliente save(Cliente cliente) {
+
 		return repoCliente.save(cliente);
 	}
 
@@ -44,6 +52,17 @@ public class ClienteService {
 	
 	public List<Cliente> findAll() {
 		return repoCliente.findAll();
+	}
+
+	public List<Cliente> findAll (){
+		return repoCliente.findAll();
+	}
+
+	public Cliente EliminarCuenta(Cliente cli){
+		Usuario usr = cli.getUsuario();
+		usr.setFechaEliminaciono(new Date());
+		servUsuario.save(usr);
+		return cli;
 	}
 
 }

@@ -32,7 +32,7 @@ public class AuthenticatedUser {
     }
 
     public Optional<Usuario> get() {
-        return getAuthentication().map(authentication -> userRepository.findBysUsuario(authentication.getName()));
+        return getAuthentication().map(authentication -> userRepository.findBysDNI(authentication.getName()));
     }
 
     public void logout() {
