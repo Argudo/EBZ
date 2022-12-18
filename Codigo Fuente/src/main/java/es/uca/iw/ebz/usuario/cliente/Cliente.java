@@ -8,10 +8,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import es.uca.iw.ebz.usuario.Usuario;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Cliente {
 	@Id
+	//@Type(type = "uuid-char")
 	@GeneratedValue
 	private UUID Id;
 
@@ -38,10 +40,7 @@ public class Cliente {
 	private Date dFechaRegistro;
 	public Date getFechaRegistro(){ return this.dFechaRegistro; }
 	public void  setFechaRegitro(Date fecha){ this.dFechaRegistro = fecha; }
-	@Column(name = "fecha_eliminacion")
-	private Date dFechaEliminacion;
-	public Date getFechaEliminacion(){ return this.dFechaEliminacion; }
-	public void  setFechaEliminaciono(Date fecha){ this.dFechaEliminacion = fecha; }
+
 
 	//Relaciones
 	@NotNull
@@ -62,7 +61,6 @@ public class Cliente {
 		this.sNombre = nombre;
 		this.dFechaNacimiento = fechNac;
 		this.dFechaRegistro = fechReg;
-		this.dFechaEliminacion = fechEli;
 		this.TipoCliente = tipoCliente;
 		this.usuario = usuario;
 	}
