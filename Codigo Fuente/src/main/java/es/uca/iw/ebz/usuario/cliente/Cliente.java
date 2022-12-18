@@ -10,10 +10,12 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
 
 import es.uca.iw.ebz.usuario.Usuario;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Cliente {
 	@Id
+	//@Type(type = "uuid-char")
 	@GeneratedValue
 	@Type(type = "uuid-char")
 	private UUID Id;
@@ -41,10 +43,7 @@ public class Cliente {
 	private Date dFechaRegistro;
 	public Date getFechaRegistro(){ return this.dFechaRegistro; }
 	public void  setFechaRegitro(Date fecha){ this.dFechaRegistro = fecha; }
-	@Column(name = "fecha_eliminacion")
-	private Date dFechaEliminacion;
-	public Date getFechaEliminacion(){ return this.dFechaEliminacion; }
-	public void  setFechaEliminaciono(Date fecha){ this.dFechaEliminacion = fecha; }
+
 
 	//Relaciones
 	@NotNull
