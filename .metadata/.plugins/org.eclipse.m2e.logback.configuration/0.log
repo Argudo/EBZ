@@ -15862,3 +15862,25 @@ java.io.FileNotFoundException: C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\.me
 2022-12-18 15:35:16,016 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 12 resources
 2022-12-18 15:35:16,020 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2022-12-18 15:35:16,020 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-12-18 15:37:36,480 [Worker-50: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: es.uca.iw.ebz:ebz:1.0-SNAPSHOT @ C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\pom.xml.
+2022-12-18 15:37:38,284 [Worker-50: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:37:38,289 [Worker-50: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-12-18 15:37:38,305 [Worker-50: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 12 resources
+2022-12-18 15:37:38,313 [Worker-50: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:37:38,313 [Worker-50: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-12-18 15:37:39,609 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:37:39,614 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-12-18 15:37:39,624 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 12 resources
+2022-12-18 15:37:39,640 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:37:39,640 [Worker-43: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-12-18 15:38:11,584 [Worker-51: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: es.uca.iw.ebz:ebz:1.0-SNAPSHOT @ C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\pom.xml.
+2022-12-18 15:38:12,747 [Worker-51: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:38:12,749 [Worker-51: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-12-18 15:38:12,749 [Worker-51: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 0 resource
+2022-12-18 15:38:12,752 [Worker-51: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:38:12,753 [Worker-51: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
+2022-12-18 15:38:17,680 [Worker-52: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:38:17,683 [Worker-52: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 1 resource
+2022-12-18 15:38:17,712 [Worker-52: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Copying 12 resources
+2022-12-18 15:38:17,720 [Worker-52: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2022-12-18 15:38:17,721 [Worker-52: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\josex\OneDrive\Documentos\GitHub\EBZ\Codigo Fuente\src\test\resources
