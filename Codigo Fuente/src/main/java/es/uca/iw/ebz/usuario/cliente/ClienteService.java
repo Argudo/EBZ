@@ -25,6 +25,7 @@ public class ClienteService {
 	}
 	
 	public Cliente findByUsuario(String usuario) {
+		System.out.println("Usuario: " + servUsuario.findBysUsuario(usuario) + "[" + servUsuario.findBysUsuario(usuario).getUsuario() + "]");
 		return repoCliente.findByusuario(servUsuario.findBysUsuario(usuario));
 	}
 

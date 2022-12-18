@@ -2,6 +2,7 @@ package es.uca.iw.ebz.usuario;
 
 import net.bytebuddy.build.ToStringPlugin;
 import org.checkerframework.common.aliasing.qual.Unique;
+import org.hibernate.annotations.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,6 +19,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue
+    @Type(type = "uuid-char")
     private UUID Id;
 
     public UUID getId(){ return this.Id; }
@@ -39,8 +41,8 @@ public class Usuario {
     private TipoUsuario tipoUsuario;
 
     public String getTipoUsuario (){
-        if(tipoUsuario == TipoUsuario.Empleado) return "empleado";
-        else return "cliente";
+        if(tipoUsuario == TipoUsuario.Empleado) return "Empleado";
+        else return "Cliente";
     }
     public void setTipoUsuario (TipoUsuario tipous){ this.tipoUsuario = tipous; }
 
