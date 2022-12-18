@@ -27,8 +27,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 public class Tarjeta {
 	@Id
 	@GeneratedValue
-	@Type(type = "uuid-char")
-	@Column(name = "id")
+	@Column(length=16, name = "id")
 	private UUID _iId;
 	
 	@Column(name = "numTarjeta")

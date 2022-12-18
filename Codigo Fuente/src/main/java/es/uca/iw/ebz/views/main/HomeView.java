@@ -178,7 +178,7 @@ private AuthenticatedUser _authenticatedUser;
 
 		//Pendiente de arreglar
 
-		List<Component> accountListComponent = null;
+		List<Component> accountListComponent = new ArrayList<Component>();
 		for(Cuenta c: accountList) {
 			accountListComponent.add(CreateAccountListElement(c));
 		}
@@ -221,10 +221,10 @@ private AuthenticatedUser _authenticatedUser;
 		if(mvList.size() < 1){
 
 			Paragraph mvMessage = new Paragraph("No hay movimientos que mostrar");
-
+			flAccountMovements.add(mvMessage);
 		}else{
 			int cont = 0;
-			List<Component> mvComponentList = null;
+			List<Component> mvComponentList = new ArrayList<>();
 			for(Movimiento m: mvList){
 				if(cont < 3){
 					mvComponentList.add(CreateMovement(m));

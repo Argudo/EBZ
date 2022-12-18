@@ -17,7 +17,7 @@ public class Cliente {
 	@Id
 	//@Type(type = "uuid-char")
 	@GeneratedValue
-	@Type(type = "uuid-char")
+	@Column(length=16)
 	private UUID Id;
 
 	public Cliente() {

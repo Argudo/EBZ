@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Admin {
 
     @Id
-    @Type(type = "uuid-char")
+    @Column(length=16)
     @GeneratedValue
     private UUID Id;
 

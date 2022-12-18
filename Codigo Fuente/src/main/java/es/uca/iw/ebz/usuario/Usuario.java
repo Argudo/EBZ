@@ -14,7 +14,7 @@ public class Usuario {
     @Id
     //@Type(type = "uuid-char")
     @GeneratedValue
-    @Type(type = "uuid-char")
+    @Column(length=16)
     private UUID Id;
 
     public UUID getId(){ return this.Id; }

@@ -2,6 +2,7 @@ package es.uca.iw.ebz;
 
 import java.util.Date;
 
+import es.uca.iw.ebz.Cuenta.Cuenta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -96,8 +97,13 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			cli2.setTipoUsuario(TipoUsuario.Cliente);
 			usuario.save(cli);
 			usuario.save(cli2);
-			clienteRepo.save(new Cliente("Juán del Marqués", new Date(), new Date(), TipoCliente.Persona, cli));
+			Cliente cliente = new Cliente("Juán del Marqués", new Date(), new Date(), TipoCliente.Persona, cli);
+			clienteRepo.save(cliente);
 			clienteRepo.save(new Cliente("Natalia Reina", new Date(), new Date(), TipoCliente.Persona, cli2));
+			Cuenta cuenta = new Cuenta();
+			cuenta.setCliente(cliente);
+			cuenta.setFechaEliminacion(new Date());
+			cuentaService.añadirCuenta(cuenta);
 		}
 		
 		if(tarService.Count() < 4) {
