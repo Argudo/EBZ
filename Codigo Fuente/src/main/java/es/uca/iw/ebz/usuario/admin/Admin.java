@@ -13,8 +13,7 @@ public class Admin {
     @GeneratedValue
     private UUID Id;
 
-    public Admin() {
-    }
+    public Admin() {}
 
     public UUID getId(){ return this.Id; }
 
@@ -27,16 +26,15 @@ public class Admin {
     @NotNull
     @Column( name = "nombre")
     private String sNombre;
-    public String getnombre(){ return this.sNombre; }
-    public void setnombre (String nombre){ this.sNombre = nombre; }
+    public String getUsuario(){ return this.sNombre; }
+    public void setUsuario (String nombre){ this.sNombre = nombre; }
 
     @ManyToOne
     private Usuario Usuario;
-    public Usuario getUsuario(){ return this.Usuario; }
-    public void setUsuario (Usuario user){ this.Usuario = user; }
+
     public Admin(String sNif, String sNombre, Usuario usuario){
         this.sNombre = sNombre;
-        this.sDNI = sDNI;
+        this.sNif = sNif;
         this.Usuario = usuario;
     }
 

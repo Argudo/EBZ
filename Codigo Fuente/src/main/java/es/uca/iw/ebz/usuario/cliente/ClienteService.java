@@ -1,17 +1,21 @@
 package es.uca.iw.ebz.usuario.cliente;
 
-import es.uca.iw.ebz.usuario.Usuario;
-import es.uca.iw.ebz.usuario.UsuarioService;
-import es.uca.iw.ebz.usuario.cliente.Cliente;
-import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.uca.iw.ebz.usuario.Usuario;
+import es.uca.iw.ebz.usuario.UsuarioService;
+
 @Service
 public class ClienteService {
-	private ClienteRepository repoCliente;
-	private UsuarioService servUsuario;
 	@Autowired
+	private ClienteRepository repoCliente;
+	@Autowired
+	private UsuarioService servUsuario;
+
 	public ClienteService(ClienteRepository clienteRepository){
 		repoCliente = clienteRepository;
 	}

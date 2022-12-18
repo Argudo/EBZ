@@ -7,17 +7,20 @@ import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
 import es.uca.iw.ebz.usuario.Usuario;
 
 @Entity
 public class Cliente {
 	@Id
 	@GeneratedValue
+	@Type(type = "uuid-char")
 	private UUID Id;
 
 	public Cliente() {
 	}
-
+	
 	public UUID getId(){ return this.Id; }
 
 	//Datos pertinentes
@@ -58,11 +61,10 @@ public class Cliente {
 	public Usuario getUsuario (){ return this.usuario; }
 	public void setUsuario(Usuario user){ this.usuario = user; }
 
-	public Cliente(String nombre, Date fechNac, Date fechReg, Date fechEli, TipoCliente tipoCliente, Usuario usuario){
+	public Cliente(String nombre, Date fechNac, Date fechReg, TipoCliente tipoCliente, Usuario usuario){
 		this.sNombre = nombre;
 		this.dFechaNacimiento = fechNac;
 		this.dFechaRegistro = fechReg;
-		this.dFechaEliminacion = fechEli;
 		this.TipoCliente = tipoCliente;
 		this.usuario = usuario;
 	}

@@ -2,6 +2,7 @@ package es.uca.iw.ebz.usuario;
 
 import net.bytebuddy.build.ToStringPlugin;
 import org.checkerframework.common.aliasing.qual.Unique;
+import org.hibernate.annotations.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,6 +19,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue
+    @Type(type = "uuid-char")
     private UUID Id;
 
     public UUID getId(){ return this.Id; }

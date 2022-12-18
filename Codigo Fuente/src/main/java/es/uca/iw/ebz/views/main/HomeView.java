@@ -1,11 +1,5 @@
 package es.uca.iw.ebz.views.main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
@@ -34,11 +28,12 @@ import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.Cookie;
 import java.awt.*;
 import java.text.NumberFormat;
+import es.uca.iw.ebz.views.main.layout.MainLayout;
+
 
 
 @PageTitle("")
