@@ -16,6 +16,7 @@ import java.util.UUID;
 public class Cuenta {
     @Id
     @GeneratedValue
+    @Column(length=16)
     private UUID id;
 
     @Column(unique = true, name = "numero_cuenta")
