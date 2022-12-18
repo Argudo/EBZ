@@ -11,6 +11,7 @@ import java.util.UUID;
 public class Interno {
     @Id
     @GeneratedValue
+    @Column(length=16)
     private UUID id;
 
     @Column(name = "Importe")
