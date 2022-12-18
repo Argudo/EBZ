@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,5 +41,7 @@ public class UsuarioService {
     //hacer añadir usuaruio cliente y admin si hay tiempo
 
     public Usuario findBysUsuario (String use) { return repoUsuario.findBysUsuario(use); }
+
+    public List<Usuario> findAll() { return repoUsuario.findAll(); }
 
 }
