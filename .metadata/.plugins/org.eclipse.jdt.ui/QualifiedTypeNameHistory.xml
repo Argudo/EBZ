@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.Icon"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.VaadinIcon"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H2"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Image"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H4"/>
@@ -49,9 +47,7 @@
     <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.TextField"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.PasswordField"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.grid.Grid"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.stream.Stream"/>
-    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.Tarjeta"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.data.renderer.Renderer"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.EnumTarjeta"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.cliente.Cliente"/>
@@ -59,4 +55,9 @@
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.cliente.TipoCliente"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.Usuario"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.Tarjeta"/>
+    <fullyQualifiedTypeName name="java.util.Collection"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.views.main.DashBoardTarjetasView.ClienteDetallesFormLayout"/>
 </qualifiedTypeNameHistroy>

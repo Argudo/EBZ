@@ -2,6 +2,7 @@ package es.uca.iw.ebz.views.main;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -85,7 +86,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		hlAviso.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 		hlAviso.setWidth("100%");
 		/*Grid cliente*/
-        gridCliente.addColumn(Cliente::getNombre);
+        gridCliente.addColumn(Cliente::getNombre).setWidth("33%");
         gridCliente.addColumn(Cliente::getTipoCliente);
         List<Tarjeta> aTarjeta = new ArrayList<Tarjeta>();
 		gridCliente.addColumn(createToggleDetailsRenderer(gridCliente, aTarjeta, gridTarjeta));
@@ -115,13 +116,11 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 			vlInfo);
 		
 		btnBuscar.addClickListener(e -> {
-			gridCliente.setItems(aClientes);
 			String dniCliente = txtDNI.getValue();
-			System.out.println("Cliente: " + _clienteService.findByDNI(dniCliente) + " - Nombre: " + _clienteService.findByDNI(dniCliente).getNombre());
 			Cliente cliBusqueda = _clienteService.findByDNI(dniCliente);
-			estadoBusqueda = cliBusqueda == null;
-			if(!aClientes.contains(cliBusqueda))
-				aClientes.add(cliBusqueda);
+			estadoBusqueda = cliBusqueda != null;
+			if(aClientes.stream().filter(cliente -> cliente != null && dniCliente.equalsIgnoreCase(cliente.getUsuario().getDNI())).count() == 0)
+				aClientes.add(0, cliBusqueda);
 			if(estadoBusqueda != null) {
 				hlAviso.removeAll();
 				if(estadoBusqueda) {
@@ -129,6 +128,8 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 					hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
 					hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
 					hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Se ha encontrado el siguiente cliente"));
+					aClientes.removeAll(Collections.singletonList(null));
+					gridCliente.getDataProvider().refreshAll();
 
 				}
 				else{
@@ -149,6 +150,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	                    	aTarjetas.removeAll(aTarjetas);
 	                    	aTarjetas.addAll((Collection<Tarjeta>) _tarService.findByCliente(cliente));
 	                    	gridTarjeta.setItems(aTarjetas);
+	                    	hGrid.setText("| Tarjetas de " + cliente.getNombre());
 	                    });
 	}
 	
