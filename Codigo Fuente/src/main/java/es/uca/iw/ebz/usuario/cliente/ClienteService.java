@@ -1,3 +1,4 @@
+package es.uca.iw.ebz.usuario.cliente;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,18 +44,14 @@ public class ClienteService {
 	}
 
 	public Cliente findByDNI(String DNI) {
-		return repoCliente.findByusuario(servUsuario.findBysUsuario(DNI));
+		return repoCliente.findByusuario(servUsuario.findBysDNI(DNI));
 	}
 
 	public Cliente findByUsuario(Usuario user) {
 		return repoCliente.findByusuario(user);
 	}
-	
-	public List<Cliente> findAll() {
-		return repoCliente.findAll();
-	}
 
-	public List<Cliente> findAll (){
+	public List<Cliente> findAll() {
 		return repoCliente.findAll();
 	}
 

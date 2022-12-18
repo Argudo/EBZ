@@ -105,10 +105,10 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			Tarjeta T2 = new Tarjeta(4321, new TipoTarjeta(1, "Debito"));
 			Tarjeta T3 = new Tarjeta(4321, new TipoTarjeta(1, "Debito"));
 			Tarjeta T4 = new Tarjeta(1234, new TipoTarjeta(1, "Debito"));
-			T1.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("12267004T")));
-			T2.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("12267004T")));
-			T3.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("12267004T")));
-			T4.setCliente(clienteRepo.findByusuario(usuario.findBysUsuario("32093905B")));
+			T1.setCliente(clienteRepo.findByusuario(usuario.findBysDNI("12267004T")));
+			T2.setCliente(clienteRepo.findByusuario(usuario.findBysDNI("12267004T")));
+			T3.setCliente(clienteRepo.findByusuario(usuario.findBysDNI("12267004T")));
+			T4.setCliente(clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
 			tarService.Save(T1);
 			tarService.Save(T2);
 			tarService.Save(T3);

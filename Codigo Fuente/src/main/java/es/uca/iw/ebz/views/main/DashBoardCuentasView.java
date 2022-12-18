@@ -87,7 +87,7 @@ public class DashBoardCuentasView extends VerticalLayout {
             Button btnCreateCuenta = new Button("Crear Cuenta");
             List<String> DNIs = new ArrayList<>();
             for (Cliente cliente : clienteService.findAll()) {
-                DNIs.add(cliente.getUsuario().getUsuario());
+                DNIs.add(cliente.getUsuario().getDNI());
             }
             cbUsuario.setItems(DNIs);
             vlDashboard.add(new Text("Introduzca el DNI del usuario que desea eliminar"),
@@ -119,7 +119,7 @@ public class DashBoardCuentasView extends VerticalLayout {
             Button btnCreateCuenta = new Button("Crear Cuenta");
             List<String> DNIs = new ArrayList<>();
             for (Cliente cliente : clienteService.findAll()) {
-                DNIs.add(cliente.getUsuario().getUsuario());
+                DNIs.add(cliente.getUsuario().getDNI());
             }
             cbUsuario.setItems(DNIs);
             vlDashboard.add(new Text("Introduzca el DNI del usuario que desea eliminar"),

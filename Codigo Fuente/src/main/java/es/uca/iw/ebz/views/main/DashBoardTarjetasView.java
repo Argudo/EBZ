@@ -118,8 +118,10 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 			gridCliente.setItems(aClientes);
 			String dniCliente = txtDNI.getValue();
 			System.out.println("Cliente: " + _clienteService.findByDNI(dniCliente) + " - Nombre: " + _clienteService.findByDNI(dniCliente).getNombre());
-			aClientes.add(_clienteService.findByDNI(dniCliente));
-			estadoBusqueda = aClientes.size() != 0; 
+			Cliente cliBusqueda = _clienteService.findByDNI(dniCliente);
+			estadoBusqueda = cliBusqueda == null;
+			if(!aClientes.contains(cliBusqueda))
+				aClientes.add(cliBusqueda);
 			if(estadoBusqueda != null) {
 				hlAviso.removeAll();
 				if(estadoBusqueda) {

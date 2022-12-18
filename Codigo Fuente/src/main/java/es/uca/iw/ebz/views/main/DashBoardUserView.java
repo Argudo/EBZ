@@ -144,7 +144,7 @@ public class DashBoardUserView extends VerticalLayout {
             Button btnDeleteUser = new Button("Eliminar");
             List<String> DNIs = new ArrayList<>();
             for (Usuario usuario : usuarioService.findAll()) {
-                DNIs.add(usuario.getUsuario());
+                DNIs.add(usuario.getDNI());
             }
             cbUsuario.setItems(DNIs);
             vlDashboard.add(new Text("Introduzca el DNI del usuario que desea eliminar"),
