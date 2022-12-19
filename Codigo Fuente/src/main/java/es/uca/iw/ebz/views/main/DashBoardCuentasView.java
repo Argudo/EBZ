@@ -17,11 +17,14 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.usuario.cliente.TipoCliente;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
+import es.uca.iw.ebz.usuario.Usuario;
 
 @PageTitle("Dashboard/cuentas")
 @PermitAll
@@ -46,11 +49,13 @@ public class DashBoardCuentasView extends VerticalLayout {
 
     private UsuarioService usuarioService;
     private ClienteService clienteService;
+    private CuentaService cuentaService;
 
     private ComboBox<String> cbUsuario = new ComboBox<>("Usuarios");
-    public DashBoardCuentasView(UsuarioService usuarioService, ClienteService clienteService) {
+    public DashBoardCuentasView(UsuarioService usuarioService, ClienteService clienteService, CuentaService cuentaService) {
         this.usuarioService = usuarioService;
         this.clienteService = clienteService;
+        this.cuentaService = cuentaService;
         vlDashboard.setWidthFull();
         vlDashboard.setPadding(false);
         vlDashboard.setMargin(false);
@@ -72,7 +77,7 @@ public class DashBoardCuentasView extends VerticalLayout {
         flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
 
         Button btnCreate= new Button("Crear Cuenta");
-        Button btnDelete = new Button("Eliminar Usuario");
+        Button btnDelete = new Button("Eliminar Cuenta");
 
         flFunctionalities.add(
                 btnCreate,
@@ -95,7 +100,11 @@ public class DashBoardCuentasView extends VerticalLayout {
                     btnCreateCuenta);
             add(vlDashboard);
             btnCreateCuenta.addClickListener(event -> {
-
+                Usuario usuario = usuarioService.findBysDNI(cbUsuario.getValue());
+                Cliente cliente = clienteService.findByUsuario(usuario);
+                Cuenta cuenta = new Cuenta();
+                cuenta.setCliente(cliente);
+                cuentaService.añadirCuenta(cuenta);
             });
         });
 
