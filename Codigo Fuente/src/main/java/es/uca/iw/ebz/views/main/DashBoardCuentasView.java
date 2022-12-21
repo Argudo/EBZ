@@ -9,6 +9,9 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -95,7 +98,7 @@ public class DashBoardCuentasView extends VerticalLayout {
                 DNIs.add(cliente.getUsuario().getDNI());
             }
             cbUsuario.setItems(DNIs);
-            vlDashboard.add(new Text("Introduzca el DNI del usuario que desea eliminar"),
+            vlDashboard.add(new Text("Introduzca el DNI del usuario para crear una cuenta"),
                     cbUsuario,
                     btnCreateCuenta);
             add(vlDashboard);
@@ -104,39 +107,53 @@ public class DashBoardCuentasView extends VerticalLayout {
                 Cliente cliente = clienteService.findByUsuario(usuario);
                 Cuenta cuenta = new Cuenta();
                 cuenta.setCliente(cliente);
-                cuentaService.añadirCuenta(cuenta);
+                if(cuentaService.añadirCuenta(cuenta) != null) {
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Cuenta creada con éxito"));
+                    vlDashboard.add(hlAviso);
+                    add(vlDashboard);
+                }
+                else {
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha podido crear la cuenta"));
+                    vlDashboard.add(hlAviso);
+                    add(vlDashboard);
+                }
             });
         });
 
-        bntSave.addClickListener(e -> {
-
-            /*if (clienteTest != null) {
-                hlAviso.getStyle().set("font-size", "14px");
-                hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
-                hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Cliente creado con éxito"));
-            }else {
-                hlAviso.getStyle().set("font-size", "14px");
-                hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
-                hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha podido crear el cliente"));
-            }
-            vlDashboard.add(hlAviso);*/
-        });
-
         btnDelete.addClickListener(e -> {
-            Button btnCreateCuenta = new Button("Crear Cuenta");
-            List<String> DNIs = new ArrayList<>();
-            for (Cliente cliente : clienteService.findAll()) {
-                DNIs.add(cliente.getUsuario().getDNI());
+            Button btnDeleteCuenta = new Button("Eliminar cuenta");
+            List<String> aCuentas = new ArrayList<>();
+            for (Cuenta cuenta : cuentaService.loadCuentas()) {
+                aCuentas.add(cuenta.getNumeroCuenta());
             }
-            cbUsuario.setItems(DNIs);
-            vlDashboard.add(new Text("Introduzca el DNI del usuario que desea eliminar"),
+            cbUsuario.setItems(aCuentas);
+            vlDashboard.add(new Text("Introduzca el número de cuenta para eliminarla"),
                     cbUsuario,
-                    btnCreateCuenta);
+                    btnDeleteCuenta);
             add(vlDashboard);
-            btnCreateCuenta.addClickListener(event -> {
-
+            btnDeleteCuenta.addClickListener(event -> {
+                Cuenta cuentaDelete = cuentaService.findByNumeroCuenta(cbUsuario.getValue()).get();
+                if(cuentaService.delete2(cbUsuario.getValue())){
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Cuenta eliminada con éxito"));
+                    vlDashboard.add(hlAviso);
+                    add(vlDashboard);
+                }else{
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha podido eliminar la cuenta"));
+                    vlDashboard.add(hlAviso);
+                    add(vlDashboard);
+                }
             });
         });
     }

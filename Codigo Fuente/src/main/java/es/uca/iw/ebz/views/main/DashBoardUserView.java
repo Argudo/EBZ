@@ -152,12 +152,27 @@ public class DashBoardUserView extends VerticalLayout {
                     btnDeleteUser);
             add(vlDashboard);
             btnDeleteUser.addClickListener(event -> {
-
+                Usuario usuario = usuarioService.findBysDNI(cbUsuario.getValue());
+                if(eliminarUsuario(usuario)) {
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Usuario eliminado con éxito"));
+                }else {
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha podido eliminar el usuario"));
+                }
+                add(hlAviso);
             });
         });
     }
 
     private boolean eliminarUsuario(Usuario usuario) {
+        if (usuario == null || usuario.getFechaEliminacion() != null ) return false;
+        usuario.setFechaEliminaciono(new Date());
+        usuarioService.save(usuario);
         return true;
     }
 }
