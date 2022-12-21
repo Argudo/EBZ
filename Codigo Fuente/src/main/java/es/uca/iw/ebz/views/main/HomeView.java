@@ -112,12 +112,6 @@ private AuthenticatedUser _authenticatedUser;
 
 
 		//Account information and buttons section
-		VerticalLayout vlAccount = new VerticalLayout();
-		vlAccount.setWidth("70%");
-		vlAccount.setPadding(false);
-		vlAccount.setSpacing(false);
-		vlAccount.setMargin(false);
-		//End account information and buttons section
 
 		//Username section
 		Component userName = CreateUserNameBanner(_cliente.getNombre());
@@ -126,74 +120,106 @@ private AuthenticatedUser _authenticatedUser;
 
 		//Account gallery section
 		List<Cuenta> accountList = _cuentaService.findByCliente(_cliente);
-		acSelected = accountList.get(0);
-		updateAccountInfo();
-		VerticalLayout vlShowAccount = new VerticalLayout();
-		vlShowAccount.setAlignItems(Alignment.CENTER);
-		vlShowAccount.setSpacing(false);
-		vlShowAccount.setWidth("100%");
 
-		vlShowAccount.add(
-				_acNumber,
-				_acBalance);
+		if(accountList.size() > 1){
+
+			VerticalLayout vlAccount = new VerticalLayout();
+			vlAccount.setWidth("70%");
+			vlAccount.setPadding(false);
+			vlAccount.setSpacing(false);
+			vlAccount.setMargin(false);
+
+			acSelected = accountList.get(0);
+			updateAccountInfo();
+			VerticalLayout vlShowAccount = new VerticalLayout();
+			vlShowAccount.setAlignItems(Alignment.CENTER);
+			vlShowAccount.setSpacing(false);
+			vlShowAccount.setWidth("100%");
+
+			vlShowAccount.add(
+					_acNumber,
+					_acBalance);
+
+			vlAccount.add(userName);
+			vlAccount.add(vlShowAccount);
+
+			//Button section
+			FlexLayout flAccountButtons = new FlexLayout();
+			flAccountButtons.setWidthFull();
+			flAccountButtons.setFlexDirection(FlexDirection.ROW);
+			flAccountButtons.setFlexWrap(FlexWrap.WRAP);
+			flAccountButtons.setJustifyContentMode(JustifyContentMode.EVENLY);
+
+			Component cTarjeta = CreateButton("Tarjetas", VaadinIcon.CREDIT_CARD);
+			Component cEstadisticas = CreateButton("Estadísticas", VaadinIcon.BAR_CHART_H);
+			Component cMovimientos = CreateButton("Movimientos", VaadinIcon.EXCHANGE);
+			Component cTransferencias = CreateButton("Transferencias", VaadinIcon.MONEY_EXCHANGE);
+			flAccountButtons.add(
+					cTarjeta,
+					cEstadisticas,
+					cMovimientos,
+					cTransferencias
+			);
+			//End button section
+
+			//Including name, account information and buttons to the first layout
+			vlAccount.add(flAccountButtons);
+			//End of including...
+
+			//Account list layout section
+
+			Scroller accountScroller = new Scroller();
+			accountScroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+			accountScroller.setWidth("28%");
+			//accountScroller.setHeight("95%");
+
+
+			VerticalLayout vlAccountList = new VerticalLayout();
+			vlAccountList.setWidthFull();
+			vlAccountList.setPadding(false);
+			vlAccountList.setMargin(false);
+			vlAccountList.setSpacing(false);
+			vlAccountList.setAlignItems(Alignment.CENTER);
+
+			//Pendiente de arreglar
+
+			List<Component> accountListComponent = new ArrayList<Component>();
+			for(Cuenta c: accountList) {
+				accountListComponent.add(CreateAccountListElement(c));
+			}
+			for(Component c: accountListComponent){
+				vlAccountList.add(c);
+			}
+			accountScroller.setContent(vlAccountList);
+			//End account list layout section
+
+			hlMain.add(
+					vlAccount,
+					accountScroller);
+
+		}else{
+
+			VerticalLayout vlNoAccounts = new VerticalLayout();
+			vlNoAccounts.setWidthFull();
+			vlNoAccounts.setPadding(true);
+			vlNoAccounts.setSpacing(false);
+			vlNoAccounts.setMargin(false);
+			vlNoAccounts.setAlignItems(Alignment.CENTER);
+
+			H1 sNoAccounts = new H1("No tienes cuentas asociadas actualmente.");
+
+
+			vlNoAccounts.add(
+					userName,
+					sNoAccounts);
+
+			hlMain.add(vlNoAccounts);
+
+		}
+
 
 		//End account gallery section
 
-		//Button section
-		FlexLayout flAccountButtons = new FlexLayout();
-		flAccountButtons.setWidthFull();
-		flAccountButtons.setFlexDirection(FlexDirection.ROW);
-		flAccountButtons.setFlexWrap(FlexWrap.WRAP);
-		flAccountButtons.setJustifyContentMode(JustifyContentMode.EVENLY);
-
-		Component cTarjeta = CreateButton("Tarjetas", VaadinIcon.CREDIT_CARD);
-		Component cEstadisticas = CreateButton("Estadísticas", VaadinIcon.BAR_CHART_H);
-		Component cMovimientos = CreateButton("Movimientos", VaadinIcon.EXCHANGE);
-		Component cTransferencias = CreateButton("Transferencias", VaadinIcon.MONEY_EXCHANGE);
-		flAccountButtons.add(
-				cTarjeta,
-				cEstadisticas,
-				cMovimientos,
-				cTransferencias
-				);
-		//End button section
-
-		//Including name, account information and buttons to the first layout
-		vlAccount.add(userName);
-		vlAccount.add(vlShowAccount);
-		vlAccount.add(flAccountButtons);
-		//End of including...
-
-		//Account list layout section
-
-		Scroller accountScroller = new Scroller();
-		accountScroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
-		accountScroller.setWidth("28%");
-		//accountScroller.setHeight("95%");
-
-
-		VerticalLayout vlAccountList = new VerticalLayout();
-		vlAccountList.setWidthFull();
-		vlAccountList.setPadding(false);
-		vlAccountList.setMargin(false);
-		vlAccountList.setSpacing(false);
-		vlAccountList.setAlignItems(Alignment.CENTER);
-
-		//Pendiente de arreglar
-
-		List<Component> accountListComponent = new ArrayList<Component>();
-		for(Cuenta c: accountList) {
-			accountListComponent.add(CreateAccountListElement(c));
-		}
-		for(Component c: accountListComponent){
-			vlAccountList.add(c);
-		}
-		accountScroller.setContent(vlAccountList);
-		//End account list layout section
-
-		hlMain.add(
-				vlAccount,
-				accountScroller);
 		//End first layout section
 
 		//Movements and notifications section
