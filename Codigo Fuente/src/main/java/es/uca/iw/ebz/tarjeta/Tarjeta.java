@@ -7,12 +7,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.persistence.*;
-
-import es.uca.iw.ebz.usuario.cliente.Cliente;
-import org.apache.commons.codec.binary.Hex;
-import org.hibernate.annotations.Type;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.google.common.hash.Hashing;
 import com.vaadin.flow.component.Component;
@@ -21,6 +21,9 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 
 
 @Entity
@@ -51,18 +54,18 @@ public class Tarjeta {
 	@ManyToOne
 	private Cliente _clienteTitular;
 	
-	//TODO: Conexion relacional
-	@Column(name = "numCuenta")
-	String _sNumCuenta;
+	@OneToOne
+	Cuenta _cuenta;
 
 	public Tarjeta() {
 	}
 
-	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta) {
+	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta, Cuenta cuenta, Cliente cliente) {
 		super();
 		_iPin = iPin;
 		_tipoTarjeta = tipoTarjeta;
-		_sNumCuenta = "81732HAASKJDHA1" + (int) (Math.random()*25+1) + "872";
+		_cuenta = cuenta;
+		_clienteTitular = cliente;
 		_sNumTarjeta = GenerarNumTarjeta();
 		_fechaExpiracion = GenerarFechaExpiracion();
 	}
@@ -73,7 +76,7 @@ public class Tarjeta {
 		switch(_tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				String sNumCuenta_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_sNumCuenta, StandardCharsets.UTF_8).toString());
+				String sNumCuenta_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString());
 				sNumTarjeta += sNumCuenta_sha256.substring(0,8).toUpperCase();
 				break;
 			case Credito:
