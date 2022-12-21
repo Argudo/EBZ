@@ -61,8 +61,10 @@ public class TarjetaView extends VerticalLayout{
 	static Tarjeta tarSelected = null;
 	private Cliente _cliente;
 	private List<Cuenta> aCuentas;
+	private List<TarjetaComponent> aTarjetasComponent = new ArrayList<TarjetaComponent>();
 	
-	HorizontalLayout hlInformacion = new HorizontalLayout();
+	private HorizontalLayout hlInformacion = new HorizontalLayout();
+	private HorizontalLayout hlTarjetas = new HorizontalLayout();
 	
 	VerticalLayout vlDetalleTarjetas = new VerticalLayout();	
 		private H3 hNumCuenta = new H3("Número de cuenta");
@@ -91,7 +93,6 @@ public class TarjetaView extends VerticalLayout{
 		setAlignItems(FlexComponent.Alignment.CENTER);
 		_cliente = _cliService.findByUsuario(_authUser.get().get());
 		List<Tarjeta> aTarjetas = _tarService.findByCliente(_cliente);
-		List<TarjetaComponent> aTarjetasComponent = new ArrayList<TarjetaComponent>();
 		textPin.setReadOnly(true);
 		textPin.setClassName("padding40");
 		
@@ -141,7 +142,6 @@ public class TarjetaView extends VerticalLayout{
 						  vlTransacciones);
 		hlInformacion.setWidth("71vw");
 		
-		HorizontalLayout hlTarjetas = new HorizontalLayout();
 		hlTarjetas.setWidth("100%");
 		hlTarjetas.setHeight("100%");
 		hlTarjetas.setPadding(true);
@@ -156,40 +156,7 @@ public class TarjetaView extends VerticalLayout{
 		CargarDetalles();
 		TarjetaComponent tNewCard = new TarjetaComponent();
 		hlTarjetas.add(tNewCard);
-		for(TarjetaComponent tc: aTarjetasComponent) {
-			hlTarjetas.add(tc);
-		}
-		
-		hlTarjetas.getChildren().forEach(child -> {
-			child.getElement().addEventListener("click", e -> {
-				if(!child.equals(tNewCard)) {					
-					if(tcSelected == null) {
-						tcSelected = TarjetaComponent.class.cast(child);
-						tcSelected.seleccionarTarjeta();
-						tarSelected = tcSelected.getTarjeta();
-						CargarDetalles();
-					}
-					
-					if(tcSelected != TarjetaComponent.class.cast(child)) {
-						tcSelected.deseleccionarTarjeta();
-						tcSelected = TarjetaComponent.class.cast(child);
-						tcSelected.seleccionarTarjeta();
-						tarSelected = tcSelected.getTarjeta();
-						CargarDetalles();
-					}
-					else if((tcSelected == TarjetaComponent.class.cast(child) && tcSelected.getSelected())) {
-						tcSelected.deseleccionarTarjeta();
-						CargarDetalles();
-					}
-					else {
-						tcSelected = TarjetaComponent.class.cast(child);
-						tcSelected.seleccionarTarjeta();
-						tarSelected = tcSelected.getTarjeta();
-						CargarDetalles();
-					}
-				}
-			});
-		});
+		ActualizarTarjetas();
 
 		dlogNT.setWidth("30vw");
 		dlogNT.setHeaderTitle("Solicitar nueva tarjeta");
@@ -279,6 +246,8 @@ public class TarjetaView extends VerticalLayout{
 		
 		Notification notification = Notification.show("Tu nueva tarjeta " + T.getNumTarjeta() + " ha sido creada correctamente");
 		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+		aTarjetasComponent.add(new TarjetaComponent(T));
+		ActualizarTarjetas();
 		dlogNT.close();
 	}
 	
@@ -308,7 +277,39 @@ public class TarjetaView extends VerticalLayout{
 			});
 		}
 	}
-
-    public static class DashBoardCuentaView {
-    }
+	
+	private void ActualizarTarjetas() {
+		for(TarjetaComponent tc: aTarjetasComponent) {
+			hlTarjetas.add(tc);
+		}
+		
+		hlTarjetas.getChildren().forEach(child -> {
+			child.getElement().addEventListener("click", e -> {				
+				if(tcSelected == null) {
+					tcSelected = TarjetaComponent.class.cast(child);
+					tcSelected.seleccionarTarjeta();
+					tarSelected = tcSelected.getTarjeta();
+					CargarDetalles();
+				}
+				
+				if(tcSelected != TarjetaComponent.class.cast(child)) {
+					tcSelected.deseleccionarTarjeta();
+					tcSelected = TarjetaComponent.class.cast(child);
+					tcSelected.seleccionarTarjeta();
+					tarSelected = tcSelected.getTarjeta();
+					CargarDetalles();
+				}
+				else if((tcSelected == TarjetaComponent.class.cast(child) && tcSelected.getSelected())) {
+					tcSelected.deseleccionarTarjeta();
+					CargarDetalles();
+				}
+				else {
+					tcSelected = TarjetaComponent.class.cast(child);
+					tcSelected.seleccionarTarjeta();
+					tarSelected = tcSelected.getTarjeta();
+					CargarDetalles();
+				}
+			});
+		});
+	}
 }
