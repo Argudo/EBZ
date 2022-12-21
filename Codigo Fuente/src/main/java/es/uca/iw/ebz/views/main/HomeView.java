@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.flow.router.RouteAlias;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -44,6 +45,7 @@ import es.uca.iw.ebz.views.main.layout.MainLayout;
 
 @PageTitle("")
 @Route(value = "", layout = MainLayout.class)
+@RouteAlias(value = "home", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 
 public class HomeView extends VerticalLayout  {
@@ -88,6 +90,9 @@ private AuthenticatedUser _authenticatedUser;
 		this._authenticatedUser = _authenticatedUser;
 		//End services initialization section
 
+		//Client asignation
+		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
+
 		setMargin(false);
 		setPadding(false);
 		setSpacing(true);
@@ -113,8 +118,6 @@ private AuthenticatedUser _authenticatedUser;
 		vlAccount.setSpacing(false);
 		vlAccount.setMargin(false);
 		//End account information and buttons section
-		System.out.println("Auth: " + _authenticatedUser.get().get() + "| Cli: " + _clienteService.findByUsuario(_authenticatedUser.get().get()));
-		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
 
 		//Username section
 		Component userName = CreateUserNameBanner(_cliente.getNombre());
@@ -132,8 +135,7 @@ private AuthenticatedUser _authenticatedUser;
 
 		vlShowAccount.add(
 				_acNumber,
-				_acBalance
-		);
+				_acBalance);
 
 		//End account gallery section
 
@@ -221,8 +223,10 @@ private AuthenticatedUser _authenticatedUser;
 
 		if(mvList.size() < 1){
 
-			Paragraph mvMessage = new Paragraph("No hay movimientos que mostrar");
+			H2 mvMessage = new H2("No tienes movimientos actualmente.");
+			flAccountMovements.setAlignItems(Alignment.CENTER);
 			flAccountMovements.add(mvMessage);
+
 		}else{
 			int cont = 0;
 			List<Component> mvComponentList = new ArrayList<>();
@@ -323,26 +327,6 @@ private AuthenticatedUser _authenticatedUser;
 		return vlMain;
 	}
 
-	//Componente de prueba para mostrar la información de la cuenta.
-	/*private Component ShowAccount(String acNumber, float acBalance) {
-		VerticalLayout vlMain = new VerticalLayout();
-		vlMain.setAlignItems(Alignment.CENTER);
-		vlMain.setSpacing(false);
-		vlMain.setWidth("100%");
-
-		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
-
-		H2 _acNumber = new H2(acNumber);
-		H3 _acBalance = new H3(formatImport.format(acBalance));
-		vlMain.add(
-				_acNumber,
-				_acBalance
-		);
-
-		return vlMain;
-
-	}*/
-
 	//Componente para mostrar el nombre del usuario en la vista principal.
 	//Falta arreglar la situación del nombre
 	private Component CreateUserNameBanner(String userName){
@@ -383,9 +367,12 @@ private AuthenticatedUser _authenticatedUser;
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		Paragraph _ae1 = new Paragraph(ac.getNumeroCuenta() + "  " + ac.getSaldo());
+		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t" + ac.getSaldo());
 
-		//_ae1.addClickListener();
+		_ae1.addClickListener(e -> {
+			acSelected = ac;
+			updateAccountInfo();
+		});
 
 		vlMain.add(
 				_ae1);
