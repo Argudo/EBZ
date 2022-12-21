@@ -25,8 +25,11 @@ import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
 import es.uca.iw.ebz.views.main.layout.MainLayout;
 
+import javax.annotation.security.RolesAllowed;
+
 @PageTitle("Tarjetas")
 @Route(value = "tarjetas", layout = MainLayout.class)
+@RolesAllowed({ "Cliente" })
 public class TarjetaView extends VerticalLayout{
 	//@Autowired
 	//private TarjetaService _tarService;

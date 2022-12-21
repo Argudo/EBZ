@@ -23,13 +23,14 @@ import es.uca.iw.ebz.usuario.cliente.TipoCliente;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
-@PermitAll
+@RolesAllowed({ "Empleado"})
 @PageTitle("Dashboard/usuario")
 @Route(value = "Dashboard/usuario", layout = AdminLayout.class)
 public class DashBoardUserView extends VerticalLayout {

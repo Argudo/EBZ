@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -30,7 +31,7 @@ import es.uca.iw.ebz.views.main.layout.AdminLayout;
 import es.uca.iw.ebz.usuario.Usuario;
 
 @PageTitle("Dashboard/cuentas")
-@PermitAll
+@RolesAllowed({ "Empleado"})
 @Route(value = "Dashboard/cuentas", layout = AdminLayout.class)
 public class DashBoardCuentasView extends VerticalLayout {
     private VerticalLayout vlDashboard = new VerticalLayout();

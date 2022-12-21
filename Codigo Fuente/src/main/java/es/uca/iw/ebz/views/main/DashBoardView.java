@@ -12,7 +12,7 @@ import es.uca.iw.ebz.views.main.layout.AdminLayout;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
-@PermitAll
+@RolesAllowed({ "Empleado" })
 @PageTitle("Dashboard")
 @Route(value = "Dashboard", layout = AdminLayout.class)
 public class DashBoardView extends VerticalLayout {

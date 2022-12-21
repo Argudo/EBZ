@@ -36,10 +36,10 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
-@PermitAll
+
 @PageTitle("Gestión de tarjetas")
 @Route(value = "Dashboard/tarjetas", layout = AdminLayout.class)
-@RolesAllowed("Empleado")
+@RolesAllowed({ "Empleado"})
 public class DashBoardTarjetasView extends HorizontalLayout{
 	private VerticalLayout vlGrid = new VerticalLayout();
 	private VerticalLayout vlInfo = new VerticalLayout();

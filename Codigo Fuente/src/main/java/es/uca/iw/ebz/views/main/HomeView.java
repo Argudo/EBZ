@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,7 +44,7 @@ import es.uca.iw.ebz.views.main.layout.MainLayout;
 
 @PageTitle("")
 @Route(value = "", layout = MainLayout.class)
-@PermitAll
+@RolesAllowed({ "Cliente" })
 
 public class HomeView extends VerticalLayout  {
 @Autowired
