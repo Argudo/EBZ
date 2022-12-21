@@ -28,18 +28,31 @@ public class CuentaService {
         cuenta.setFechaCreacion(new Date());
         _cuentaRepository.save(cuenta);
         return cuenta;
-       // return cuenta;
     }
 
     public List<Cuenta> loadCuentas() {
         return _cuentaRepository.findByFechaEliminacionIsNull();
     }
 
-    public void delete(Cuenta cuenta) {
+    public boolean delete(Cuenta cuenta) {
         cuenta.setFechaEliminacion(new Date());
-        _cuentaRepository.save(cuenta);
+        //cuenta.setNumeroCuenta("1234");  error para preguntar: si tiene el mismo numero da error duplicate entry y si ponemos otro numero crea otra fila
+        if(_cuentaRepository.save(cuenta) != null) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
+    public boolean delete2(String sNumeroCuenta) {
+        Cuenta cuenta = _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta).get();
+        cuenta.setFechaEliminacion(new Date());
+        if(_cuentaRepository.save(cuenta) != null) {
+            return true;
+        }else {
+            return false;
+        }
+    }
     public void update(String sNumeroCuenta, float fSaldo) {
         Optional<Cuenta> cuenta = _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
         cuenta.get().setSaldo(cuenta.get().getSaldo() + fSaldo);

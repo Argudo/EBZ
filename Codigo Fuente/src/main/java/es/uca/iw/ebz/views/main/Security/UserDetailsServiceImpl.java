@@ -27,20 +27,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario user = userRepository.findBysUsuario(username);
+        Usuario user = userRepository.findBysDNI(username);
         if (user == null) {
             throw new UsernameNotFoundException("No user present with username: " + username);
         } else {
-            return new org.springframework.security.core.userdetails.User(user.getUsuario(), user.getContraseña(),
+            return new org.springframework.security.core.userdetails.User(user.getDNI(), user.getContraseña(),
                     getAuthorities(user));
         }
     }
 
-    private static List<GrantedAuthority> getAuthorities(Usuario user) {
+    private List<GrantedAuthority> getAuthorities(Usuario user) {
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
         list.add(new SimpleGrantedAuthority("ROLE_" + user.getTipoUsuario()));
+        //System.out.println("Rol: " + list.get(0));
         return list;
-
     }
 
 }

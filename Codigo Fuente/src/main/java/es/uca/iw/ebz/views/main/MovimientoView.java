@@ -7,11 +7,15 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import es.uca.iw.ebz.views.main.layout.MainLayout;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Movimiento")
 @Component
 @Route(value = "movimiento", layout = MainLayout.class)
+@RolesAllowed({ "Cliente" })
 public class MovimientoView extends VerticalLayout {
     private VerticalLayout vlDetalleMovimiento = new VerticalLayout();
 

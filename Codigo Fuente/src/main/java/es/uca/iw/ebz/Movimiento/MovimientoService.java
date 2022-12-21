@@ -141,14 +141,14 @@ public class MovimientoService {
                 break;
             case COMPRATARJETA:
                 CompraTarjeta compraTarjeta = _compraTarjetaService.findByMovimiento(movimiento);
-                datos.put("Origen", compraTarjeta.getTarjeta().getsNumTarjeta());
+                datos.put("Origen", compraTarjeta.getTarjeta().getNumTarjeta());
                 datos.put("Destino", compraTarjeta.getDestino());
                 datos.put("Importe", compraTarjeta.getImporte());
                 break;
             case RECARGATARJETA:
                 RecargaTarjeta recargaTarjeta = _recargaTarjetaService.findByMovimiento(movimiento);
                 datos.put("Origen", recargaTarjeta.getCuenta().getNumeroCuenta());
-                datos.put("Destino", recargaTarjeta.getTarjeta().getsNumTarjeta());
+                datos.put("Destino", recargaTarjeta.getTarjeta().getNumTarjeta());
                 datos.put("Importe", recargaTarjeta.getImporte());
                 break;
         }

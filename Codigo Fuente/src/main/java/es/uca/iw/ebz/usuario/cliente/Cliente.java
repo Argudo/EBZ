@@ -7,17 +7,22 @@ import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
 import es.uca.iw.ebz.usuario.Usuario;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Cliente {
 	@Id
+	//@Type(type = "uuid-char")
 	@GeneratedValue
+	@Column(length=16)
 	private UUID Id;
 
 	public Cliente() {
 	}
-
+	
 	public UUID getId(){ return this.Id; }
 
 	//Datos pertinentes
@@ -38,10 +43,7 @@ public class Cliente {
 	private Date dFechaRegistro;
 	public Date getFechaRegistro(){ return this.dFechaRegistro; }
 	public void  setFechaRegitro(Date fecha){ this.dFechaRegistro = fecha; }
-	@Column(name = "fecha_eliminacion")
-	private Date dFechaEliminacion;
-	public Date getFechaEliminacion(){ return this.dFechaEliminacion; }
-	public void  setFechaEliminaciono(Date fecha){ this.dFechaEliminacion = fecha; }
+
 
 	//Relaciones
 	@NotNull
@@ -53,16 +55,15 @@ public class Cliente {
 	@NotNull
 	//@Column(name = "id_usuario")
 	@ManyToOne
-	//@JoinColumn(name = "usuarios_id")
+	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario usuario;
 	public Usuario getUsuario (){ return this.usuario; }
 	public void setUsuario(Usuario user){ this.usuario = user; }
 
-	public Cliente(String nombre, Date fechNac, Date fechReg, Date fechEli, TipoCliente tipoCliente, Usuario usuario){
+	public Cliente(String nombre, Date fechNac, Date fechReg, TipoCliente tipoCliente, Usuario usuario){
 		this.sNombre = nombre;
 		this.dFechaNacimiento = fechNac;
 		this.dFechaRegistro = fechReg;
-		this.dFechaEliminacion = fechEli;
 		this.TipoCliente = tipoCliente;
 		this.usuario = usuario;
 	}

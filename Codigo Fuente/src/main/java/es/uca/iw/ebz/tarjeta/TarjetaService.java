@@ -61,16 +61,21 @@ public class TarjetaService {
 	public List<Tarjeta> findByCliente(Cliente cliente){
 		List<Tarjeta> aT = new ArrayList<Tarjeta>();
 		_tarRepository.findBy_clienteTitular(cliente).forEach(T -> {
+			System.out.println("Tarjeta: " + T.getNumTarjeta());
 			if(T.getFechaCancelacion() == null) aT.add(T);
 		});
 		return aT;
+	}
+	
+	public long Count() {
+		return _tarRepository.count();
 	}
 	
 	
 	public Component GenerarTarjeta(Tarjeta t) {
 		VerticalLayout vlTarjeta = new VerticalLayout();
         vlTarjeta.add(new H4("EBZ"),
-        			   new H5(t.getsNumTarjeta()),
+        			   new H5(t.getNumTarjeta()),
         			   new H6(t.getFechaExpiracion().toString()));
         vlTarjeta.setClassName("tarjeta-mid");
         vlTarjeta.setWidth("300px");

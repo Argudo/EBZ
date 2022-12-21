@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.views.main;
+package es.uca.iw.ebz.views.main.layout;
 
 import javax.swing.text.html.ListView;
 
@@ -20,9 +20,16 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
+import es.uca.iw.ebz.views.main.HomeView;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.main.TarjetaView;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class MainLayout extends AppLayout{
-	
+	@Autowired
+	private AuthenticatedUser _authenticatedUser;
+
+
 	public MainLayout() {
 		CreateHeader();
 		
@@ -38,8 +45,14 @@ public class MainLayout extends AppLayout{
     	Button btnSignOut = new Button();
     	Icon icon = new Icon(VaadinIcon.SIGN_OUT);
     	btnSignOut.getElement().appendChild(icon.getElement());
+		btnSignOut.addClickListener(e -> {
+			_authenticatedUser.logout();
+		});
         H1 logo = new H1("EBZ");
         logo.addClassNames("text-l", "m-m");
+		logo.addClickListener(e -> {
+			logo.getUI().ifPresent((ui -> ui.navigate("")));
+		});
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();

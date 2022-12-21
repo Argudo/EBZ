@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,7 +23,7 @@ public class UsuarioService {
     public UsuarioService (UsuarioRepository usr) { repoUsuario = usr; }
 
     public UUID inicioSesion(String usuario, String contraseña) throws UsuarioNoEncontrado, ContraseñaIncorrecta, NoSuchAlgorithmException { //sujeto a cambio
-        Usuario user = repoUsuario.findBysUsuario(usuario);
+        Usuario user = repoUsuario.findBysDNI(usuario);
         if (user == null) throw new UsuarioNoEncontrado("Este usuario no se encuentra en la base de datos: " + usuario);
         if (user.getContraseña() != passwordEncoder.encode(contraseña)) throw  new ContraseñaIncorrecta("La contraseña no coincide con la de la base de datos " + contraseña);
         return user.getId();
@@ -50,6 +52,14 @@ public class UsuarioService {
     }
     //hacer añadir usuaruio cliente y admin si hay tiempo
 
-    public Usuario findBysUsuario (String use) { return repoUsuario.findBysUsuario(use); }
+    public Usuario findBysDNI (String use) { return repoUsuario.findBysDNI(use); }
+
+    public Usuario EliminarUsuario(Usuario usr){
+        usr.setFechaEliminaciono(new Date());
+        save(usr);
+        return usr;
+    }
+
+    public List<Usuario> findAll() { return repoUsuario.findAll(); }
 
 }

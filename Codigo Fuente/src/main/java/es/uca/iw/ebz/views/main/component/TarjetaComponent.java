@@ -41,7 +41,7 @@ public class TarjetaComponent extends Component {
     	DateFormat dateFormat = new SimpleDateFormat("mm/yy");  
         String fechaExpiracion = dateFormat.format(_tarjeta.getFechaExpiracion());  
         _vlTarjeta.add(new H4("EBZ"),
-        			   new H5(_tarjeta.getsNumTarjeta()),
+        			   new H5(_tarjeta.getNumTarjeta()),
         			   new H6(fechaExpiracion)
         			 );
         _vlTarjeta.setClassName("tarjeta-mid");

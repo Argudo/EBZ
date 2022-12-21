@@ -36,11 +36,14 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (authenticatedUser.get().isPresent()) {
-            // Already logged in
-            setOpened(false);
-            event.forwardTo("");
+            if(authenticatedUser.get().get().getTipoUsuario().equals("Empleado")) {
+                setOpened(false);
+                event.forwardTo(DashBoardView.class);
+            } else {
+                setOpened(false);
+                event.forwardTo("");
+            }
         }
-
         setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
     }
 }

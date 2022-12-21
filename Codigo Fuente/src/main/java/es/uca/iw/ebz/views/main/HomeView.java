@@ -1,53 +1,54 @@
 package es.uca.iw.ebz.views.main;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+
+import com.vaadin.flow.router.RouteAlias;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
 import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.theme.lumo.LumoUtility;
+
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
+import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
-import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
-import es.uca.iw.ebz.tarjeta.EnumTarjeta;
-import es.uca.iw.ebz.tarjeta.Tarjeta;
-import es.uca.iw.ebz.tarjeta.TipoTarjeta;
-import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
-import org.springframework.beans.factory.annotation.Autowired;
+import es.uca.iw.ebz.views.main.layout.MainLayout;
 
-import javax.annotation.security.PermitAll;
-import javax.servlet.http.Cookie;
-import java.awt.*;
-import java.text.NumberFormat;
 
 
 @PageTitle("")
 @Route(value = "", layout = MainLayout.class)
-@PermitAll
+@RouteAlias(value = "home", layout = MainLayout.class)
+@RolesAllowed({ "Cliente" })
 
-public class HomeView extends VerticalLayout{
+public class HomeView extends VerticalLayout  {
 @Autowired
 private MovimientoService _movimientoService;
 
@@ -89,6 +90,9 @@ private AuthenticatedUser _authenticatedUser;
 		this._authenticatedUser = _authenticatedUser;
 		//End services initialization section
 
+		//Client asignation
+		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
+
 		setMargin(false);
 		setPadding(false);
 		setSpacing(true);
@@ -108,89 +112,114 @@ private AuthenticatedUser _authenticatedUser;
 
 
 		//Account information and buttons section
-		VerticalLayout vlAccount = new VerticalLayout();
-		vlAccount.setWidth("70%");
-		vlAccount.setPadding(false);
-		vlAccount.setSpacing(false);
-		vlAccount.setMargin(false);
-		//End account information and buttons section
-
 
 		//Username section
 		Component userName = CreateUserNameBanner(_cliente.getNombre());
+		//Component userName = CreateUserNameBanner(_authenticatedUser.get().get().getUsuario());
 		//End username section
 
 		//Account gallery section
 		List<Cuenta> accountList = _cuentaService.findByCliente(_cliente);
-		acSelected = accountList.get(0);
-		updateAccountInfo();
-		VerticalLayout vlShowAccount = new VerticalLayout();
-		vlShowAccount.setAlignItems(Alignment.CENTER);
-		vlShowAccount.setSpacing(false);
-		vlShowAccount.setWidth("100%");
 
-		vlShowAccount.add(
-				_acNumber,
-				_acBalance
-		);
+		if(accountList.size() > 1){
+
+			VerticalLayout vlAccount = new VerticalLayout();
+			vlAccount.setWidth("70%");
+			vlAccount.setPadding(false);
+			vlAccount.setSpacing(false);
+			vlAccount.setMargin(false);
+
+			acSelected = accountList.get(0);
+			updateAccountInfo();
+			VerticalLayout vlShowAccount = new VerticalLayout();
+			vlShowAccount.setAlignItems(Alignment.CENTER);
+			vlShowAccount.setSpacing(false);
+			vlShowAccount.setWidth("100%");
+
+			vlShowAccount.add(
+					_acNumber,
+					_acBalance);
+
+			vlAccount.add(userName);
+			vlAccount.add(vlShowAccount);
+
+			//Button section
+			FlexLayout flAccountButtons = new FlexLayout();
+			flAccountButtons.setWidthFull();
+			flAccountButtons.setFlexDirection(FlexDirection.ROW);
+			flAccountButtons.setFlexWrap(FlexWrap.WRAP);
+			flAccountButtons.setJustifyContentMode(JustifyContentMode.EVENLY);
+
+			Component cTarjeta = CreateButton("Tarjetas", VaadinIcon.CREDIT_CARD);
+			Component cEstadisticas = CreateButton("Estadísticas", VaadinIcon.BAR_CHART_H);
+			Component cMovimientos = CreateButton("Movimientos", VaadinIcon.EXCHANGE);
+			Component cTransferencias = CreateButton("Transferencias", VaadinIcon.MONEY_EXCHANGE);
+			flAccountButtons.add(
+					cTarjeta,
+					cEstadisticas,
+					cMovimientos,
+					cTransferencias
+			);
+			//End button section
+
+			//Including name, account information and buttons to the first layout
+			vlAccount.add(flAccountButtons);
+			//End of including...
+
+			//Account list layout section
+
+			Scroller accountScroller = new Scroller();
+			accountScroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+			accountScroller.setWidth("28%");
+			//accountScroller.setHeight("95%");
+
+
+			VerticalLayout vlAccountList = new VerticalLayout();
+			vlAccountList.setWidthFull();
+			vlAccountList.setPadding(false);
+			vlAccountList.setMargin(false);
+			vlAccountList.setSpacing(false);
+			vlAccountList.setAlignItems(Alignment.CENTER);
+
+			//Pendiente de arreglar
+
+			List<Component> accountListComponent = new ArrayList<Component>();
+			for(Cuenta c: accountList) {
+				accountListComponent.add(CreateAccountListElement(c));
+			}
+			for(Component c: accountListComponent){
+				vlAccountList.add(c);
+			}
+			accountScroller.setContent(vlAccountList);
+			//End account list layout section
+
+			hlMain.add(
+					vlAccount,
+					accountScroller);
+
+		}else{
+
+			VerticalLayout vlNoAccounts = new VerticalLayout();
+			vlNoAccounts.setWidthFull();
+			vlNoAccounts.setPadding(true);
+			vlNoAccounts.setSpacing(false);
+			vlNoAccounts.setMargin(false);
+			vlNoAccounts.setAlignItems(Alignment.CENTER);
+
+			H1 sNoAccounts = new H1("No tienes cuentas asociadas actualmente.");
+
+
+			vlNoAccounts.add(
+					userName,
+					sNoAccounts);
+
+			hlMain.add(vlNoAccounts);
+
+		}
+
 
 		//End account gallery section
 
-		//Button section
-		FlexLayout flAccountButtons = new FlexLayout();
-		flAccountButtons.setWidthFull();
-		flAccountButtons.setFlexDirection(FlexDirection.ROW);
-		flAccountButtons.setFlexWrap(FlexWrap.WRAP);
-		flAccountButtons.setJustifyContentMode(JustifyContentMode.EVENLY);
-
-		Component cTarjeta = CreateButton("Tarjetas", VaadinIcon.CREDIT_CARD);
-		Component cEstadisticas = CreateButton("Estadísticas", VaadinIcon.BAR_CHART_H);
-		Component cMovimientos = CreateButton("Movimientos", VaadinIcon.EXCHANGE);
-		Component cTransferencias = CreateButton("Transferencias", VaadinIcon.MONEY_EXCHANGE);
-		flAccountButtons.add(
-				cTarjeta,
-				cEstadisticas,
-				cMovimientos,
-				cTransferencias
-				);
-		//End button section
-
-		//Including name, account information and buttons to the first layout
-		vlAccount.add(userName);
-		vlAccount.add(vlShowAccount);
-		vlAccount.add(flAccountButtons);
-		//End of including...
-
-		//Account list layout section
-
-		Scroller accountScroller = new Scroller();
-		accountScroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
-		accountScroller.setWidth("28%");
-		//accountScroller.setHeight("95%");
-
-
-		VerticalLayout vlAccountList = new VerticalLayout();
-		vlAccountList.setWidthFull();
-		vlAccountList.setPadding(false);
-		vlAccountList.setMargin(false);
-		vlAccountList.setSpacing(false);
-		vlAccountList.setAlignItems(Alignment.CENTER);
-
-		//Pendiente de arreglar
-
-		List<Component> accountListComponent = null;
-		for(Cuenta c: accountList) {
-			accountListComponent.add(CreateAccountListElement(c));
-		}
-		for(Component c: accountListComponent){
-			vlAccountList.add(c);
-		}
-		accountScroller.setContent(vlAccountList);
-		//End account list layout section
-
-		hlMain.add(
-				vlAccount,
-				accountScroller);
 		//End first layout section
 
 		//Movements and notifications section
@@ -220,11 +249,13 @@ private AuthenticatedUser _authenticatedUser;
 
 		if(mvList.size() < 1){
 
-			Paragraph mvMessage = new Paragraph("No hay movimientos que mostrar");
+			H2 mvMessage = new H2("No tienes movimientos actualmente.");
+			flAccountMovements.setAlignItems(Alignment.CENTER);
+			flAccountMovements.add(mvMessage);
 
 		}else{
 			int cont = 0;
-			List<Component> mvComponentList = null;
+			List<Component> mvComponentList = new ArrayList<>();
 			for(Movimiento m: mvList){
 				if(cont < 3){
 					mvComponentList.add(CreateMovement(m));
@@ -322,26 +353,6 @@ private AuthenticatedUser _authenticatedUser;
 		return vlMain;
 	}
 
-	//Componente de prueba para mostrar la información de la cuenta.
-	/*private Component ShowAccount(String acNumber, float acBalance) {
-		VerticalLayout vlMain = new VerticalLayout();
-		vlMain.setAlignItems(Alignment.CENTER);
-		vlMain.setSpacing(false);
-		vlMain.setWidth("100%");
-
-		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
-
-		H2 _acNumber = new H2(acNumber);
-		H3 _acBalance = new H3(formatImport.format(acBalance));
-		vlMain.add(
-				_acNumber,
-				_acBalance
-		);
-
-		return vlMain;
-
-	}*/
-
 	//Componente para mostrar el nombre del usuario en la vista principal.
 	//Falta arreglar la situación del nombre
 	private Component CreateUserNameBanner(String userName){
@@ -382,9 +393,12 @@ private AuthenticatedUser _authenticatedUser;
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		Paragraph _ae1 = new Paragraph(ac.getNumeroCuenta() + "  " + ac.getSaldo());
+		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t" + ac.getSaldo());
 
-		//_ae1.addClickListener();
+		_ae1.addClickListener(e -> {
+			acSelected = ac;
+			updateAccountInfo();
+		});
 
 		vlMain.add(
 				_ae1);
@@ -435,4 +449,11 @@ private AuthenticatedUser _authenticatedUser;
 		_acBalance.setText(formatImport.format(acSelected.getSaldo()));
 
 	}
+
+	/*@Override
+	public void beforeEnter(BeforeEnterEvent event) {
+		if(_authenticatedUser.get().isPresent()) _cliente = _clienteService.findByUsuario(_authenticatedUser.get().get());
+		else event.rerouteTo(LoginView.class);
+
+	}*/
 }
