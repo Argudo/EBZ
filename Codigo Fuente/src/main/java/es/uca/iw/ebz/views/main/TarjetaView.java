@@ -1,8 +1,11 @@
 package es.uca.iw.ebz.views.main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
@@ -12,8 +15,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
-import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
@@ -21,15 +22,22 @@ import com.vaadin.flow.router.Route;
 
 import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
-import es.uca.iw.ebz.tarjeta.TipoTarjeta;
+import es.uca.iw.ebz.tarjeta.TarjetaService;
+import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
 import es.uca.iw.ebz.views.main.layout.MainLayout;
 
 @PageTitle("Tarjetas")
 @Route(value = "tarjetas", layout = MainLayout.class)
+@RolesAllowed({ "Cliente" })
 public class TarjetaView extends VerticalLayout{
-	//@Autowired
-	//private TarjetaService _tarService;
+	@Autowired
+	private TarjetaService _tarService;
+	@Autowired
+	private AuthenticatedUser _authUser;
+	@Autowired
+	private ClienteService _cliService;
 	
 	static TarjetaComponent tcSelected = null;
 	static Tarjeta tarSelected = null;
@@ -50,15 +58,18 @@ public class TarjetaView extends VerticalLayout{
 	VerticalLayout vlTransacciones = new VerticalLayout();
 	
 	
-	TarjetaView(){
+	TarjetaView(AuthenticatedUser _authUser, ClienteService _cliService, TarjetaService _tarService){
 		setWidthFull();
 		setPadding(true);
 		setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER); 
 		setAlignItems(FlexComponent.Alignment.CENTER);
+		/*
 		TipoTarjeta tpTarjeta = new TipoTarjeta(EnumTarjeta.Debito);
 		Tarjeta tarjeta = new Tarjeta(5000, tpTarjeta);
 		Tarjeta tarjeta2 = new Tarjeta(7000, tpTarjeta);
 		List<Tarjeta> aTarjetas = Arrays.asList(tarjeta2, tarjeta, tarjeta, tarjeta2, tarjeta, tarjeta2, tarjeta);
+		*/
+		List<Tarjeta> aTarjetas = _tarService.findByCliente(_cliService.findByUsuario(_authUser.get().get()));
 		List<TarjetaComponent> aTarjetasComponent = new ArrayList<TarjetaComponent>();
 		textPin.setReadOnly(true);
 		textPin.setClassName("padding40");

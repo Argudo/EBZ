@@ -23,13 +23,14 @@ import es.uca.iw.ebz.usuario.cliente.TipoCliente;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
-@PermitAll
+@RolesAllowed({ "Empleado"})
 @PageTitle("Dashboard/usuario")
 @Route(value = "Dashboard/usuario", layout = AdminLayout.class)
 public class DashBoardUserView extends VerticalLayout {
@@ -152,12 +153,27 @@ public class DashBoardUserView extends VerticalLayout {
                     btnDeleteUser);
             add(vlDashboard);
             btnDeleteUser.addClickListener(event -> {
-
+                Usuario usuario = usuarioService.findBysDNI(cbUsuario.getValue());
+                if(eliminarUsuario(usuario)) {
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Usuario eliminado con éxito"));
+                }else {
+                    hlAviso.getStyle().set("font-size", "14px");
+                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha podido eliminar el usuario"));
+                }
+                add(hlAviso);
             });
         });
     }
 
     private boolean eliminarUsuario(Usuario usuario) {
+        if (usuario == null || usuario.getFechaEliminacion() != null ) return false;
+        usuario.setFechaEliminaciono(new Date());
+        usuarioService.save(usuario);
         return true;
     }
 }

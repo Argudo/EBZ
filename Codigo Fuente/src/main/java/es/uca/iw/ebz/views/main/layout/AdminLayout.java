@@ -18,9 +18,13 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
 import es.uca.iw.ebz.views.main.*;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class AdminLayout  extends AppLayout{
+    @Autowired
+    private AuthenticatedUser _authenticatedUser;
     public AdminLayout() {
         CreateHeader();
 
@@ -36,6 +40,9 @@ public class AdminLayout  extends AppLayout{
         Button btnSignOut = new Button();
         Icon icon = new Icon(VaadinIcon.SIGN_OUT);
         btnSignOut.getElement().appendChild(icon.getElement());
+        btnSignOut.addClickListener(e -> {
+            _authenticatedUser.logout();
+        });
         H1 logo = new H1("EBZ");
         logo.addClassNames("text-l", "m-m");
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
