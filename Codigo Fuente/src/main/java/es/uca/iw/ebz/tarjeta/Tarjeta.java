@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.persistence.*;
 
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.apache.commons.codec.binary.Hex;
 import org.hibernate.annotations.Type;
 import javax.persistence.Id;
@@ -21,14 +22,12 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import es.uca.iw.ebz.cliente.Cliente;
 
 @Entity
 public class Tarjeta {
 	@Id
 	@GeneratedValue
-	@Type(type = "uuid-char")
-	@Column(name = "id")
+	@Column(length=16, name = "id")
 	private UUID _iId;
 	
 	@Column(name = "numTarjeta")
@@ -55,12 +54,15 @@ public class Tarjeta {
 	//TODO: Conexion relacional
 	@Column(name = "numCuenta")
 	String _sNumCuenta;
-	
+
+	public Tarjeta() {
+	}
+
 	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta) {
 		super();
 		_iPin = iPin;
 		_tipoTarjeta = tipoTarjeta;
-		_sNumCuenta = "81732HAASKJDHA171872";
+		_sNumCuenta = "81732HAASKJDHA1" + (int) (Math.random()*25+1) + "872";
 		_sNumTarjeta = GenerarNumTarjeta();
 		_fechaExpiracion = GenerarFechaExpiracion();
 	}
@@ -143,7 +145,7 @@ public class Tarjeta {
         DateFormat dateFormat = new SimpleDateFormat("mm/yy");  
         String fechaExpiracion = dateFormat.format(t.getFechaExpiracion());  
         vlTarjeta.add(new H4("EBZ"),
-        			   new H5(t.getsNumTarjeta()),
+        			   new H5(t.getNumTarjeta()),
         			   new H6(fechaExpiracion)
         			 );
         vlTarjeta.setClassName("tarjeta-mid");
@@ -157,15 +159,17 @@ public class Tarjeta {
 	}
 
 	public UUID getId() { return _iId; }
-	public String getsNumTarjeta() { return _sNumTarjeta; }
-	public void setsNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
+	public String getNumTarjeta() { return _sNumTarjeta; }
+	public void setNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
 	public int getiPin() { return _iPin; }
 	public void setiPin(int iPin) { this._iPin = iPin; }
 	public Date getFechaExpiracion() { return _fechaExpiracion; }
 	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
 	public Date getFechaCreacion() { return _fechaCreacion; }
 	public void setFechaCreacion(Date fechaCreacion) { this._fechaCreacion = fechaCreacion; }
-	public TipoTarjeta getTipoTarjeta() { return _tipoTarjeta; }
+	public Enum getTipoTarjeta() { return _tipoTarjeta.getTipo(); }
 	public Date getFechaCancelacion() { return _fechaCancelacion; }
 	public void setFechaCancelacion(Date fechaCancelacion) { _fechaCancelacion = fechaCancelacion; }
+	public void setCliente(Cliente cliente) {this._clienteTitular = cliente; }
+	public Cliente getCliente() { return this._clienteTitular; }
 }

@@ -1,5 +1,5 @@
 package es.uca.iw.ebz.Movimiento.RecargaTarjeta;
-;
+
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.tarjeta.Tarjeta;

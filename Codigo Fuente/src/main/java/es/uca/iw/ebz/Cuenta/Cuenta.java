@@ -1,7 +1,9 @@
 package es.uca.iw.ebz.Cuenta;
 
 
-import es.uca.iw.ebz.cliente.Cliente;
+
+
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +16,7 @@ import java.util.UUID;
 public class Cuenta {
     @Id
     @GeneratedValue
+    @Column(length=16)
     private UUID id;
 
     @Column(unique = true, name = "numero_cuenta")
@@ -31,7 +34,9 @@ public class Cuenta {
     @Column
     private Date fechaEliminacion;
 
-    @ManyToOne(cascade=CascadeType.PERSIST)
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    @NotNull
     private Cliente cliente;
     public Cuenta() {}
 

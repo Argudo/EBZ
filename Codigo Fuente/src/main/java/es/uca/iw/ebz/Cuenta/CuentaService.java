@@ -28,7 +28,6 @@ public class CuentaService {
         cuenta.setFechaCreacion(new Date());
         _cuentaRepository.save(cuenta);
         return cuenta;
-       // return cuenta;
     }
 
     public List<Cuenta> loadCuentas() {

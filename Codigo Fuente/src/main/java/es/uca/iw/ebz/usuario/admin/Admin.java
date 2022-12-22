@@ -1,37 +1,38 @@
 package es.uca.iw.ebz.usuario.admin;
 
 import es.uca.iw.ebz.usuario.Usuario;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+@Entity
 public class Admin {
 
     @Id
+    @Column(length=16)
     @GeneratedValue
     private UUID Id;
-    public UUID getId(){ return this.Id; }
 
-    @NotNull
-    @Column( name = "nif")
-    private String sNif;
-    public String getNif(){ return this.sNif; }
-    public void setNif (String nif){ this.sNif = nif; }
+    public Admin() {}
+
+    public UUID getId(){ return this.Id; }
 
     @NotNull
     @Column( name = "nombre")
     private String sNombre;
-    public String getUsuario(){ return this.sNombre; }
-    public void setUsuario (String nombre){ this.sNombre = nombre; }
+    public String getNombre(){ return this.sNombre; }
+    public void setNombre (String nombre){ this.sNombre = nombre; }
 
+    @NotNull
     @ManyToOne
-    private Usuario Usuario;
-
-    public Admin(String sNif, String sNombre, Usuario usuario){
+    private Usuario usuario;
+    public Usuario getUsuario(){ return this.usuario; }
+    public void setUsuario (Usuario user){ this.usuario = user; }
+    public Admin(String sNombre, Usuario usuario){
         this.sNombre = sNombre;
-        this.sNif = sNif;
-        this.Usuario = usuario;
+        this.usuario = usuario;
     }
 
     //hay que hacer noticia y hacer la referencia.

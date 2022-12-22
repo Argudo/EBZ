@@ -1,23 +1,29 @@
 package es.uca.iw.ebz.views.main;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.Command;
 
-import es.uca.iw.ebz.Cuenta.CuentaService;
-import es.uca.iw.ebz.tarjeta.*;
+import es.uca.iw.ebz.tarjeta.EnumTarjeta;
+import es.uca.iw.ebz.tarjeta.Tarjeta;
+import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.views.main.component.TarjetaComponent;
+import es.uca.iw.ebz.views.main.layout.MainLayout;
 
 @PageTitle("Tarjetas")
 @Route(value = "tarjetas", layout = MainLayout.class)
@@ -38,6 +44,7 @@ public class TarjetaView extends VerticalLayout{
 		private Paragraph pNumCuenta = new Paragraph();
 		private Paragraph pSaldo = new Paragraph();
 		private Paragraph pPin = new Paragraph();
+		private PasswordField textPin = new PasswordField();
 		private Paragraph pFechaCaducidad = new Paragraph();
 			
 	VerticalLayout vlTransacciones = new VerticalLayout();
@@ -53,6 +60,8 @@ public class TarjetaView extends VerticalLayout{
 		Tarjeta tarjeta2 = new Tarjeta(7000, tpTarjeta);
 		List<Tarjeta> aTarjetas = Arrays.asList(tarjeta2, tarjeta, tarjeta, tarjeta2, tarjeta, tarjeta2, tarjeta);
 		List<TarjetaComponent> aTarjetasComponent = new ArrayList<TarjetaComponent>();
+		textPin.setReadOnly(true);
+		textPin.setClassName("padding40");
 		
 		H1 hTarjeta = new H1("| Tarjetas");
 		hTarjeta.setClassName("title");
@@ -85,7 +94,7 @@ public class TarjetaView extends VerticalLayout{
 							  hSaldo,
 							  pSaldo,
 							  hPin,
-							  pPin,
+							  textPin,
 							  hFechaCaducidad,
 							  pFechaCaducidad);
 		
@@ -153,15 +162,16 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
-			pNumCuenta.setText(tarSelected.getsNumTarjeta());
+			pNumCuenta.setText(tarSelected.getNumTarjeta());
 			pFechaCaducidad.setText(tarSelected.getFechaExpiracion().toString());
 			pPin.setText(String.valueOf(tarSelected.getiPin()));
+			textPin.setValue(String.valueOf(tarSelected.getiPin()));
 			vlDetalleTarjetas.getChildren().forEach(child -> {
 				if(child.getClass() != H1.class || child.getClass() != Hr.class) {
 					child.setVisible(true);
 				}
 			});
-			if(tarSelected.getTipoTarjeta().getTipo() == EnumTarjeta.Prepago) {
+			if(tarSelected.getTipoTarjeta() == EnumTarjeta.Prepago) {
 				pSaldo.setText("1000€");
 			}
 			else {
@@ -176,4 +186,7 @@ public class TarjetaView extends VerticalLayout{
 			});
 		}
 	}
+
+    public static class DashBoardCuentaView {
+    }
 }
