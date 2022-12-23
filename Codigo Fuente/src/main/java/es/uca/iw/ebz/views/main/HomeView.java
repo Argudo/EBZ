@@ -7,7 +7,9 @@ import java.util.List;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
-import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.router.*;
+import es.uca.iw.ebz.usuario.TipoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -25,8 +27,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
@@ -46,9 +46,9 @@ import es.uca.iw.ebz.views.main.layout.MainLayout;
 @PageTitle("")
 @Route(value = "", layout = MainLayout.class)
 @RouteAlias(value = "home", layout = MainLayout.class)
-@RolesAllowed({ "Cliente" })
+@PermitAll
 
-public class HomeView extends VerticalLayout  {
+public class HomeView extends VerticalLayout implements BeforeEnterObserver {
 @Autowired
 private MovimientoService _movimientoService;
 
@@ -90,6 +90,9 @@ private AuthenticatedUser _authenticatedUser;
 		this._authenticatedUser = _authenticatedUser;
 		//End services initialization section
 
+
+			//UI.getCurrent().navigate(DashBoardView.class);
+
 		//Client asignation
 		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
 
@@ -112,9 +115,9 @@ private AuthenticatedUser _authenticatedUser;
 
 
 		//Account information and buttons section
-
+		Component userName = new H1("Bienvenido de nuevo");
 		//Username section
-		Component userName = CreateUserNameBanner(_cliente.getNombre());
+		if(_cliente != null) userName = CreateUserNameBanner(_cliente.getNombre());
 		//Component userName = CreateUserNameBanner(_authenticatedUser.get().get().getUsuario());
 		//End username section
 
@@ -456,4 +459,11 @@ private AuthenticatedUser _authenticatedUser;
 		else event.rerouteTo(LoginView.class);
 
 	}*/
+
+	@Override
+	public void beforeEnter(BeforeEnterEvent event) {
+		if(_authenticatedUser.get().isPresent()){
+			if(_authenticatedUser.get().get().getTipoUsuario() == TipoUsuario.Empleado) event.rerouteTo(DashBoardView.class);
+		}
+	}
 }
