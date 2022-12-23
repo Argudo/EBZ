@@ -60,4 +60,8 @@ public class CuentaService {
         }
         return sNumeroCuenta;
     }
+
+    public Cuenta save(Cuenta cuenta) {
+        return _cuentaRepository.save(cuenta);
+    }
 }

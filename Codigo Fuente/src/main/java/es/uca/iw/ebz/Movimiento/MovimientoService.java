@@ -48,10 +48,23 @@ public class MovimientoService {
     }
 
     public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) {
+        if(cuentaOrigen.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - fimporte);
+
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
             case INTERNO:
-                Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaService.findByNumeroCuenta(cuentaDestino).get(), mov);
+                Cuenta _cuentaDestino = _cuentaService.findByNumeroCuenta(cuentaDestino).get();
+                if(_cuentaDestino.getFechaEliminacion() != null){
+                    _movimientoRepository.delete(mov);
+                    new Exception("Cuenta destino eliminado");
+                }
+                _cuentaDestino.setSaldo(_cuentaDestino.getSaldo() + fimporte);
+                _cuentaService.save(cuentaOrigen);
+                _cuentaService.save(_cuentaDestino);
+
+                Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaDestino, mov);
                 _internoService.añadirInterno(interno);
                 break;
             case EXTERNO:
