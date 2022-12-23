@@ -117,9 +117,19 @@ public class MovimientoService {
     }
 
     public Movimiento compraTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte) {
-        switch(tarjeta.getTipoTarjeta()) {
+        /*switch(tarjeta.getTipoTarjeta()) {
+            case EnumTarjeta.Prepago:
 
-        }
+                break;
+            case EnumTarjeta.Debito:
+                break;
+            case EnumTarjeta.Credito:
+
+                break;
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + tarjeta.getTipoTarjeta());
+                break;
+        }*/
         Movimiento mov = _movimientoRepository.save(movimiento);
         CompraTarjeta compraTarjeta = new CompraTarjeta(tarjeta, sDestino, fimporte, mov);
         _compraTarjetaService.añadirCompraTarjeta(compraTarjeta);
@@ -143,6 +153,7 @@ public class MovimientoService {
         List<Interno> movInternos = _internoService.findByCuentaOrigenOrCuentaDestino(cuenta);
         List<Externo> movExternos = _externoService.findByCuentaPropia(cuenta);
         List<RecargaTarjeta> movRecargaTarjeta = _recargaTarjetaService.findByCuenta(cuenta);
+        List<Recibo> movRecibos = _reciboService.findByCuenta(cuenta);
         List<Movimiento> movimientos = new ArrayList<Movimiento>();
 
         for(Externo movExterno : movExternos) {
@@ -155,6 +166,10 @@ public class MovimientoService {
 
         for(RecargaTarjeta movRecarga : movRecargaTarjeta) {
             movimientos.add(movRecarga.getMovimiento());
+        }
+
+        for(Recibo movRecibo : movRecibos) {
+            movimientos.add(movRecibo.getMovimiento());
         }
 
         return Movimiento.sortByFechaASC(movimientos);
@@ -206,6 +221,11 @@ public class MovimientoService {
                 datos.put("Origen", recargaTarjeta.getCuenta().getNumeroCuenta());
                 datos.put("Destino", recargaTarjeta.getTarjeta().getNumTarjeta());
                 datos.put("Importe", recargaTarjeta.getImporte());
+                break;
+            case RECIBO:
+                Recibo recibo = _reciboService.findByMovimiento(movimiento);
+                datos.put("Origen", recibo.getCuenta().getNumeroCuenta());
+                datos.put("Importe", recibo.getImporte());
                 break;
         }
         return datos;
