@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -44,16 +44,18 @@ public class NuevaTarjetaDialog extends Dialog {
 	private List<Cuenta> aCuentas;
 	private Cliente _cliente;
 	
-	@Autowired
 	private CuentaService _cuentaService;
-	@Autowired
 	private TipoCrediticioRepository _tipoCredRepo;
-	@Autowired 
 	private ClienteService _clienteService;
-	@Autowired
 	private TarjetaService _tarService;
 	
-	public NuevaTarjetaDialog() {
+	public NuevaTarjetaDialog(CuentaService cuentaService, ClienteService clienteService, TarjetaService tarService, TipoCrediticioRepository tipoCredRepo) {
+		
+		_cuentaService = cuentaService;
+		_tipoCredRepo = tipoCredRepo;
+		_clienteService = clienteService;
+		_tarService = tarService;
+
 		setWidth("30vw");
 		setHeaderTitle("Solicitar nueva tarjeta");
 		Button btnGenerar = new Button("Solicitar");
@@ -98,6 +100,7 @@ public class NuevaTarjetaDialog extends Dialog {
 			else if(rdGroup.getValue() == "Crédito") {
 				cmbCuentas.setWidthFull();
 				aCuentas = _cuentaService.findByCliente(_cliente);
+				
 				List<String> aNumCuentas = new ArrayList();
 				aCuentas.forEach(c -> {
 					aNumCuentas.add(c.getNumeroCuenta());
@@ -124,6 +127,7 @@ public class NuevaTarjetaDialog extends Dialog {
 		add(new Hr(), vlogMain);
 		
 	}
+	
 	private Boolean GenerarTarjeta() {
 		TipoTarjeta tp;
 		Cuenta cuenta;
@@ -157,7 +161,14 @@ public class NuevaTarjetaDialog extends Dialog {
 		
 		Notification notification = Notification.show("Tu nueva tarjeta " + T.getNumTarjeta() + " ha sido creada correctamente");
 		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+		
 		close();
 		return true;
 	}
+	
+	public void padre() {
+		System.out.println();
+	}
+	
+	public void setTitular(Cliente titular) {_cliente = titular; txtTitular.setValue(titular.getNombre()); }
 }

@@ -3,7 +3,6 @@ package es.uca.iw.ebz.views.main;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -13,8 +12,6 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -30,8 +27,6 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LitRenderer;
@@ -48,6 +43,7 @@ import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.views.main.component.NuevaTarjetaDialog;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
 
@@ -71,13 +67,6 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Grid<Cliente> gridCliente = new Grid<>(Cliente.class, false);
 	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
 	
-	private Dialog dlogNT = new Dialog();
-		private RadioButtonGroup<String> rdGroup = new RadioButtonGroup<String>();
-		private PasswordField txtPin = new PasswordField("Crear PIN");
-		private TextField txtFechaExp = new TextField("Fecha de expiración");
-		private ComboBox<String> cmbCuentas = new ComboBox<>("Seleccione la cuenta");
-		private ComboBox<String> cmbTipoCredito = new ComboBox<>("Seleccione el tipo de tarjeta crediticia");
-		private TextField txtTitular = new TextField("Nombre del titular");
 	
 	private Cliente _cliente;
 	private List<Cuenta> aCuentas;
@@ -92,8 +81,10 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	@Autowired
 	private TipoCrediticioRepository _tipoCredRepo;
 	
+	private NuevaTarjetaDialog dlogNT;
 	
 	public DashBoardTarjetasView(CuentaService _cuentaService, ClienteService _clienteService, TarjetaService _tarService, TipoCrediticioRepository _tipoCredRepo) {
+		dlogNT = new NuevaTarjetaDialog(_cuentaService, _clienteService, _tarService, _tipoCredRepo);
 		hGrid.setClassName("title");
 		hInfo.setClassName("title");
 		
@@ -125,76 +116,6 @@ public class DashBoardTarjetasView extends HorizontalLayout{
         
         List<Cliente> aClientes = new ArrayList<Cliente>();
         gridCliente.setItems(aClientes);
-        /*Dialogo Nueva Tarjeta*/
-        dlogNT.setWidth("30vw");
-		dlogNT.setHeaderTitle("Solicitar nueva tarjeta");
-		
-		Button btnGenerar = new Button("Solicitar");
-		Button btnCancelar = new Button(new Icon(VaadinIcon.CLOSE));
-		btnCancelar.addThemeVariants(ButtonVariant.LUMO_ICON);
-		btnCancelar.addThemeVariants(ButtonVariant.LUMO_ERROR);
-		btnGenerar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		HorizontalLayout hlOptions = new HorizontalLayout();
-		hlOptions.setWidthFull();
-		hlOptions.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-		hlOptions.add(btnGenerar);
-		
-		
-		VerticalLayout vlogMain = new VerticalLayout();
-		HorizontalLayout hlInfo = new HorizontalLayout();
-		hlInfo.setWidthFull();
-		hlInfo.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-		txtPin.setMaxLength(4);
-		txtPin.setMinLength(4);
-		txtPin.setPattern("[0-9]{4}");
-		txtFechaExp.setValue(Integer.toString(new Date().getMonth()) + "/" + Integer.toString(new Date().getYear()+4).substring(1,3));
-		txtFechaExp.setReadOnly(true);
-		hlInfo.add(txtPin, txtFechaExp);
-
-		txtTitular.setReadOnly(true);
-		txtTitular.setWidthFull();
-		rdGroup.setLabel("Tipo de tarjeta");
-		rdGroup.setItems("Débito", "Crédito", "Prepago");
-		rdGroup.addValueChangeListener(e -> {			
-			vlogMain.removeAll();
-			vlogMain.add(rdGroup, txtTitular);
-			if(rdGroup.getValue() == "Débito") {
-				cmbCuentas.setWidthFull();
-				aCuentas = _cuentaService.findByCliente(_cliente);
-				List<String> aNumCuentas = new ArrayList();
-				aCuentas.forEach(c -> {
-					aNumCuentas.add(c.getNumeroCuenta());
-				});
-				cmbCuentas.setItems(aNumCuentas);
-				vlogMain.add(cmbCuentas);
-			}
-			else if(rdGroup.getValue() == "Crédito") {
-				cmbCuentas.setWidthFull();
-				aCuentas = _cuentaService.findByCliente(_cliente);
-				List<String> aNumCuentas = new ArrayList();
-				aCuentas.forEach(c -> {
-					aNumCuentas.add(c.getNumeroCuenta());
-				});
-				cmbCuentas.setItems(aNumCuentas);
-				
-				cmbTipoCredito.setWidthFull();
-				List<String> aTipoCredito = new ArrayList<String>();
-				_tipoCredRepo.findAll().forEach(tc -> {
-					aTipoCredito.add(tc.getNombre());
-				});;
-				cmbTipoCredito.setItems(aTipoCredito);
-				
-				vlogMain.add(cmbTipoCredito, cmbCuentas);
-			}
-			vlogMain.add(hlInfo);
-			dlogNT.getFooter().add(hlOptions);
-		});
-		
-		btnCancelar.getElement().addEventListener("click", e -> dlogNT.close());
-		btnGenerar.getElement().addEventListener("click", e -> GenerarTarjeta());
-		dlogNT.getHeader().add(btnCancelar);
-		vlogMain.add(rdGroup, txtTitular);
-		dlogNT.add(new Hr(), vlogMain);
         /*Grid Tarjeta*/
         gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader("Tipo de tarjeta");
         gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader("Número de tarjeta");
@@ -259,7 +180,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	            .withFunction("handleClick",
 	                    cliente -> {	 
 	                    	_cliente = cliente;
-	                    	txtTitular.setValue(_cliente.getNombre());
+	                    	dlogNT.setTitular(_cliente);
 	                    	dlogNT.open();
 	                    });
 	}
@@ -270,66 +191,28 @@ public class DashBoardTarjetasView extends HorizontalLayout{
     }
 	
 	 private static class ClienteDetallesFormLayout extends FormLayout {
-	        //private final TextField txtId = new TextField("ID");
-	        private final TextField txtNombre = new TextField("Nombre");
-	        private final TextField txtFechaNacimiento = new TextField("Fecha Nacimiento");
-	        private final TextField txtTipoUsuario = new TextField("Tipo de usuario");
+        //private final TextField txtId = new TextField("ID");
+        private final TextField txtNombre = new TextField("Nombre");
+        private final TextField txtFechaNacimiento = new TextField("Fecha Nacimiento");
+        private final TextField txtTipoUsuario = new TextField("Tipo de usuario");
 
-	        public ClienteDetallesFormLayout() {
-	            Stream.of(txtNombre, txtFechaNacimiento, txtTipoUsuario).forEach(field -> {
-	                        field.setReadOnly(true);
-	                        add(field);
-	                    });
-	            
-	            setResponsiveSteps(new ResponsiveStep("0", 3));
-	            setColspan(txtNombre, 3);
-	            setColspan(txtTipoUsuario, 3);
-	            setColspan(txtFechaNacimiento, 3);
-	        }
+        public ClienteDetallesFormLayout() {
+            Stream.of(txtNombre, txtFechaNacimiento, txtTipoUsuario).forEach(field -> {
+                        field.setReadOnly(true);
+                        add(field);
+                    });
+            
+            setResponsiveSteps(new ResponsiveStep("0", 3));
+            setColspan(txtNombre, 3);
+            setColspan(txtTipoUsuario, 3);
+            setColspan(txtFechaNacimiento, 3);
+        }
 
-	        public void setCliente(Cliente cliente) {
-	            //txtId.setValue(cliente.getId().toString());
-	            txtNombre.setValue(cliente.getNombre());
-	            txtFechaNacimiento.setValue(cliente.getFechaNacimiento().toString());
-	            txtTipoUsuario.setValue(cliente.getTipoCliente().name());
-	        }
-	    }
-	 
-		private void GenerarTarjeta() {
-			TipoTarjeta tp;
-			Cuenta cuenta;
-			Optional<Cuenta> optCuenta;
-			int iPin;
-			Boolean fallo = false;
-			//Precondiciones
-			if(rdGroup.getValue() == null) { rdGroup.getElement().setAttribute("invalid", ""); rdGroup.setErrorMessage("Debe elegir uno de los tipos de tarjeta disponible"); fallo = true; }
-			if(cmbCuentas.getValue() == null) {	cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("Debe seleccionar una cuenta"); fallo = true; }
-			optCuenta = _cuentaService.findByNumeroCuenta(cmbCuentas.getValue());
-			if(optCuenta.isEmpty() || aCuentas.indexOf(optCuenta.get()) != -1) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("No se encuentra la cuenta seleccionada"); fallo = true; }
-			if(txtPin.getValue().length() != 4) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage("El pin debe tener 4 caracteres"); fallo = true; }
-			if(!txtPin.getValue().matches("\\d{4}")) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage("El pin debe ser númerico"); fallo = true; }
-			if(fallo) return;
-			
-			cuenta = optCuenta.get();
-			tp = new TipoTarjeta(EnumTarjeta.toTipo(rdGroup.getValue()));
-			iPin = Integer.parseInt(txtPin.getValue());
-			Tarjeta T = new Tarjeta(iPin, tp, cuenta, _cliente);
-			
-			try {
-				_tarService.Save(T); 
-			}
-			catch(Exception e) {
-				Notification notification = Notification.show("Se ha encontrado un error en la solicitud de tu nueva tarjeta");
-				notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-				System.out.println(e.getMessage()); 
-			}
-			
-			Notification notification = Notification.show("Tu nueva tarjeta " + T.getNumTarjeta() + " ha sido creada correctamente");
-			notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        	aTarjeta.removeAll(aTarjeta);
-        	aTarjeta.addAll((Collection<Tarjeta>) _tarService.findByCliente(_cliente));
-        	gridTarjeta.setItems(aTarjeta);
-        	hGrid.setText("| Tarjetas de " + _cliente.getNombre());
-			dlogNT.close();
-		}
+        public void setCliente(Cliente cliente) {
+            //txtId.setValue(cliente.getId().toString());
+            txtNombre.setValue(cliente.getNombre());
+            txtFechaNacimiento.setValue(cliente.getFechaNacimiento().toString());
+            txtTipoUsuario.setValue(cliente.getTipoCliente().name());
+        }
+    }
 }
