@@ -215,7 +215,7 @@ public class Tarjeta {
 	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
 	public Date getFechaCreacion() { return _fechaCreacion; }
 	public void setFechaCreacion(Date fechaCreacion) { this._fechaCreacion = fechaCreacion; }
-	public Enum getTipoTarjeta() { return _tipoTarjeta.getTipo(); }
+	public EnumTarjeta getTipoTarjeta() { return _tipoTarjeta.getTipo(); }
 	public Date getFechaCancelacion() { return _fechaCancelacion; }
 	public void setFechaCancelacion(Date fechaCancelacion) { _fechaCancelacion = fechaCancelacion; }
 	public void setCliente(Cliente cliente) {this._clienteTitular = cliente; }

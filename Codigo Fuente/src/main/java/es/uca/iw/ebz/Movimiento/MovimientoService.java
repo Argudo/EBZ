@@ -15,6 +15,10 @@ import es.uca.iw.ebz.Movimiento.Recibo.ReciboService;
 import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
+import es.uca.iw.ebz.tarjeta.credito.Credito;
+import es.uca.iw.ebz.tarjeta.credito.CreditoService;
+import es.uca.iw.ebz.tarjeta.prepago.Prepago;
+import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,11 +43,16 @@ public class MovimientoService {
 
     private ReciboService _reciboService;
 
+    private PrepagoService _prepagoService;
+
+    private CreditoService _creditoService;
+
     @Autowired
     public MovimientoService(MovimientoRepository movimientoRepository, InternoService internoService, ExternoService externoService,
                              CuentaService cuentaService, RecargaTarjetaService recargaTarjetaService,
                              CompraTarjetaService compraTarjetaService, TarjetaService tarjetaService,
-                             ReciboService reciboService) {
+                             ReciboService reciboService, PrepagoService prepagoService,
+                             CreditoService creditoService) {
         _movimientoRepository = movimientoRepository;
         _internoService = internoService;
         _externoService = externoService;
@@ -52,6 +61,8 @@ public class MovimientoService {
         _compraTarjetaService = compraTarjetaService;
         _tarjetaService = tarjetaService;
         _reciboService = reciboService;
+        _prepagoService = prepagoService;
+        _creditoService = creditoService;
     }
 
     public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) {
@@ -85,31 +96,15 @@ public class MovimientoService {
         return mov;
     }
 
-    public Movimiento añadirMovimientoTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte) {
-        Movimiento mov = _movimientoRepository.save(movimiento);
-        switch (movimiento.getTipo()) {
-            case RECARGATARJETA:
-                RecargaTarjeta recargaTarjeta = new RecargaTarjeta(_cuentaService.findByNumeroCuenta(sDestino).get(), tarjeta, fimporte, mov);
-                _recargaTarjetaService.añadirRecargaTarjeta(recargaTarjeta);
-                break;
-            case COMPRATARJETA:
-                CompraTarjeta compraTarjeta = new CompraTarjeta(tarjeta, sDestino, fimporte, mov);
-                _compraTarjetaService.añadirCompraTarjeta(compraTarjeta);
-                break;
-            default:
-                _movimientoRepository.delete(mov);
-                throw new IllegalArgumentException("Unexpected value: " + movimiento.getTipo());
-        }
-        return mov;
-    }
-
     public Movimiento recargaTarjeta(Movimiento movimiento, Cuenta cuentaOrigen, Tarjeta tarjeta, float fimporte) {
         if(cuentaOrigen.getSaldo() < fimporte) new Exception("Saldo insuficiente");
         if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
         if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago) new Exception("Tarjeta no es de tipo prepago");
         cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - fimporte);
-        //falta añadir el dinero a la tarjeta
-
+        //Añadimos la recarga de la tarjeta
+        Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
+        prepago.setSaldo(prepago.getSaldo() + fimporte);
+        _prepagoService.Save(prepago);
         Movimiento mov = _movimientoRepository.save(movimiento);
         RecargaTarjeta recargaTarjeta = new RecargaTarjeta(cuentaOrigen, tarjeta, fimporte, mov);
         _recargaTarjetaService.añadirRecargaTarjeta(recargaTarjeta);
@@ -117,19 +112,26 @@ public class MovimientoService {
     }
 
     public Movimiento compraTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte) {
-        /*switch(tarjeta.getTipoTarjeta()) {
-            case EnumTarjeta.Prepago:
-
+        switch(tarjeta.getTipoTarjeta()) {
+            case Prepago:
+                Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
+                if(prepago.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+                prepago.setSaldo(prepago.getSaldo() - fimporte);
+                _prepagoService.Save(prepago);
                 break;
-            case EnumTarjeta.Debito:
+            case Debito:
+                if(tarjeta.getCuenta().getSaldo() < fimporte) new Exception("Saldo insuficiente");
+                tarjeta.getCuenta().setSaldo(tarjeta.getCuenta().getSaldo() - fimporte);
+                _cuentaService.save(tarjeta.getCuenta());
                 break;
-            case EnumTarjeta.Credito:
-
+            case Credito:
+                Credito credito = _creditoService.findByTarjeta(tarjeta);
+                credito.setDeuda(credito.getDeuda() + fimporte);
+                _creditoService.Save(credito);
                 break;
             default:
                 throw new IllegalArgumentException("Unexpected value: " + tarjeta.getTipoTarjeta());
-                break;
-        }*/
+        }
         Movimiento mov = _movimientoRepository.save(movimiento);
         CompraTarjeta compraTarjeta = new CompraTarjeta(tarjeta, sDestino, fimporte, mov);
         _compraTarjetaService.añadirCompraTarjeta(compraTarjeta);
