@@ -197,12 +197,12 @@ public class Tarjeta {
         return vlTarjeta;
 	}
 
-	public String getStringTipoTarjeta() throws Exception {
+	public String getStringTipoTarjeta() {
 		switch(_tipoTarjeta.getTipo()) {
 		case Debito: return "Débito";
 		case Prepago: return "Prepago";
 		case Credito: return "Crédito";
-		default: throw new Exception("El tipo de la tarjeta no esta entre los esperados");
+		default: return "No encontrado";
 		}
 	}
 

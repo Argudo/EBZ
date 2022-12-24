@@ -40,6 +40,7 @@ import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
+import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
@@ -61,6 +62,8 @@ public class TarjetaView extends VerticalLayout{
 	private CuentaService _cuentaService;
 	@Autowired
 	private PrepagoService _prepagoService;
+	@Autowired
+	private TipoCrediticioRepository _tipoCredRepo;
 	
 	static TarjetaComponent tcSelected = null;
 	static Tarjeta tarSelected = null;
@@ -94,10 +97,11 @@ public class TarjetaView extends VerticalLayout{
 		private PasswordField txtPin = new PasswordField("Crear PIN");
 		private TextField txtFechaExp = new TextField("Fecha de expiración");
 		private ComboBox<String> cmbCuentas = new ComboBox<>("Seleccione la cuenta");
+		private ComboBox<String> cmbTipoCredito = new ComboBox<>("Seleccione el tipo de tarjeta crediticia");
 		private TextField txtTitular = new TextField("Nombre del titular");
 	
 	
-	TarjetaView(AuthenticatedUser _authUser, ClienteService _cliService, TarjetaService _tarService, CuentaService _cuentaService, PrepagoService _prepagoService){
+	TarjetaView(AuthenticatedUser _authUser, ClienteService _cliService, TarjetaService _tarService, CuentaService _cuentaService, PrepagoService _prepagoService, TipoCrediticioRepository _tipoCredRepo){
 		setWidthFull();
 		setPadding(true);
 		setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER); 
@@ -249,9 +253,28 @@ public class TarjetaView extends VerticalLayout{
 					aNumCuentas.add(c.getNumeroCuenta());
 				});
 				cmbCuentas.setItems(aNumCuentas);
-				vlogMain.add(cmbCuentas, hlInfo);
-				dlogNT.getFooter().add(hlOptions);
+				vlogMain.add(cmbCuentas);
 			}
+			else if(rdGroup.getValue() == "Crédito") {
+				cmbCuentas.setWidthFull();
+				aCuentas = _cuentaService.findByCliente(_cliente);
+				List<String> aNumCuentas = new ArrayList();
+				aCuentas.forEach(c -> {
+					aNumCuentas.add(c.getNumeroCuenta());
+				});
+				cmbCuentas.setItems(aNumCuentas);
+				
+				cmbTipoCredito.setWidthFull();
+				List<String> aTipoCredito = new ArrayList<String>();
+				_tipoCredRepo.findAll().forEach(tc -> {
+					aTipoCredito.add(tc.getNombre());
+				});;
+				cmbTipoCredito.setItems(aTipoCredito);
+				
+				vlogMain.add(cmbTipoCredito, cmbCuentas);
+			}
+			vlogMain.add(hlInfo);
+			dlogNT.getFooter().add(hlOptions);
 		});
 		
 		btnCancelar.getElement().addEventListener("click", e -> dlogNT.close());
@@ -306,7 +329,7 @@ public class TarjetaView extends VerticalLayout{
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
 			pNumTarjeta.setText(tarSelected.getNumTarjeta());
-			try { pTipoTarjeta.setText(tarSelected.getStringTipoTarjeta()); } catch (Exception e) { pTipoTarjeta.setText("Se encontró un error al cargar los datos"); }
+			pTipoTarjeta.setText(tarSelected.getStringTipoTarjeta());
 			pFechaCaducidad.setText(tarSelected.getFechaExpiracion().toString());
 			pPin.setText(String.valueOf(tarSelected.getiPin()));
 			textCvc.setValue(tarSelected.getCVC());
@@ -318,7 +341,7 @@ public class TarjetaView extends VerticalLayout{
 			});
 			if(tarSelected.getTipoTarjeta() == EnumTarjeta.Prepago) {
 				hSaldo.setText("Saldo");
-				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()));
+				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()) + "€");
 			}
 			else {
 				hSaldo.setText("Número de cuenta");

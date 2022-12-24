@@ -45,9 +45,9 @@ import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
+import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
-import es.uca.iw.ebz.views.main.component.TarjetaComponent;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
 
@@ -76,6 +76,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		private PasswordField txtPin = new PasswordField("Crear PIN");
 		private TextField txtFechaExp = new TextField("Fecha de expiración");
 		private ComboBox<String> cmbCuentas = new ComboBox<>("Seleccione la cuenta");
+		private ComboBox<String> cmbTipoCredito = new ComboBox<>("Seleccione el tipo de tarjeta crediticia");
 		private TextField txtTitular = new TextField("Nombre del titular");
 	
 	private Cliente _cliente;
@@ -88,9 +89,11 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private TarjetaService _tarService;
 	@Autowired
 	private CuentaService _cuentaService;
+	@Autowired
+	private TipoCrediticioRepository _tipoCredRepo;
 	
 	
-	public DashBoardTarjetasView(CuentaService _cuentaService, ClienteService _clienteService, TarjetaService _tarService	) {
+	public DashBoardTarjetasView(CuentaService _cuentaService, ClienteService _clienteService, TarjetaService _tarService, TipoCrediticioRepository _tipoCredRepo) {
 		hGrid.setClassName("title");
 		hInfo.setClassName("title");
 		
@@ -163,9 +166,28 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 					aNumCuentas.add(c.getNumeroCuenta());
 				});
 				cmbCuentas.setItems(aNumCuentas);
-				vlogMain.add(cmbCuentas, hlInfo);
-				dlogNT.getFooter().add(hlOptions);
+				vlogMain.add(cmbCuentas);
 			}
+			else if(rdGroup.getValue() == "Crédito") {
+				cmbCuentas.setWidthFull();
+				aCuentas = _cuentaService.findByCliente(_cliente);
+				List<String> aNumCuentas = new ArrayList();
+				aCuentas.forEach(c -> {
+					aNumCuentas.add(c.getNumeroCuenta());
+				});
+				cmbCuentas.setItems(aNumCuentas);
+				
+				cmbTipoCredito.setWidthFull();
+				List<String> aTipoCredito = new ArrayList<String>();
+				_tipoCredRepo.findAll().forEach(tc -> {
+					aTipoCredito.add(tc.getNombre());
+				});;
+				cmbTipoCredito.setItems(aTipoCredito);
+				
+				vlogMain.add(cmbTipoCredito, cmbCuentas);
+			}
+			vlogMain.add(hlInfo);
+			dlogNT.getFooter().add(hlOptions);
 		});
 		
 		btnCancelar.getElement().addEventListener("click", e -> dlogNT.close());
@@ -174,7 +196,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		vlogMain.add(rdGroup, txtTitular);
 		dlogNT.add(new Hr(), vlogMain);
         /*Grid Tarjeta*/
-        gridTarjeta.addColumn(Tarjeta::getTipoTarjeta).setHeader("Tipo de tarjeta");
+        gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader("Tipo de tarjeta");
         gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader("Número de tarjeta");
         gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader("Fecha de expiración");
         
