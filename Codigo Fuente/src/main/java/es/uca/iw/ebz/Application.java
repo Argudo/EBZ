@@ -126,7 +126,7 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 		}
 	
 		if(prepagoService.Count() < 1) {
-			Tarjeta tarPrepago = new Tarjeta(4719, new TipoTarjeta(EnumTarjeta.Prepago), clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
+			Tarjeta tarPrepago = new Tarjeta(4719, clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
 			tarService.Save(tarPrepago);
 			Prepago prepago = new Prepago(tarPrepago);
 			prepagoService.Save(prepago);

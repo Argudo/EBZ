@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -62,6 +63,9 @@ public class Tarjeta {
 	@Column(name = "costeMantenimiento")
 	private BigDecimal _costeMantenimiento;
 	
+	@Column(name = "CVC")
+	private String _cvc;
+	
 	@ManyToOne
 	@NotNull
 	private TipoTarjeta _tipoTarjeta;
@@ -76,25 +80,20 @@ public class Tarjeta {
 	public Tarjeta() {}
 	
 	//Constructor prepago
-	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta, Cliente cliente) {
-		if(tipoTarjeta.getTipo() != EnumTarjeta.Prepago) throw new IllegalArgumentException("No está usando el constructor adecuado, este constructor solo esta disponible para tarjetas prepago");
-		_iPin = iPin;
-		_tipoTarjeta = tipoTarjeta;
-		_cuenta = null;
-		_clienteTitular = cliente;
-		_sNumTarjeta = GenerarNumTarjeta();
-		_fechaCreacion = new Date();
-		_fechaExpiracion = GenerarFechaExpiracion();
+	public Tarjeta(int iPin, Cliente cliente) {
+		this(iPin, new TipoTarjeta(EnumTarjeta.Prepago), null,  cliente);
 	}
 
 
 	//Constructor Débito y Credito
 	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta, Cuenta cuenta, Cliente cliente) {
+		if(tipoTarjeta.getTipo() != EnumTarjeta.Prepago && cuenta == null) throw new IllegalArgumentException("La cuenta no puede ser nula para los tipos débito y crédito");
 		_iPin = iPin;
 		_tipoTarjeta = tipoTarjeta;
 		_cuenta = cuenta;
 		_clienteTitular = cliente;
 		_sNumTarjeta = GenerarNumTarjeta();
+		_cvc = GenerarCVC();
 		_fechaCreacion = new Date();
 		_fechaExpiracion = GenerarFechaExpiracion();
 	}
@@ -119,6 +118,16 @@ public class Tarjeta {
 		}
 		sNumTarjeta += CalculateCheckDigit(sNumTarjeta);
 		return sNumTarjeta;
+	}
+	
+	private String GenerarCVC() { return GenerarCVC(null); }
+	private String GenerarCVC(Integer valor) {
+		int iValor = valor == null? new Random().nextInt(1, 999) : valor;
+		String sCVC = String.valueOf(iValor);
+		while(sCVC.length() < 3) {
+			sCVC = "0".concat(sCVC);
+		}
+		return sCVC;
 	}
 	
 	private static Date GenerarFechaExpiracion() {
@@ -188,6 +197,15 @@ public class Tarjeta {
         return vlTarjeta;
 	}
 
+	public String getStringTipoTarjeta() throws Exception {
+		switch(_tipoTarjeta.getTipo()) {
+		case Debito: return "Débito";
+		case Prepago: return "Prepago";
+		case Credito: return "Crédito";
+		default: throw new Exception("El tipo de la tarjeta no esta entre los esperados");
+		}
+	}
+
 	public UUID getId() { return _iId; }
 	public String getNumTarjeta() { return _sNumTarjeta; }
 	public void setNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
@@ -201,5 +219,9 @@ public class Tarjeta {
 	public Date getFechaCancelacion() { return _fechaCancelacion; }
 	public void setFechaCancelacion(Date fechaCancelacion) { _fechaCancelacion = fechaCancelacion; }
 	public void setCliente(Cliente cliente) {this._clienteTitular = cliente; }
+	public String getCVC() { return _cvc; }
+	public void setCVC(String cvc) { _cvc = cvc; }
+	public void setCVC(int cvc) { _cvc = GenerarCVC(cvc); }
+	public Cuenta getCuenta() { return _cuenta; }
 	public Cliente getCliente() { return this._clienteTitular; }
 }

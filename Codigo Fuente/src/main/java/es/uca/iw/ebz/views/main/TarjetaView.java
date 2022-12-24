@@ -72,13 +72,18 @@ public class TarjetaView extends VerticalLayout{
 	private HorizontalLayout hlTarjetas = new HorizontalLayout();
 	
 	VerticalLayout vlDetalleTarjetas = new VerticalLayout();	
-		private H3 hNumCuenta = new H3("Número de cuenta");
+		private H3 hNumTarjeta = new H3("Número de tarjeta");
+		private H3 hTipoTarjeta = new H3("Tipo de tarjeta");
 		private H3 hSaldo = new H3("Saldo");
+		private H3 hCvc = new H3("CVC");
 		private H3 hPin = new H3("PIN");
 		private H3 hFechaCaducidad = new H3("Fecha de expiración");
-		private Paragraph pNumCuenta = new Paragraph();
+		private Paragraph pNumTarjeta = new Paragraph();
+		private Paragraph pTipoTarjeta = new Paragraph();
 		private Paragraph pSaldo = new Paragraph();
+		private Paragraph pCvc = new Paragraph();
 		private Paragraph pPin = new Paragraph();
+		private PasswordField textCvc = new PasswordField();
 		private PasswordField textPin = new PasswordField();
 		private Paragraph pFechaCaducidad = new Paragraph();
 			
@@ -99,6 +104,8 @@ public class TarjetaView extends VerticalLayout{
 		setAlignItems(FlexComponent.Alignment.CENTER);
 		_cliente = _cliService.findByUsuario(_authUser.get().get());
 		List<Tarjeta> aTarjetas = _tarService.findByCliente(_cliente);
+		textCvc.setReadOnly(true);
+		textCvc.setClassName("padding40");
 		textPin.setReadOnly(true);
 		textPin.setClassName("padding40");
 		
@@ -128,10 +135,14 @@ public class TarjetaView extends VerticalLayout{
 		vlDetalleTarjetas.setClassName("detalleTarjeta");
 		vlDetalleTarjetas.add(hDetalleTarjeta,
 							  new Hr(),
-							  hNumCuenta,
-							  pNumCuenta,
+							  hNumTarjeta,
+							  pNumTarjeta,
+							  hTipoTarjeta,
+							  pTipoTarjeta,
 							  hSaldo,
 							  pSaldo,
+							  hCvc,
+							  textCvc,
 							  hPin,
 							  textPin,
 							  hFechaCaducidad,
@@ -294,9 +305,11 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
-			pNumCuenta.setText(tarSelected.getNumTarjeta());
+			pNumTarjeta.setText(tarSelected.getNumTarjeta());
+			try { pTipoTarjeta.setText(tarSelected.getStringTipoTarjeta()); } catch (Exception e) { pTipoTarjeta.setText("Se encontró un error al cargar los datos"); }
 			pFechaCaducidad.setText(tarSelected.getFechaExpiracion().toString());
 			pPin.setText(String.valueOf(tarSelected.getiPin()));
+			textCvc.setValue(tarSelected.getCVC());
 			textPin.setValue(String.valueOf(tarSelected.getiPin()));
 			vlDetalleTarjetas.getChildren().forEach(child -> {
 				if(child.getClass() != H1.class || child.getClass() != Hr.class) {
@@ -304,10 +317,12 @@ public class TarjetaView extends VerticalLayout{
 				}
 			});
 			if(tarSelected.getTipoTarjeta() == EnumTarjeta.Prepago) {
+				hSaldo.setText("Saldo");
 				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()));
 			}
 			else {
-				pSaldo.setText("Ver saldo de cuenta asociada");
+				hSaldo.setText("Número de cuenta");
+				pSaldo.setText(tarSelected.getCuenta().getNumeroCuenta());
 			}			
 		}
 		else {
