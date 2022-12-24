@@ -1,9 +1,9 @@
 package es.uca.iw.ebz.tarjeta;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import com.google.common.hash.Hashing;
 import com.vaadin.flow.component.Component;
@@ -34,39 +35,67 @@ public class Tarjeta {
 	private UUID _iId;
 	
 	@Column(name = "numTarjeta")
+	@NotNull
 	private String _sNumTarjeta;
 	
 	@Column(name = "PIN")
+	@NotNull
 	private int _iPin;
 	
 	@Column(name = "fechaExpiracion")
+	@NotNull
 	private Date _fechaExpiracion;
 	
 	@Column(name = "fechaCreacion")
+	@NotNull
 	private Date _fechaCreacion;
 	
 	@Column(name = "fechaCancelacion")
 	private Date _fechaCancelacion;
 	
+	@Column(name = "gastoDiario")
+	private BigDecimal _gastoDiario;
+	
+	@Column(name = "gastoMax")
+	private BigDecimal _gastoMax;
+	
+	@Column(name = "costeMantenimiento")
+	private BigDecimal _costeMantenimiento;
+	
 	@ManyToOne
+	@NotNull
 	private TipoTarjeta _tipoTarjeta;
 	
 	@ManyToOne
+	@NotNull
 	private Cliente _clienteTitular;
 	
 	@OneToOne
 	Cuenta _cuenta;
-
-	public Tarjeta() {
+	
+	public Tarjeta() {}
+	
+	//Constructor prepago
+	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta, Cliente cliente) {
+		if(tipoTarjeta.getTipo() != EnumTarjeta.Prepago) throw new IllegalArgumentException("No está usando el constructor adecuado, este constructor solo esta disponible para tarjetas prepago");
+		_iPin = iPin;
+		_tipoTarjeta = tipoTarjeta;
+		_cuenta = null;
+		_clienteTitular = cliente;
+		_sNumTarjeta = GenerarNumTarjeta();
+		_fechaCreacion = new Date();
+		_fechaExpiracion = GenerarFechaExpiracion();
 	}
 
+
+	//Constructor Débito y Credito
 	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta, Cuenta cuenta, Cliente cliente) {
-		super();
 		_iPin = iPin;
 		_tipoTarjeta = tipoTarjeta;
 		_cuenta = cuenta;
 		_clienteTitular = cliente;
 		_sNumTarjeta = GenerarNumTarjeta();
+		_fechaCreacion = new Date();
 		_fechaExpiracion = GenerarFechaExpiracion();
 	}
 
@@ -76,16 +105,16 @@ public class Tarjeta {
 		switch(_tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				String sNumCuenta_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString());
-				sNumTarjeta += sNumCuenta_sha256.substring(0,8).toUpperCase();
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,8).toUpperCase();
 				break;
 			case Credito:
-				sNumTarjeta += "1";
-				//TODO: segun rango crediticio añadir digito
-				sNumTarjeta += "1";
+				sNumTarjeta += "10";
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,8).toUpperCase();
 				break;
 			case Prepago:
 				sNumTarjeta += "20";
+				String cliente_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_clienteTitular.getUsuario().getDNI(), StandardCharsets.UTF_8).toString());
+				sNumTarjeta += cliente_sha256.substring(0,8).toUpperCase();
 				break;
 		}
 		sNumTarjeta += CalculateCheckDigit(sNumTarjeta);
@@ -93,11 +122,9 @@ public class Tarjeta {
 	}
 	
 	private static Date GenerarFechaExpiracion() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(Calendar.MONTH, calendar.MONTH);
-		calendar.set(Calendar.YEAR, calendar.YEAR);
-		return calendar.getTime();
+		Date dFecha = new Date();
+		dFecha.setYear(dFecha.getYear()+4);
+		return dFecha;
 	}
 	
 	public static String StringToHexadecimal(String str) {
@@ -166,7 +193,7 @@ public class Tarjeta {
 	public void setNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
 	public int getiPin() { return _iPin; }
 	public void setiPin(int iPin) { this._iPin = iPin; }
-	public Date getFechaExpiracion() { return _fechaExpiracion; }
+	public String getFechaExpiracion() { return (String.valueOf(_fechaExpiracion.getMonth()) + "/" + String.valueOf(_fechaExpiracion.getYear()-100)); }
 	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
 	public Date getFechaCreacion() { return _fechaCreacion; }
 	public void setFechaCreacion(Date fechaCreacion) { this._fechaCreacion = fechaCreacion; }

@@ -60,7 +60,7 @@ public class TarjetaComponent extends Component {
     	_tarjeta = tarjeta;
     	_vlTarjeta = new VerticalLayout();
     	DateFormat dateFormat = new SimpleDateFormat("mm/yy");  
-        String fechaExpiracion = dateFormat.format(_tarjeta.getFechaExpiracion());  
+        String fechaExpiracion = _tarjeta.getFechaExpiracion();
         _vlTarjeta.add(new H4("EBZ"),
         			   new H5(_tarjeta.getNumTarjeta()),
         			   new H6(fechaExpiracion)

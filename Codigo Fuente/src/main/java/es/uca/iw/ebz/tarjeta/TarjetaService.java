@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +15,9 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
 
 
 @Service
@@ -65,6 +67,10 @@ public class TarjetaService {
 			if(T.getFechaCancelacion() == null) aT.add(T);
 		});
 		return aT;
+	}
+	
+	public List<Tarjeta> findByCuenta(Cuenta cuenta){
+		return _tarRepository.findAllBy_cuenta(cuenta);
 	}
 	
 	public long Count() {

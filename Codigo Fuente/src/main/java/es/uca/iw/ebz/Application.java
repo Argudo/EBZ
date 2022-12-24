@@ -2,7 +2,6 @@ package es.uca.iw.ebz;
 
 import java.util.Date;
 
-import es.uca.iw.ebz.Cuenta.Cuenta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,13 +13,19 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
+import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
+import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
-import es.uca.iw.ebz.tarjeta.TipoCrediticio;
-import es.uca.iw.ebz.tarjeta.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.tarjeta.TipoTarjetaRepository;
+import es.uca.iw.ebz.tarjeta.credito.Credito;
+import es.uca.iw.ebz.tarjeta.credito.CreditoService;
+import es.uca.iw.ebz.tarjeta.credito.TipoCrediticio;
+import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
+import es.uca.iw.ebz.tarjeta.prepago.Prepago;
+import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.TipoUsuario;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioRepository;
@@ -68,6 +73,13 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 
 	@Autowired
 	CuentaService cuentaService;
+	
+	@Autowired
+	CreditoService credService;
+	
+	@Autowired
+	PrepagoService prepagoService;
+	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -86,7 +98,7 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			tipoCredRepo.save(new TipoCrediticio(3, "Black", 100000));
 			
 		}
-
+		
 		if(usuario.count() < 2){
 			Usuario empleado = new Usuario("1234", "1234");
 			empleado.setTipoUsuario(TipoUsuario.Empleado);
@@ -105,6 +117,21 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			cuenta.setFechaEliminacion(new Date());
 			cuentaService.añadirCuenta(cuenta);
 		}
+		
+		if(credService.Count() < 1) {
+			Tarjeta tarCredito = new Tarjeta(4719, new TipoTarjeta(EnumTarjeta.Credito), cuentaService.findByCliente(clienteRepo.findByusuario(usuario.findBysDNI("32093905B"))).get(0), clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
+			tarService.Save(tarCredito);
+			Credito cred = new Credito(tarCredito, tipoCredRepo.findById(1).get());
+			credService.Save(cred);
+		}
+	
+		if(prepagoService.Count() < 1) {
+			Tarjeta tarPrepago = new Tarjeta(4719, new TipoTarjeta(EnumTarjeta.Prepago), clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
+			tarService.Save(tarPrepago);
+			Prepago prepago = new Prepago(tarPrepago);
+			prepagoService.Save(prepago);
+		}
+		
 	}
 
 }
