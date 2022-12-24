@@ -38,7 +38,7 @@ public class ObjectMother {
     }
 
     public static Tarjeta createTestTarjeta() {
-        Tarjeta tarjeta = new Tarjeta(1234, new TipoTarjeta(EnumTarjeta.Debito));
+        Tarjeta tarjeta = new Tarjeta(1234, new TipoTarjeta(EnumTarjeta.Debito), null, null);
         return tarjeta;
     }
 

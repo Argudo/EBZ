@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H2"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Image"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H4"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Paragraph"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.charts.model.Responsive"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Hr"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H3"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjeta.Tipo"/>
     <fullyQualifiedTypeName name="com.google.common.hash.Hashing"/>
     <fullyQualifiedTypeName name="java.nio.charset.StandardCharsets"/>
     <fullyQualifiedTypeName name="de.mekaso.vaadin.addons.Carousel"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.charts.model.TimeUnit"/>
     <fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Div"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H1"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H6"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H5"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.Component"/>
@@ -31,7 +17,6 @@
     <fullyQualifiedTypeName name="org.springframework.boot.CommandLineRunner"/>
     <fullyQualifiedTypeName name="org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjetaRepository"/>
-    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjeta"/>
     <fullyQualifiedTypeName name="org.springframework.data.annotation.Id"/>
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
@@ -44,15 +29,12 @@
     <fullyQualifiedTypeName name="java.util.UUID"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.cliente.Cliente"/>
-    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.TextField"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.PasswordField"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.component.grid.Grid"/>
     <fullyQualifiedTypeName name="java.util.stream.Stream"/>
     <fullyQualifiedTypeName name="com.vaadin.flow.data.renderer.Renderer"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.EnumTarjeta"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.cliente.Cliente"/>
-    <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.TipoUsuario"/>
-    <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.cliente.TipoCliente"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.Usuario"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.Tarjeta"/>
@@ -60,4 +42,22 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="es.uca.iw.ebz.views.main.DashBoardTarjetasView.ClienteDetallesFormLayout"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.Div"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.html.H1"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.usuario.TipoUsuario"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.dialog.Dialog"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.button.Button"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.VaadinIcon"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.icon.Icon"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.textfield.TextField"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.HorizontalLayout"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode"/>
+    <fullyQualifiedTypeName name="org.apache.commons.lang3.StringUtils"/>
+    <fullyQualifiedTypeName name="es.uca.iw.ebz.tarjeta.TipoTarjeta"/>
+    <fullyQualifiedTypeName name="java.util.Optional"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.notification.Notification"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.grid.ColumnTextAlign"/>
+    <fullyQualifiedTypeName name="com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap"/>
 </qualifiedTypeNameHistroy>

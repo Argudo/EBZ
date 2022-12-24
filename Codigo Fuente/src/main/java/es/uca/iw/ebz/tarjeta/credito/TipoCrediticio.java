@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.tarjeta;
+package es.uca.iw.ebz.tarjeta.credito;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
