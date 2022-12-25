@@ -1,9 +1,0 @@
-@import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
-
-.navBarColor{
-    background-color: #e8e8e8;
-}
-
-.objectFit{
-	object-fit: stretch;
-}
