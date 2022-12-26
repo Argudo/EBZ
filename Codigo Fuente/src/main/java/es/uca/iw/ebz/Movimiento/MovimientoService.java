@@ -10,8 +10,15 @@ import es.uca.iw.ebz.Movimiento.Interno.Interno;
 import es.uca.iw.ebz.Movimiento.Interno.InternoService;
 import es.uca.iw.ebz.Movimiento.RecargaTarjeta.RecargaTarjeta;
 import es.uca.iw.ebz.Movimiento.RecargaTarjeta.RecargaTarjetaService;
+import es.uca.iw.ebz.Movimiento.Recibo.Recibo;
+import es.uca.iw.ebz.Movimiento.Recibo.ReciboService;
+import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
+import es.uca.iw.ebz.tarjeta.credito.Credito;
+import es.uca.iw.ebz.tarjeta.credito.CreditoService;
+import es.uca.iw.ebz.tarjeta.prepago.Prepago;
+import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,10 +41,18 @@ public class MovimientoService {
 
     private TarjetaService _tarjetaService;
 
+    private ReciboService _reciboService;
+
+    private PrepagoService _prepagoService;
+
+    private CreditoService _creditoService;
+
     @Autowired
     public MovimientoService(MovimientoRepository movimientoRepository, InternoService internoService, ExternoService externoService,
                              CuentaService cuentaService, RecargaTarjetaService recargaTarjetaService,
-                             CompraTarjetaService compraTarjetaService, TarjetaService tarjetaService) {
+                             CompraTarjetaService compraTarjetaService, TarjetaService tarjetaService,
+                             ReciboService reciboService, PrepagoService prepagoService,
+                             CreditoService creditoService) {
         _movimientoRepository = movimientoRepository;
         _internoService = internoService;
         _externoService = externoService;
@@ -45,13 +60,29 @@ public class MovimientoService {
         _recargaTarjetaService = recargaTarjetaService;
         _compraTarjetaService = compraTarjetaService;
         _tarjetaService = tarjetaService;
+        _reciboService = reciboService;
+        _prepagoService = prepagoService;
+        _creditoService = creditoService;
     }
 
     public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) {
+        if(cuentaOrigen.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - fimporte);
+
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
             case INTERNO:
-                Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaService.findByNumeroCuenta(cuentaDestino).get(), mov);
+                Cuenta _cuentaDestino = _cuentaService.findByNumeroCuenta(cuentaDestino).get();
+                if(_cuentaDestino.getFechaEliminacion() != null){
+                    _movimientoRepository.delete(mov);
+                    new Exception("Cuenta destino eliminado");
+                }
+                _cuentaDestino.setSaldo(_cuentaDestino.getSaldo() + fimporte);
+                _cuentaService.save(cuentaOrigen);
+                _cuentaService.save(_cuentaDestino);
+
+                Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaDestino, mov);
                 _internoService.añadirInterno(interno);
                 break;
             case EXTERNO:
@@ -65,21 +96,58 @@ public class MovimientoService {
         return mov;
     }
 
-    public Movimiento añadirMovimientoTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte) {
+    public Movimiento recargaTarjeta(Movimiento movimiento, Cuenta cuentaOrigen, Tarjeta tarjeta, float fimporte) {
+        if(cuentaOrigen.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
+        if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago) new Exception("Tarjeta no es de tipo prepago");
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - fimporte);
+        //Añadimos la recarga de la tarjeta
+        Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
+        prepago.setSaldo(prepago.getSaldo() + fimporte);
+        _prepagoService.Save(prepago);
         Movimiento mov = _movimientoRepository.save(movimiento);
-        switch (movimiento.getTipo()) {
-            case RECARGATARJETA:
-                RecargaTarjeta recargaTarjeta = new RecargaTarjeta(_cuentaService.findByNumeroCuenta(sDestino).get(), tarjeta, fimporte, mov);
-                _recargaTarjetaService.añadirRecargaTarjeta(recargaTarjeta);
+        RecargaTarjeta recargaTarjeta = new RecargaTarjeta(cuentaOrigen, tarjeta, fimporte, mov);
+        _recargaTarjetaService.añadirRecargaTarjeta(recargaTarjeta);
+        return mov;
+    }
+
+    public Movimiento compraTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte) {
+        switch(tarjeta.getTipoTarjeta()) {
+            case Prepago:
+                Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
+                if(prepago.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+                prepago.setSaldo(prepago.getSaldo() - fimporte);
+                _prepagoService.Save(prepago);
                 break;
-            case COMPRATARJETA:
-                CompraTarjeta compraTarjeta = new CompraTarjeta(tarjeta, sDestino, fimporte, mov);
-                _compraTarjetaService.añadirCompraTarjeta(compraTarjeta);
+            case Debito:
+                if(tarjeta.getCuenta().getSaldo() < fimporte) new Exception("Saldo insuficiente");
+                tarjeta.getCuenta().setSaldo(tarjeta.getCuenta().getSaldo() - fimporte);
+                _cuentaService.save(tarjeta.getCuenta());
+                break;
+            case Credito:
+                Credito credito = _creditoService.findByTarjeta(tarjeta);
+                credito.setDeuda(credito.getDeuda() + fimporte);
+                _creditoService.Save(credito);
                 break;
             default:
-                _movimientoRepository.delete(mov);
-                throw new IllegalArgumentException("Unexpected value: " + movimiento.getTipo());
+                throw new IllegalArgumentException("Unexpected value: " + tarjeta.getTipoTarjeta());
         }
+        Movimiento mov = _movimientoRepository.save(movimiento);
+        CompraTarjeta compraTarjeta = new CompraTarjeta(tarjeta, sDestino, fimporte, mov);
+        _compraTarjetaService.añadirCompraTarjeta(compraTarjeta);
+        return mov;
+    }
+
+    public Movimiento añadirRecibo(Movimiento movimiento, Cuenta cuenta, float fimporte) {
+        if(cuenta.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
+        cuenta.setSaldo(cuenta.getSaldo() + fimporte);
+
+        Movimiento mov = _movimientoRepository.save(movimiento);
+        Recibo recibo = new Recibo();
+        recibo.setCuenta(cuenta);
+        recibo.setImporte(fimporte);
+        recibo.setMovimiento(mov);
+        _reciboService.añadirRecibo(recibo);
         return mov;
     }
 
@@ -87,6 +155,7 @@ public class MovimientoService {
         List<Interno> movInternos = _internoService.findByCuentaOrigenOrCuentaDestino(cuenta);
         List<Externo> movExternos = _externoService.findByCuentaPropia(cuenta);
         List<RecargaTarjeta> movRecargaTarjeta = _recargaTarjetaService.findByCuenta(cuenta);
+        List<Recibo> movRecibos = _reciboService.findByCuenta(cuenta);
         List<Movimiento> movimientos = new ArrayList<Movimiento>();
 
         for(Externo movExterno : movExternos) {
@@ -99,6 +168,10 @@ public class MovimientoService {
 
         for(RecargaTarjeta movRecarga : movRecargaTarjeta) {
             movimientos.add(movRecarga.getMovimiento());
+        }
+
+        for(Recibo movRecibo : movRecibos) {
+            movimientos.add(movRecibo.getMovimiento());
         }
 
         return Movimiento.sortByFechaASC(movimientos);
@@ -150,6 +223,11 @@ public class MovimientoService {
                 datos.put("Origen", recargaTarjeta.getCuenta().getNumeroCuenta());
                 datos.put("Destino", recargaTarjeta.getTarjeta().getNumTarjeta());
                 datos.put("Importe", recargaTarjeta.getImporte());
+                break;
+            case RECIBO:
+                Recibo recibo = _reciboService.findByMovimiento(movimiento);
+                datos.put("Origen", recibo.getCuenta().getNumeroCuenta());
+                datos.put("Importe", recibo.getImporte());
                 break;
         }
         return datos;

@@ -62,6 +62,7 @@ public class Cuenta {
     public Date getFechaCreacion() {return fechaCreacion;}
     public Date getFechaEliminacion() {return fechaEliminacion;}
     public Cliente getCliente() {return cliente;}
+    public String getDNICliente() {return cliente.getUsuario().getDNI();}
 
     //setters
     public void setNumeroCuenta(String sNumeroCuenta) {this.sNumeroCuenta = sNumeroCuenta;}
