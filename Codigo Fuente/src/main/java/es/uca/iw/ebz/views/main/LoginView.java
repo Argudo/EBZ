@@ -32,7 +32,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
         i18n.getErrorMessage().setTitle("DNI o contraseña incorrectos");
         i18n.setForm(i18nForm);
-        i18n.getHeader().setTitle("Bienvenido a EBZ");
+        i18n.getHeader().setTitle("EBZ");
         i18n.getHeader().setDescription("Tu banca online de confianza");
         i18n.setAdditionalInformation(null);
         setI18n(i18n);
