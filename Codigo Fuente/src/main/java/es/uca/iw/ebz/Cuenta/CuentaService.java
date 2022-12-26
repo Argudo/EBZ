@@ -25,12 +25,12 @@ public class CuentaService {
         //generar numero de cuenta aleatoria y comprobar que no existe
         String sNumeroCuenta = new Iban.Builder()
                 .countryCode(CountryCode.ES)
-                .bankCode("62022")
+                .bankCode("55521")
                 .buildRandom().toString();
         while (_cuentaRepository.findBysNumeroCuenta(sNumeroCuenta).isPresent()) {
             sNumeroCuenta = new Iban.Builder()
                     .countryCode(CountryCode.ES)
-                    .bankCode("62022")
+                    .bankCode("55521")
                     .buildRandom().toString();
         }
         cuenta.setNumeroCuenta(sNumeroCuenta);

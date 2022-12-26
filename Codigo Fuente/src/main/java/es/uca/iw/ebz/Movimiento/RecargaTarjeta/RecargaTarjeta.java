@@ -6,6 +6,7 @@ import es.uca.iw.ebz.tarjeta.Tarjeta;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +23,7 @@ public class RecargaTarjeta {
 
     @Column(name = "Importe")
     @NotNull
-    private float fImporte;
+    private BigDecimal fImporte;
 
     @OneToOne
     private Movimiento movimiento;
@@ -32,7 +33,7 @@ public class RecargaTarjeta {
     public RecargaTarjeta(Cuenta cuenta, Tarjeta tarjeta, float fImporte, Movimiento movimiento) {
         this.cuenta = cuenta;
         this.tarjeta = tarjeta;
-        this.fImporte = fImporte;
+        this.fImporte = BigDecimal.valueOf(fImporte);
         this.movimiento = movimiento;
     }
 
@@ -40,14 +41,14 @@ public class RecargaTarjeta {
     public UUID getId() {return id;}
     public Cuenta getCuenta() {return cuenta;}
     public Tarjeta getTarjeta() {return tarjeta;}
-    public float getImporte() {return fImporte;}
+    public float getImporte() {return fImporte.floatValue();}
     public Movimiento getMovimiento() {return movimiento;}
 
     //setters
     public void setId(UUID id) {this.id = id;}
     public void setCuenta(Cuenta cuenta) {this.cuenta = cuenta;}
     public void setTarjeta(Tarjeta tarjeta) {this.tarjeta = tarjeta;}
-    public void setImporte(float fImporte) {this.fImporte = fImporte;}
+    public void setImporte(float fImporte) {this.fImporte = BigDecimal.valueOf(fImporte);}
     public void setMovimiento(Movimiento movimiento) {this.movimiento = movimiento;}
 
 }

@@ -5,6 +5,7 @@ import es.uca.iw.ebz.tarjeta.Tarjeta;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -23,7 +24,7 @@ public class CompraTarjeta {
 
     @Column(name = "Importe")
     @NotNull
-    private float fImporte;
+    private BigDecimal fImporte;
 
     @OneToOne
     private Movimiento movimiento;
@@ -33,7 +34,7 @@ public class CompraTarjeta {
     public CompraTarjeta(Tarjeta tarjeta, String sDestino, float fImporte, Movimiento movimiento) {
         this.tarjeta = tarjeta;
         this.sDestino = sDestino;
-        this.fImporte = fImporte;
+        this.fImporte = BigDecimal.valueOf(fImporte);
         this.movimiento = movimiento;
     }
 
@@ -41,14 +42,14 @@ public class CompraTarjeta {
     public UUID getId() {return id;}
     public Tarjeta getTarjeta() {return tarjeta;}
     public String getDestino() {return sDestino;}
-    public float getImporte() {return fImporte;}
+    public float getImporte() {return fImporte.floatValue();}
     public Movimiento getMovimiento() {return movimiento;}
 
     //setters
     public void setId(UUID id) {this.id = id;}
     public void setTarjeta(Tarjeta tarjeta) {this.tarjeta = tarjeta;}
     public void setDestino(String sDestino) {this.sDestino = sDestino;}
-    public void setImporte(float fImporte) {this.fImporte = fImporte;}
+    public void setImporte(float fImporte) {this.fImporte = BigDecimal.valueOf(fImporte);}
     public void setMovimiento(Movimiento movimiento) {this.movimiento = movimiento;}
 
 }
