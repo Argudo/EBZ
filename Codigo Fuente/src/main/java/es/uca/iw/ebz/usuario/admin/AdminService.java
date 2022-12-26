@@ -3,6 +3,7 @@ package es.uca.iw.ebz.usuario.admin;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.List;
 @Service
 public class AdminService {
     private AdminRepository repoAdmin;
+    @Autowired
     private UsuarioService servUsuario;
 
     public AdminService(AdminRepository clienteRepository){

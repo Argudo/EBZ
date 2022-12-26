@@ -2,6 +2,8 @@ package es.uca.iw.ebz;
 
 import java.util.Date;
 
+import es.uca.iw.ebz.usuario.admin.Admin;
+import es.uca.iw.ebz.usuario.admin.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -79,6 +81,9 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 	
 	@Autowired
 	PrepagoService prepagoService;
+
+	@Autowired
+	AdminService adminService;
 	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -103,6 +108,10 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			Usuario empleado = new Usuario("1234", "1234");
 			empleado.setTipoUsuario(TipoUsuario.Empleado);
 			usuario.save(empleado);
+			Admin admin = new Admin();
+			admin.setUsuario(empleado);
+			admin.setNombre("Pedro");
+			adminService.save(admin);
 			Usuario cli = new Usuario("32093905B", "1234");
 			Usuario cli2 = new Usuario("12267004T", "1234");
 			cli.setTipoUsuario(TipoUsuario.Cliente);
