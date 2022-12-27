@@ -4,5 +4,7 @@ public enum TipoMovimiento {
     INTERNO,
     EXTERNO,
     COMPRATARJETA,
-    RECARGATARJETA
+    RECARGATARJETA,
+
+    RECIBO
 }

@@ -1,8 +1,7 @@
-package es.uca.iw.ebz.Movimiento.RecargaTarjeta;
+package es.uca.iw.ebz.Movimiento.Recibo;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Movimiento.Movimiento;
-import es.uca.iw.ebz.tarjeta.Tarjeta;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,45 +9,34 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-public class RecargaTarjeta {
+public class Recibo {
+
     @Id
     @GeneratedValue
+    @Column(length=16)
     private UUID id;
-
-    @ManyToOne
-    private Cuenta cuenta;
-
-    @ManyToOne
-    private Tarjeta tarjeta;
 
     @Column(name = "Importe")
     @NotNull
     private BigDecimal fImporte;
 
+    @ManyToOne
+    private Cuenta cuenta;
+
     @OneToOne
     private Movimiento movimiento;
 
-    public RecargaTarjeta() {}
-
-    public RecargaTarjeta(Cuenta cuenta, Tarjeta tarjeta, float fImporte, Movimiento movimiento) {
-        this.cuenta = cuenta;
-        this.tarjeta = tarjeta;
-        this.fImporte = BigDecimal.valueOf(fImporte);
-        this.movimiento = movimiento;
-    }
+    public Recibo() {}
 
     //getters
     public UUID getId() {return id;}
-    public Cuenta getCuenta() {return cuenta;}
-    public Tarjeta getTarjeta() {return tarjeta;}
     public float getImporte() {return fImporte.floatValue();}
+    public Cuenta getCuenta() {return cuenta;}
     public Movimiento getMovimiento() {return movimiento;}
 
     //setters
     public void setId(UUID id) {this.id = id;}
-    public void setCuenta(Cuenta cuenta) {this.cuenta = cuenta;}
-    public void setTarjeta(Tarjeta tarjeta) {this.tarjeta = tarjeta;}
     public void setImporte(float fImporte) {this.fImporte = BigDecimal.valueOf(fImporte);}
+    public void setCuenta(Cuenta cuenta) {this.cuenta = cuenta;}
     public void setMovimiento(Movimiento movimiento) {this.movimiento = movimiento;}
-
 }

@@ -1,9 +1,12 @@
 package es.uca.iw.ebz.Cuenta;
 
 import es.uca.iw.ebz.usuario.cliente.Cliente;
+import org.iban4j.CountryCode;
+import org.iban4j.Iban;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +23,15 @@ public class CuentaService {
 
     public Cuenta añadirCuenta(Cuenta cuenta) {
         //generar numero de cuenta aleatoria y comprobar que no existe
-        String sNumeroCuenta = generarNumeroCuenta();
+        String sNumeroCuenta = new Iban.Builder()
+                .countryCode(CountryCode.ES)
+                .bankCode("55521")
+                .buildRandom().toString();
         while (_cuentaRepository.findBysNumeroCuenta(sNumeroCuenta).isPresent()) {
-            sNumeroCuenta = generarNumeroCuenta();
+            sNumeroCuenta = new Iban.Builder()
+                    .countryCode(CountryCode.ES)
+                    .bankCode("55521")
+                    .buildRandom().toString();
         }
         cuenta.setNumeroCuenta(sNumeroCuenta);
         cuenta.setFechaCreacion(new Date());
@@ -53,9 +62,9 @@ public class CuentaService {
             return false;
         }
     }
-    public void update(String sNumeroCuenta, float fSaldo) {
+    public void update(String sNumeroCuenta, BigDecimal fSaldo) {
         Optional<Cuenta> cuenta = _cuentaRepository.findBysNumeroCuenta(sNumeroCuenta);
-        cuenta.get().setSaldo(cuenta.get().getSaldo() + fSaldo);
+        cuenta.get().setSaldo(cuenta.get().getSaldo().add(fSaldo));
         _cuentaRepository.save(cuenta.get());
     }
 
@@ -73,5 +82,9 @@ public class CuentaService {
             sNumeroCuenta += (int) (Math.random() * 10);
         }
         return sNumeroCuenta;
+    }
+
+    public Cuenta save(Cuenta cuenta) {
+        return _cuentaRepository.save(cuenta);
     }
 }

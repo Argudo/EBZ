@@ -1,67 +1,59 @@
 package es.uca.iw.ebz.views.main;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import es.uca.iw.ebz.usuario.admin.Admin;
+import es.uca.iw.ebz.usuario.admin.AdminService;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.layout.AdminLayout;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 
 @RolesAllowed({ "Empleado" })
 @PageTitle("Dashboard")
 @Route(value = "Dashboard", layout = AdminLayout.class)
 public class DashBoardView extends VerticalLayout {
     private VerticalLayout vlDashboard = new VerticalLayout();
-    public DashBoardView() {
-       vlDashboard.setWidthFull();
-        vlDashboard.setPadding(false);
-        vlDashboard.setMargin(false);
 
-        FlexLayout flFunctionalities = new FlexLayout();
-        flFunctionalities.setWidthFull();
-        flFunctionalities.setFlexDirection(FlexLayout.FlexDirection.ROW);
-        flFunctionalities.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-        flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
+    private H2 hDay = new H2("Buenos días, ");
 
-        FlexLayout flListen = new FlexLayout();
-        flFunctionalities.setWidthFull();
-        flFunctionalities.setFlexDirection(FlexLayout.FlexDirection.ROW);
-        flFunctionalities.setFlexWrap(FlexLayout.FlexWrap.WRAP);
-        flFunctionalities.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
+    private H1 dashBoard = new H1("Panel de control");
 
-        Button btnUsuario = new Button ("Gestión Usuario");
-        Button btnCuenta = new Button ("Gestion de Cuentas");
-        Button btnNoticia = new Button ("Gestion Noticias");
-        Button btnConsulta = new Button ("Gestion Consultas");
-        Button btnTarjeta = new Button("Gestión de tarjetas");
+    private Date date = new Date();
 
-        flFunctionalities.add(
-                btnUsuario,
-                btnCuenta,
-                btnNoticia,
-                btnConsulta,
-                btnTarjeta
-        );
+    private Calendar calendar = GregorianCalendar.getInstance();
 
-        vlDashboard.add(flFunctionalities);
+    private Admin admin;
 
+    private AuthenticatedUser user;
+
+    private AdminService adminService;
+
+    public DashBoardView(AuthenticatedUser user, AdminService adminService) {
+        this.user = user;
+        this.adminService = adminService;
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        admin = adminService.findByDNI(user.get().get().getDNI());
+
+        if(hour > 8 && hour < 14) hDay.setText("Buenos días, " + admin.getNombre());
+
+        if(hour > 14 && hour < 22) hDay.setText("Buenas tardes, " + admin.getNombre());
+
+        if(hour > 22 || hour < 8) hDay.setText("¿Trabajando hasta tarde " + admin.getNombre() + "?");
+        vlDashboard.add(dashBoard, hDay);
         add(vlDashboard);
 
-        btnUsuario.addClickListener(e -> {
-            Button btnAñadir = new Button ("Añadir Usuario");
-            add(btnAñadir);
-        });
-
-        btnCuenta.addClickListener(e -> {
-            Button btnAñadir = new Button ("Añadir Cuenta");
-            Button btnDelete = new Button ("Eliminar Cuenta");
-            flListen.add(btnAñadir, btnDelete);
-            add(flListen);
-        });
     }
 }

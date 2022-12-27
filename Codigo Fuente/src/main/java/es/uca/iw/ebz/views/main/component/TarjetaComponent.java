@@ -34,12 +34,33 @@ public class TarjetaComponent extends Component {
 		//_vlTarjeta.getStyle().set("opacity", "0.5");
 		_selected = false;
 	}
+	
+	public TarjetaComponent() {
+    	_vlTarjeta = new VerticalLayout();
+    	DateFormat dateFormat = new SimpleDateFormat("mm/yy");  
+        String fechaExpiracion = "00/00";  
+        H5 hNueva = new H5("+");
+        _vlTarjeta.getStyle().set("display", "flex").set("justify-content", "center");
+        hNueva.setClassName("nueva-tarjeta-h");
+        _vlTarjeta.add(new H4("EBZ"),
+        			   hNueva,
+        			   new H6(fechaExpiracion)
+        			 );
+        _vlTarjeta.setClassName("tarjeta-mid");
+        _vlTarjeta.setWidth("300px");
+        _vlTarjeta.setHeight("200px");
+        _vlTarjeta.setPadding(false);
+        _vlTarjeta.getStyle().set("display", "-webkit-box");
+        _vlTarjeta.setAlignItems(FlexComponent.Alignment.CENTER);
+        _vlTarjeta.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        getElement().appendChild(_vlTarjeta.getElement());
+	}
     
     public TarjetaComponent(Tarjeta tarjeta){
     	_tarjeta = tarjeta;
     	_vlTarjeta = new VerticalLayout();
     	DateFormat dateFormat = new SimpleDateFormat("mm/yy");  
-        String fechaExpiracion = dateFormat.format(_tarjeta.getFechaExpiracion());  
+        String fechaExpiracion = _tarjeta.getFechaExpiracion();
         _vlTarjeta.add(new H4("EBZ"),
         			   new H5(_tarjeta.getNumTarjeta()),
         			   new H6(fechaExpiracion)
