@@ -123,7 +123,7 @@ H3 _acBalance = new H3();
 		//Account gallery section
 		List<Cuenta> accountList = _cuentaService.findByCliente(_cliente);
 
-		if(accountList.size() > 1){
+		if(accountList.size() >= 1){
 
 			VerticalLayout vlAccount = new VerticalLayout();
 			vlAccount.setWidth("70%");

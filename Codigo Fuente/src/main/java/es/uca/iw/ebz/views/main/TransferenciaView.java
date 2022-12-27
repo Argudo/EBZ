@@ -1,18 +1,27 @@
 package es.uca.iw.ebz.views.main;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
+import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
+import es.uca.iw.ebz.Movimiento.TipoMovimiento;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
@@ -20,9 +29,12 @@ import es.uca.iw.ebz.views.main.layout.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-@PageTitle("transferencia")
+
+@PageTitle("Transferencia")
 @Route(value = "transferencia", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class TransferenciaView extends VerticalLayout {
@@ -41,15 +53,21 @@ public class TransferenciaView extends VerticalLayout {
 
     private Cliente _cliente;
 
-    private ComboBox cbAccount1;
+    private ComboBox<String> cbAccount1;
 
-    private ComboBox cbAccount2;
+    private ComboBox<String> cbAccount2;
 
     private TextField tfConcept;
 
     private NumberField nfBalance;
 
     private TextField tfDestinyAccount;
+
+    private FormLayout frmTransfer;
+
+    private RadioButtonGroup<String> rdGroup;
+
+    private Button btnTrans;
 
 
     public TransferenciaView(MovimientoService _movimientoService, CuentaService _cuentaService,
@@ -61,6 +79,27 @@ public class TransferenciaView extends VerticalLayout {
         this._clienteService = _clienteService;
         this._authenticatedUser = _authenticatedUser;
         //End services initialization section
+
+        //Title section
+        VerticalLayout vlTitle = new VerticalLayout();
+        vlTitle.setWidth("70%");
+        vlTitle.setSpacing(true);
+        vlTitle.setPadding(true);
+        vlTitle.setMargin(true);
+        vlTitle.setClassName("box");
+
+        H1 hTitle = new H1("| Transferencia");
+        hTitle.setClassName("title");
+        vlTitle.add(hTitle);
+
+        //End title section
+
+        //Separator section
+        HorizontalLayout hlSeparator = new HorizontalLayout();
+        hlSeparator.setWidth("2px");
+        hlSeparator.getStyle().set("background-color", "var(--lumo-contrast-10pct)");
+        hlSeparator.getStyle().set("padding", "0");
+        //End separator section
 
         //Client asignation
         _cliente = _clienteService.findByUsuario(_authenticatedUser.get().get());
@@ -80,7 +119,7 @@ public class TransferenciaView extends VerticalLayout {
         vlForm.setMargin(true);
         vlForm.setClassName("box");
 
-        FormLayout frmTransfer = new FormLayout();
+        frmTransfer = new FormLayout();
         frmTransfer.setWidthFull();
         frmTransfer.setResponsiveSteps(
 
@@ -89,49 +128,143 @@ public class TransferenciaView extends VerticalLayout {
         );
 
         //Transference form fields section
-        cbAccount1 = new ComboBox<>("Cuenta origen");
-        cbAccount1.setItems(_cuentaService.findByCliente(_cliente));
-        cbAccount2 = new ComboBox<>("Cuenta destino");
-        cbAccount2.setItems(_cuentaService.findByCliente(_cliente));
+        List<String>  asAccounts = new ArrayList<>();
+        List<Cuenta> lstAccounts = _cuentaService.findByCliente(_cliente);
+
+        for(Cuenta c: lstAccounts){
+            asAccounts.add(c.getNumeroCuenta());
+        }
+
+        cbAccount1 = new ComboBox<String>("Cuenta origen");
+        cbAccount1.setItems(asAccounts);
+        cbAccount1.setRequiredIndicatorVisible(true);
+        cbAccount1.setErrorMessage("La cuenta origen es obligatoria");
+
+        cbAccount2 = new ComboBox<String>("Cuenta destino");
+        cbAccount2.setItems(asAccounts);
+        cbAccount2.setRequiredIndicatorVisible(true);
+        cbAccount2.setErrorMessage("La cuenta destino es obligatoria");
 
         tfDestinyAccount = new TextField("Cuenta destino");
-        tfConcept = new TextField("Concepto");
+        tfDestinyAccount.setRequiredIndicatorVisible(true);
+        tfDestinyAccount.setErrorMessage("La cuenta destino es obligatoria");
+
+        tfConcept = new TextField("Concepto (mínimo 10 caracteres)");
+        tfConcept.setRequiredIndicatorVisible(true);
+        tfConcept.setMinLength(10);
+        tfConcept.setErrorMessage("El concepto es obligatorio");
 
         nfBalance = new NumberField("Cantidad a transferir");
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
         nfBalance.setSuffixComponent(euroSuffix);
+        nfBalance.setRequiredIndicatorVisible(true);
+        nfBalance.setMin(0.01);
+        nfBalance.setErrorMessage("El importe es obligatorio");
+
+        btnTrans = new Button("Transferir");
 
         //End transference form fields section
 
-        RadioButtonGroup<String> rdGroup = new RadioButtonGroup<>();
+        rdGroup = new RadioButtonGroup<>();
         rdGroup.setLabel("Tipo de transferencia");
         rdGroup.setItems("Traspaso (entre cuentas propias)", "Transferencia (a una cuenta ajena)");
         rdGroup.addValueChangeListener(e -> {
            frmTransfer.removeAll();
            if(rdGroup.getValue() == "Traspaso (entre cuentas propias)"){
+
                frmTransfer.add(
                        rdGroup,
                        cbAccount1,
                        cbAccount2,
                        tfConcept,
-                       nfBalance);
+                       nfBalance,
+                       btnTrans);
+
+               btnTrans.addClickListener( ev -> {
+
+                   if(cbAccount1.getValue() == null){
+                       CargarFormulario(true);
+                       frmTransfer.add(new Paragraph("La cuenta origen no está seleccionada."));
+                   }else if(cbAccount2.getValue() == null){
+                       CargarFormulario(true);
+                       frmTransfer.add(new Paragraph("La cuenta destino no está seleccionada."));
+                   }else if(tfConcept.getValue() == null){
+                       CargarFormulario(true);
+                       frmTransfer.add(new Paragraph("El concepto no cumple con el mínimo de caracteres o no es obligatorio."));
+                   }else if(nfBalance.getValue() == null){
+                       CargarFormulario(true);
+                       frmTransfer.add(new Paragraph("El importe es obligatorio."));
+                   }else{
+                       Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.INTERNO);
+                       _movimientoService.añadirMovimientoCuenta(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), cbAccount2.getValue(), nfBalance.getValue().floatValue());
+                       CargarFormulario(true);
+                   }
+
+               });
+
+
+
            }else{
+
                frmTransfer.add(
                        rdGroup,
                        cbAccount1,
                        tfDestinyAccount,
                        tfConcept,
-                       nfBalance);
+                       nfBalance,
+                       btnTrans);
+
+               btnTrans.addClickListener( ev -> {
+
+                   if(cbAccount1.getValue() == null){
+                       CargarFormulario(false);
+                       frmTransfer.add(new Paragraph("La cuenta origen no está seleccionada."));
+                   }else if(tfDestinyAccount.getValue() == null){
+                       CargarFormulario(false);
+                       frmTransfer.add(new Paragraph("La cuenta destino no está seleccionada."));
+                   }else if(tfConcept.getValue() == null){
+                       CargarFormulario(false);
+                       frmTransfer.add(new Paragraph("El concepto no cumple con el mínimo de caracteres o no es obligatorio."));
+                   }else if(nfBalance.getValue() == null){
+                       CargarFormulario(false);
+                       frmTransfer.add(new Paragraph("El importe es obligatorio."));
+                   }else{
+                       Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.EXTERNO);
+                       _movimientoService.añadirMovimientoCuenta(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), tfDestinyAccount.getValue(), nfBalance.getValue().floatValue());
+                       CargarFormulario(false);
+                   }
+
+               });
+
            }
 
 
         });
         frmTransfer.add(rdGroup);
-        vlForm.add(frmTransfer);
-        add(vlForm);
+        vlTitle.add(hlSeparator, frmTransfer);
+        add(vlTitle);
 
     }
+
+    private void CargarFormulario(boolean b){
+        if(b){ //Si es traspaso
+            frmTransfer.removeAll();
+            cbAccount1.clear();
+            cbAccount2.clear();
+            tfConcept.clear();
+            nfBalance.clear();
+            frmTransfer.add(rdGroup, cbAccount1, cbAccount2, tfConcept, nfBalance, btnTrans);
+        }else{ //Si es transferencia
+            frmTransfer.removeAll();
+            cbAccount1.clear();
+            tfDestinyAccount.clear();
+            tfConcept.clear();
+            nfBalance.clear();
+            frmTransfer.add(rdGroup, cbAccount1, tfDestinyAccount, tfConcept, nfBalance, btnTrans);
+        }
+    }
+
 
 
 }

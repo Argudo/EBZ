@@ -23,6 +23,7 @@ import com.vaadin.flow.router.RouterLink;
 import es.uca.iw.ebz.views.main.HomeView;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.TarjetaView;
+import es.uca.iw.ebz.views.main.TransferenciaView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MainLayout extends AppLayout{
@@ -108,7 +109,7 @@ public class MainLayout extends AppLayout{
 
 	private Component[] createMenuItems() {
 	    return new Tab[] { createTab("Inicio", HomeView.class),
-	            createTab("Transferencias", HomeView.class),
+	            createTab("Transferencias", TransferenciaView.class),
 	            createTab("Tarjetas", TarjetaView.class)};
 	}
 
