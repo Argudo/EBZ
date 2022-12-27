@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -43,9 +44,9 @@ public class CuentaServiceTest {
     public void testUpdate() {
         cuentaTest = new Cuenta();
         cuentaTest.setNumeroCuenta("12345678901234567890");
-        cuentaService.update(cuentaTest.getNumeroCuenta(), 10);
+        cuentaService.update(cuentaTest.getNumeroCuenta(), BigDecimal.valueOf(10));
         Optional<Cuenta> cuenta = cuentaService.findByNumeroCuenta("12345678901234567890");
-        assertTrue(cuenta.get().getSaldo() == 10);
+        assertTrue(cuenta.get().getSaldo().intValue() == 10);
     }
 
 }

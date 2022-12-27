@@ -123,7 +123,8 @@ public class Tarjeta {
 	private String GenerarCVC() { return GenerarCVC(null); }
 	private String GenerarCVC(Integer valor) {
 		//int iValor = valor == null? new Random().nextInt(1, 999) : valor;
-		String sCVC = String.valueOf(1);
+		int iValor = 2;
+		String sCVC = String.valueOf(iValor);
 		while(sCVC.length() < 3) {
 			sCVC = "0".concat(sCVC);
 		}

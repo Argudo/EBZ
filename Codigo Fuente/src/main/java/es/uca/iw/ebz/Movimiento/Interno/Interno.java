@@ -5,6 +5,7 @@ import es.uca.iw.ebz.Movimiento.Movimiento;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -16,7 +17,7 @@ public class Interno {
 
     @Column(name = "Importe")
     @NotNull
-    private float fImporte;
+    private BigDecimal fImporte;
 
     @ManyToOne
     private Cuenta cuentaDestino;
@@ -30,13 +31,13 @@ public class Interno {
     public Interno() {}
 
     public Interno(float fImporte, Cuenta cuentaDestino, Cuenta cuentaOrigen) {
-        this.fImporte = fImporte;
+        this.fImporte = BigDecimal.valueOf(fImporte);
         this.cuentaDestino = cuentaDestino;
         this.cuentaOrigen = cuentaOrigen;
     }
 
     public Interno(float fImporte, Cuenta cuentaDestino, Cuenta cuentaOrigen, Movimiento movimiento) {
-        this.fImporte = fImporte;
+        this.fImporte = BigDecimal.valueOf(fImporte);
         this.cuentaDestino = cuentaDestino;
         this.cuentaOrigen = cuentaOrigen;
         this.movimiento = movimiento;
@@ -44,7 +45,7 @@ public class Interno {
 
     //getters
     public UUID getId() {return id;}
-    public float getImporte() {return fImporte;}
+    public float getImporte() {return fImporte.floatValue();}
     public Cuenta getCuentaDestino() {return cuentaDestino;}
     public Cuenta getCuentaOrigen() {return cuentaOrigen;}
     public Movimiento getMovimiento() {return movimiento;}
@@ -52,7 +53,7 @@ public class Interno {
 
     //setters
     public void setId(UUID id) {this.id = id;}
-    public void setImporte(float fImporte) {this.fImporte = fImporte;}
+    public void setImporte(float fImporte) {this.fImporte = BigDecimal.valueOf(fImporte);}
     public void setCuentaDestino(Cuenta cuentaDestino) {this.cuentaDestino = cuentaDestino;}
     public void setCuentaOrigen(Cuenta cuentaOrigen) {this.cuentaOrigen = cuentaOrigen;}
     public void setMovimiento(Movimiento movimiento) {this.movimiento = movimiento;}

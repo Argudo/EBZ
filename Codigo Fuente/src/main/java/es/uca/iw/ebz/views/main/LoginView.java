@@ -24,8 +24,16 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.setHeader(new LoginI18n.Header());
-        i18n.getHeader().setTitle("My App");
-        i18n.getHeader().setDescription("Login using user/user or admin/admin");
+        LoginI18n.Form i18nForm = i18n.getForm();
+        i18nForm.setTitle("EBZ");
+        i18nForm.setUsername("DNI");
+        i18nForm.setPassword("Contraseña");
+        i18nForm.setSubmit("Iniciar sesión");
+
+        i18n.getErrorMessage().setTitle("DNI o contraseña incorrectos");
+        i18n.setForm(i18nForm);
+        i18n.getHeader().setTitle("EBZ");
+        i18n.getHeader().setDescription("Tu banca online de confianza");
         i18n.setAdditionalInformation(null);
         setI18n(i18n);
 

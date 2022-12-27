@@ -23,6 +23,7 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +67,10 @@ public class MovimientoService {
     }
 
     public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) {
-        if(cuentaOrigen.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
         if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
-        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - fimporte);
+        if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) new Exception("Cuenta origen y destino iguales");
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().add(BigDecimal.valueOf(fimporte)));
 
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
@@ -78,7 +80,7 @@ public class MovimientoService {
                     _movimientoRepository.delete(mov);
                     new Exception("Cuenta destino eliminado");
                 }
-                _cuentaDestino.setSaldo(_cuentaDestino.getSaldo() + fimporte);
+                _cuentaDestino.setSaldo(_cuentaDestino.getSaldo().add(BigDecimal.valueOf(fimporte)));
                 _cuentaService.save(cuentaOrigen);
                 _cuentaService.save(_cuentaDestino);
 
@@ -97,10 +99,10 @@ public class MovimientoService {
     }
 
     public Movimiento recargaTarjeta(Movimiento movimiento, Cuenta cuentaOrigen, Tarjeta tarjeta, float fimporte) {
-        if(cuentaOrigen.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
         if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
         if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago) new Exception("Tarjeta no es de tipo prepago");
-        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - fimporte);
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().add(BigDecimal.valueOf(fimporte)));
         //Añadimos la recarga de la tarjeta
         Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
         prepago.setSaldo(prepago.getSaldo() + fimporte);
@@ -120,8 +122,8 @@ public class MovimientoService {
                 _prepagoService.Save(prepago);
                 break;
             case Debito:
-                if(tarjeta.getCuenta().getSaldo() < fimporte) new Exception("Saldo insuficiente");
-                tarjeta.getCuenta().setSaldo(tarjeta.getCuenta().getSaldo() - fimporte);
+                if(tarjeta.getCuenta().getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
+                tarjeta.getCuenta().setSaldo(tarjeta.getCuenta().getSaldo().add(BigDecimal.valueOf(fimporte)));
                 _cuentaService.save(tarjeta.getCuenta());
                 break;
             case Credito:
@@ -140,7 +142,7 @@ public class MovimientoService {
 
     public Movimiento añadirRecibo(Movimiento movimiento, Cuenta cuenta, float fimporte) {
         if(cuenta.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
-        cuenta.setSaldo(cuenta.getSaldo() + fimporte);
+        cuenta.setSaldo(cuenta.getSaldo().add(BigDecimal.valueOf(fimporte)));
 
         Movimiento mov = _movimientoRepository.save(movimiento);
         Recibo recibo = new Recibo();

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ public class Cuenta {
 
     @Column(name = "saldo")
     @NotNull
-    private float fSaldo = 0;
+    private BigDecimal fSaldo = BigDecimal.valueOf(0);
 
     @Column
     @NotNull
@@ -42,7 +43,7 @@ public class Cuenta {
 
     public Cuenta(String sNumeroCuenta, float fSaldo, Date fechaCreacion) {
         this.sNumeroCuenta = sNumeroCuenta;
-        this.fSaldo = fSaldo;
+        this.fSaldo = BigDecimal.valueOf(fSaldo);
         this.fechaCreacion = fechaCreacion;
         this.fechaEliminacion = fechaEliminacion;
     }
@@ -58,7 +59,7 @@ public class Cuenta {
     }
 
     public String getNumeroCuenta() {return sNumeroCuenta;}
-    public float getSaldo() {return fSaldo;}
+    public @NotNull BigDecimal getSaldo() {return fSaldo;}
     public Date getFechaCreacion() {return fechaCreacion;}
     public Date getFechaEliminacion() {return fechaEliminacion;}
     public Cliente getCliente() {return cliente;}
@@ -66,7 +67,7 @@ public class Cuenta {
 
     //setters
     public void setNumeroCuenta(String sNumeroCuenta) {this.sNumeroCuenta = sNumeroCuenta;}
-    public void setSaldo(float fSaldo) {this.fSaldo = fSaldo;}
+    public void setSaldo(BigDecimal fSaldo) {this.fSaldo = fSaldo;}
     public void setFechaCreacion(Date fechaCreacion) {this.fechaCreacion = fechaCreacion;}
     public void setFechaEliminacion(Date fechaEliminacion) {this.fechaEliminacion = fechaEliminacion;}
     public void setCliente(Cliente cliente) {this.cliente = cliente;}
