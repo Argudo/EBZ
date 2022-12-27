@@ -43,7 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PageTitle("Dashboard/cuentas")
 @RolesAllowed({ "Empleado"})
 @Route(value = "Dashboard/cuentas", layout = AdminLayout.class)
-public class DashBoardCuentasView extends VerticalLayout {
+public class DashBoardCuentasView extends HorizontalLayout {
     private VerticalLayout vlGrid = new VerticalLayout();
     private VerticalLayout vlInfo = new VerticalLayout();
     private VerticalLayout vlSeparator = new VerticalLayout();
