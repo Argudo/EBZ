@@ -62,4 +62,6 @@ public class UsuarioService {
 
     public List<Usuario> findAll() { return repoUsuario.findAll(); }
 
+    public List<Usuario> findNotEliminated() { return repoUsuario.findBydFechaEliminacionIsNull(); }
+
 }

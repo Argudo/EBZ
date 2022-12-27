@@ -45,4 +45,14 @@ public class AdminService {
         return adm;
     }
 
+    public List<Admin> findNotEliminated(){
+        List<Admin> result = this.findAll();
+        for (Admin adm:result){
+            if (adm.getUsuario().getFechaEliminacion() == null){
+                result.remove(adm);
+            }
+        }
+        return result;
+    }
+
 }

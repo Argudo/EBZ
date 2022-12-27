@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, UUID>{
     Cliente findByusuario (Usuario user);
+
+
 }

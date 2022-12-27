@@ -1,8 +1,6 @@
 package es.uca.iw.ebz.usuario.cliente;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,13 +8,7 @@ import org.springframework.stereotype.Service;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 
-import es.uca.iw.ebz.usuario.cliente.Cliente;
-import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
-
-
-
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class ClienteService {
@@ -40,7 +32,6 @@ public class ClienteService {
 		cliente.setUsuario(user);
 
 		return repoCliente.save(cliente);
-
 	}
 
 	public Cliente findByDNI(String DNI) {
@@ -60,6 +51,16 @@ public class ClienteService {
 		usr.setFechaEliminaciono(new Date());
 		servUsuario.save(usr);
 		return cli;
+	}
+
+	public List<Cliente> findNotEliminated(){
+		List<Cliente> result = this.findAll();
+		for (Cliente cli:result){
+			if (cli.getUsuario().getFechaEliminacion() == null){
+				result.remove(cli);
+			}
+		}
+		return result;
 	}
 
 }
