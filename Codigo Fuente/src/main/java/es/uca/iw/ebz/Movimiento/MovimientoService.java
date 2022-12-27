@@ -70,7 +70,7 @@ public class MovimientoService {
         if(cuentaOrigen.getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
         if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
         if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) new Exception("Cuenta origen y destino iguales");
-        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().add(BigDecimal.valueOf(fimporte)));
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(BigDecimal.valueOf(fimporte)));
 
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
