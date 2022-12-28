@@ -24,4 +24,8 @@ public class TipoCrediticio {
 		_sNombre = sNombre;
 		_fLimite = fLimite;
 	}
+
+	public Integer getId() { return _iId; }
+	public String getNombre() { return _sNombre; }
+	public float getLimite() { return _fLimite; }
 }
