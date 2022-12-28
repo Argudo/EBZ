@@ -1,36 +1,22 @@
 package es.uca.iw.ebz.views.main;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -39,7 +25,6 @@ import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
-import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
@@ -208,8 +193,11 @@ public class TarjetaView extends VerticalLayout{
 		
 		tNewCard.getElement().addEventListener("click", e ->{			
 			dlogNT.setTitular(_cliente); 
-			dlogNT.padre();
 			dlogNT.open();
+		});
+		
+		dlogNT.addUpdateListener(e -> {
+			ActualizarTarjetas(e.getTarjeta());
 		});
 		
 		scrllTarjetas.setContent(hlTarjetas);		

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -22,6 +23,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.shared.Registration;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
@@ -151,6 +153,7 @@ public class NuevaTarjetaDialog extends Dialog {
 		
 		try {
 			_tarService.Save(T); 
+			fireEvent(new UpdateEvent(this, false, T));
 		}
 		catch(Exception e) {
 			Notification notification = Notification.show("Se ha encontrado un error en la solicitud de tu nueva tarjeta");
@@ -166,9 +169,9 @@ public class NuevaTarjetaDialog extends Dialog {
 		return true;
 	}
 	
-	public void padre() {
-		System.out.println();
-	}
-	
 	public void setTitular(Cliente titular) {_cliente = titular; txtTitular.setValue(titular.getNombre()); }
+
+	public Registration addUpdateListener(ComponentEventListener<UpdateEvent> listener) {
+	        return addListener(UpdateEvent.class, listener);
+	    }
 }

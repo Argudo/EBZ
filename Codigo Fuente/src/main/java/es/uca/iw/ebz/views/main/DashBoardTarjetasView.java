@@ -160,6 +160,11 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 				}
 			}
 		});
+		
+		dlogNT.addUpdateListener(e -> {
+			aTarjeta.add(e.getTarjeta());
+			gridTarjeta.setItems(aTarjeta);
+		});
 	}
 	
 	private Renderer<Cliente> VerTarjetasRenderer(Grid<Cliente> gridCliente, List<Tarjeta> aTarjetas, Grid<Tarjeta> gridTarjeta) {
