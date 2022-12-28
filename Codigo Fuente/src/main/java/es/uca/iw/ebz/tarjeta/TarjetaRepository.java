@@ -14,4 +14,5 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 public interface TarjetaRepository extends JpaRepository<Tarjeta, UUID>{
 	List<Tarjeta> findBy_clienteTitular(Cliente cliente);
 	List<Tarjeta> findAllBy_cuenta(Cuenta cuenta);
+	Tarjeta findBy_sNumTarjeta(String sNumTarjeta);
 }

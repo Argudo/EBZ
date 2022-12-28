@@ -73,6 +73,10 @@ public class TarjetaService {
 		return _tarRepository.findAllBy_cuenta(cuenta);
 	}
 	
+	public Tarjeta findByNumCuenta(String sNumCuenta) {
+		return _tarRepository.findBy_sNumTarjeta(sNumCuenta);
+	}
+	
 	public long Count() {
 		return _tarRepository.count();
 	}
