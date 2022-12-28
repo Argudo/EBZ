@@ -3,6 +3,7 @@ package es.uca.iw.ebz.views.main.layout;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -38,10 +39,17 @@ public class AdminLayout  extends AppLayout{
         HorizontalLayout hlContent = new HorizontalLayout();
 
         Button btnSignOut = new Button();
+        Button btnUser = new Button();
+        Icon iconUser = new Icon(VaadinIcon.USER);
+        btnUser.getElement().appendChild(iconUser.getElement());
         Icon icon = new Icon(VaadinIcon.SIGN_OUT);
         btnSignOut.getElement().appendChild(icon.getElement());
         btnSignOut.addClickListener(e -> {
             _authenticatedUser.logout();
+        });
+
+        btnUser.addClickListener(e -> {
+            UI.getCurrent().navigate("Perfil");
         });
         H1 logo = new H1("EBZ");
         logo.addClassNames("text-l", "m-m");
@@ -49,6 +57,7 @@ public class AdminLayout  extends AppLayout{
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();
         hlContent.add(logo,
+                btnUser,
                 btnSignOut);
 
         hLayout.setId("header");
