@@ -134,7 +134,7 @@ public class NuevaTarjetaDialog extends Dialog {
 		TipoTarjeta tp;
 		Cuenta cuenta;
 		Optional<Cuenta> optCuenta;
-		int iPin;
+		String sPin;
 		Boolean fallo = false;
 		//Precondiciones
 		if(rdGroup.getValue() == null) { rdGroup.getElement().setAttribute("invalid", ""); rdGroup.setErrorMessage("Debe elegir uno de los tipos de tarjeta disponible"); fallo = true; }
@@ -148,8 +148,8 @@ public class NuevaTarjetaDialog extends Dialog {
 		
 		cuenta = optCuenta.get();
 		tp = new TipoTarjeta(EnumTarjeta.toTipo(rdGroup.getValue()));
-		iPin = Integer.parseInt(txtPin.getValue());
-		Tarjeta T = new Tarjeta(iPin, tp, cuenta, _cliente);
+		sPin = txtPin.getValue();
+		Tarjeta T = new Tarjeta(sPin, tp, cuenta, _cliente);
 		
 		try {
 			_tarService.Save(T); 

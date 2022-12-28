@@ -119,14 +119,14 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 		}
 		
 		if(credService.Count() < 1) {
-			Tarjeta tarCredito = new Tarjeta(4719, new TipoTarjeta(EnumTarjeta.Credito), cuentaService.findByCliente(clienteRepo.findByusuario(usuario.findBysDNI("32093905B"))).get(0), clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
+			Tarjeta tarCredito = new Tarjeta("3982", new TipoTarjeta(EnumTarjeta.Credito), cuentaService.findByCliente(clienteRepo.findByusuario(usuario.findBysDNI("32093905B"))).get(0), clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
 			tarService.Save(tarCredito);
 			Credito cred = new Credito(tarCredito, tipoCredRepo.findById(1).get());
 			credService.Save(cred);
 		}
 	
 		if(prepagoService.Count() < 1) {
-			Tarjeta tarPrepago = new Tarjeta(4719, clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
+			Tarjeta tarPrepago = new Tarjeta("8201", clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
 			tarService.Save(tarPrepago);
 			Prepago prepago = new Prepago(tarPrepago);
 			prepagoService.Save(prepago);
