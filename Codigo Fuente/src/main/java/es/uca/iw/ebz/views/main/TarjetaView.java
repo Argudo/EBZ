@@ -7,6 +7,7 @@ import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
@@ -59,6 +60,9 @@ public class TarjetaView extends VerticalLayout{
 	
 	private HorizontalLayout hlInformacion = new HorizontalLayout();
 	private HorizontalLayout hlTarjetas = new HorizontalLayout();
+	
+	private Button btnCancelar = new Button("Cancelar tarjeta");
+		
 	
 	VerticalLayout vlDetalleTarjetas = new VerticalLayout();	
 		private H3 hNumTarjeta = new H3("Número de tarjeta");
@@ -207,7 +211,7 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
-			pNumTarjeta.setText(tarSelected.getNumTarjeta());
+			pNumTarjeta.setText(tarSelected.getNumTarjeta());	
 			pTipoTarjeta.setText(tarSelected.getStringTipoTarjeta());
 			pFechaCaducidad.setText(tarSelected.getFechaExpiracion().toString());
 			pPin.setText(String.valueOf(tarSelected.getiPin()));

@@ -133,23 +133,35 @@ public class NuevaTarjetaDialog extends Dialog {
 	private Boolean GenerarTarjeta() {
 		TipoTarjeta tp;
 		Cuenta cuenta;
-		Optional<Cuenta> optCuenta;
+		Optional<Cuenta> optCuenta = java.util.Optional.empty();
 		String sPin;
 		Boolean fallo = false;
+
 		//Precondiciones
 		if(rdGroup.getValue() == null) { rdGroup.getElement().setAttribute("invalid", ""); rdGroup.setErrorMessage("Debe elegir uno de los tipos de tarjeta disponible"); fallo = true; }
-		if(cmbCuentas.getValue() == null) {	cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("Debe seleccionar una cuenta"); fallo = true; }
-		optCuenta = _cuentaService.findByNumeroCuenta(cmbCuentas.getValue());
-		if(optCuenta.isEmpty() || aCuentas.indexOf(optCuenta.get()) != -1) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("No se encuentra la cuenta seleccionada"); fallo = true; }
+		tp = new TipoTarjeta(EnumTarjeta.toTipo(rdGroup.getValue()));
+		
+		if(tp.getTipo() != EnumTarjeta.Prepago) {
+			if(cmbCuentas.getValue() == null && tp.getTipo() != EnumTarjeta.Prepago) {	cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("Debe seleccionar una cuenta"); fallo = true; }
+			optCuenta = _cuentaService.findByNumeroCuenta(cmbCuentas.getValue());
+			if(optCuenta.isEmpty() || aCuentas.indexOf(optCuenta.get()) != -1) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("No se encuentra la cuenta seleccionada"); fallo = true; }
+			if(EnumTarjeta.toTipo(rdGroup.getValue()) == EnumTarjeta.Debito && !_tarService.findByCuenta(optCuenta.get()).isEmpty()) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("Ya existe una tarjeta de débito para la cuenta seleccionada"); fallo = true; } 			
+		}
+		
 		if(txtPin.getValue().length() != 4) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage("El pin debe tener 4 caracteres"); fallo = true; }
 		if(!txtPin.getValue().matches("\\d{4}")) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage("El pin debe ser númerico"); fallo = true; }
-		if(EnumTarjeta.toTipo(rdGroup.getValue()) == EnumTarjeta.Debito && !_tarService.findByCuenta(optCuenta.get()).isEmpty()) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("Ya existe una tarjeta de débito para la cuenta seleccionada"); fallo = true; } 
 		if(fallo) return false;
 		
-		cuenta = optCuenta.get();
-		tp = new TipoTarjeta(EnumTarjeta.toTipo(rdGroup.getValue()));
 		sPin = txtPin.getValue();
-		Tarjeta T = new Tarjeta(sPin, tp, cuenta, _cliente);
+		Tarjeta T;
+		if(tp.getTipo() == EnumTarjeta.Prepago)
+			T = new Tarjeta(sPin, _cliente);
+		else {
+			cuenta = optCuenta.get();
+			T = new Tarjeta(sPin, tp, cuenta, _cliente);
+		}
+		
+		System.out.println("Nueva tarjeta: " + T.getNumTarjeta());
 		
 		try {
 			_tarService.Save(T); 
