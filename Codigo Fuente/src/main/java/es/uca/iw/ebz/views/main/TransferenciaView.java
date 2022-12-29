@@ -195,9 +195,6 @@ public class TransferenciaView extends VerticalLayout {
                         CargarFormulario(true);
                         frmTransfer.add(new Paragraph("El importe es obligatorio."));
                     }else{*/
-                        if(cbAccount1.getValue() != cbAccount1.getEmptyValue() && ){
-
-                        }
                         Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.INTERNO);
                         _movimientoService.añadirMovimientoCuenta(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), cbAccount2.getValue(), nfBalance.getValue().floatValue());
                         CargarFormulario(true);
@@ -267,11 +264,6 @@ public class TransferenciaView extends VerticalLayout {
             nfBalance.clear();
             frmTransfer.add(rdGroup, cbAccount1, tfDestinyAccount, tfConcept, nfBalance, btnTrans);
         }
-    }
-
-
-    private boolean ComprobarCondiciones(){
-        return ()
     }
 
 
