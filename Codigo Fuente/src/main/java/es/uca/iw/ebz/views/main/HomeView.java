@@ -64,6 +64,8 @@ private ClienteService _clienteService;
 @Autowired
 private UsuarioService _usuarioService;
 
+@Autowired
+private AuthenticatedUser _authenticatedUser;
 
 //La cuenta que usaremos para ir actualizando el primer layout.
 static Cuenta acSelected = null;
@@ -73,9 +75,6 @@ private Cliente _cliente;
 //Atributos del layout de la cuenta.
 H2 _acNumber = new H2();
 H3 _acBalance = new H3();
-
-@Autowired
-private AuthenticatedUser _authenticatedUser;
 
 	public HomeView(MovimientoService _movimientoService, CuentaService _cuentaService,
 					TarjetaService _tarjetaService, ClienteService _clienteService,
@@ -124,7 +123,7 @@ private AuthenticatedUser _authenticatedUser;
 		//Account gallery section
 		List<Cuenta> accountList = _cuentaService.findByCliente(_cliente);
 
-		if(accountList.size() > 1){
+		if(accountList.size() >= 1){
 
 			VerticalLayout vlAccount = new VerticalLayout();
 			vlAccount.setWidth("70%");
