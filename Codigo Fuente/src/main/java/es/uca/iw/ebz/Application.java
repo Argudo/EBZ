@@ -1,7 +1,12 @@
 package es.uca.iw.ebz;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.server.VaadinSession;
 import es.uca.iw.ebz.usuario.admin.Admin;
 import es.uca.iw.ebz.usuario.admin.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +145,6 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			Prepago prepago = new Prepago(tarPrepago);
 			prepagoService.Save(prepago);
 		}
-		
 	}
 
 }

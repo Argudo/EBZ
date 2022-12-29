@@ -1,5 +1,7 @@
 package es.uca.iw.ebz.views.main.layout;
 
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -22,6 +24,9 @@ import com.vaadin.flow.router.RouterLink;
 import es.uca.iw.ebz.views.main.HomeView;
 import es.uca.iw.ebz.views.main.TarjetaView;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
+
+import java.util.List;
+import java.util.Locale;
 
 public class MainLayout extends AppLayout{
 	@Autowired
@@ -60,7 +65,18 @@ public class MainLayout extends AppLayout{
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();
+
+		Select<String> language = new Select<>();
+		language.setItems(List.of("es", "en"));
+		language.setValue(VaadinSession.getCurrent().getLocale().getLanguage());
+		language.setWidth("5%");
+		language.addValueChangeListener(e -> {
+			VaadinSession.getCurrent().setLocale(Locale.forLanguageTag((language.getValue())));
+			UI.getCurrent().getPage().reload();
+		});
         hlContent.add(logo,
+				language,
+				btnUser,
         		btnSignOut);
     	
     	hLayout.setId("header");
@@ -111,9 +127,9 @@ public class MainLayout extends AppLayout{
 	}
 
 	private Component[] createMenuItems() {
-	    return new Tab[] { createTab("Inicio", HomeView.class),
-	            createTab("Transferencias", HomeView.class),
-	            createTab("Tarjetas", TarjetaView.class)};
+	    return new Tab[] { createTab(getTranslation("client.home"), HomeView.class),
+	            createTab(getTranslation("client.transfer"), HomeView.class),
+	            createTab(getTranslation("dashboard.cars"), TarjetaView.class)};
 	}
 
 	private static Tab createTab(String text,

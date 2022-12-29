@@ -14,13 +14,18 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 import es.uca.iw.ebz.views.main.*;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Locale;
 
 
 public class AdminLayout  extends AppLayout{
@@ -56,7 +61,18 @@ public class AdminLayout  extends AppLayout{
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();
+
+        Select<String> language = new Select<>();
+        language.setItems(List.of("es", "en"));
+        language.setValue(VaadinSession.getCurrent().getLocale().getLanguage());
+        language.setWidth("5%");
+        language.addValueChangeListener(e -> {
+            VaadinSession.getCurrent().setLocale(Locale.forLanguageTag((language.getValue())));
+            UI.getCurrent().getPage().reload();
+        });
+
         hlContent.add(logo,
+                language,
                 btnUser,
                 btnSignOut);
 
@@ -109,11 +125,11 @@ public class AdminLayout  extends AppLayout{
 
     private Component[] createMenuItems() {
         return new Tab[] { 
-    		createTab("Usuario", DashBoardUserView.class, new Icon(VaadinIcon.USER_CARD)),
-            createTab("Cuentas", DashBoardCuentasView.class, new Icon(VaadinIcon.MONEY_EXCHANGE)),
-            createTab("Noticias", DashBoardNoticasView.class, new Icon(VaadinIcon.NEWSPAPER)),
-            createTab("Consultas", DashBoardConsultasView.class, new Icon(VaadinIcon.ENVELOPE_O)),
-    		createTab("Tarjetas", DashBoardTarjetasView.class, new Icon(VaadinIcon.CREDIT_CARD))
+    		createTab(getTranslation("dashboard.user"), DashBoardUserView.class, new Icon(VaadinIcon.USER_CARD)),
+            createTab(getTranslation("dashboard.account"), DashBoardCuentasView.class, new Icon(VaadinIcon.MONEY_EXCHANGE)),
+            createTab(getTranslation("dashboard.news"), DashBoardNoticasView.class, new Icon(VaadinIcon.NEWSPAPER)),
+            createTab(getTranslation("dashboard.tickets"), DashBoardConsultasView.class, new Icon(VaadinIcon.ENVELOPE_O)),
+    		createTab(getTranslation("dashboard.cards"), DashBoardTarjetasView.class, new Icon(VaadinIcon.CREDIT_CARD))
         };
     }
 
