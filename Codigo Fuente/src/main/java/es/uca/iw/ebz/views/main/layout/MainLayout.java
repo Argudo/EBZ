@@ -27,6 +27,8 @@ import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 
 import java.util.List;
 import java.util.Locale;
+import es.uca.iw.ebz.views.main.TransferenciaView;
+
 
 public class MainLayout extends AppLayout{
 	@Autowired
@@ -127,9 +129,9 @@ public class MainLayout extends AppLayout{
 	}
 
 	private Component[] createMenuItems() {
-	    return new Tab[] { createTab(getTranslation("client.home"), HomeView.class),
-	            createTab(getTranslation("client.transfer"), HomeView.class),
-	            createTab(getTranslation("dashboard.cars"), TarjetaView.class)};
+	    return new Tab[] { createTab("Inicio", HomeView.class),
+	            createTab("Transferencias", TransferenciaView.class),
+	            createTab("Tarjetas", TarjetaView.class)};
 	}
 
 	private static Tab createTab(String text,
