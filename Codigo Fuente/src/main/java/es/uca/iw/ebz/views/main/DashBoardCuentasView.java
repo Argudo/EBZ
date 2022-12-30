@@ -48,20 +48,20 @@ public class DashBoardCuentasView extends HorizontalLayout {
     private VerticalLayout vlInfo = new VerticalLayout();
     private VerticalLayout vlSeparator = new VerticalLayout();
 
-    private H1 hGrid = new H1("| Cuentas");
+    private H1 hGrid = new H1(getTranslation("account.home"));
 
-    private H2 hInfo = new H2("Buscador");
+    private H2 hInfo = new H2(getTranslation("account.search"));
     private HorizontalLayout hlBuscador = new HorizontalLayout();
 
-    private ComboBox<String> cbUsuario = new ComboBox<>("Cuentas");
+    private ComboBox<String> cbUsuario = new ComboBox<>(getTranslation("account.home"));
     private Button btnBuscar = new Button();
-    private Paragraph pDNI = new Paragraph("NúmeroCuenta");
+    private Paragraph pDNI = new Paragraph(getTranslation("account.number"));
     private HorizontalLayout hlAviso = new HorizontalLayout();
     private Grid<Cuenta> gridCuenta = new Grid<>(Cuenta.class, false);
 
-    private Button btnAdd = new Button("+ Añadir cuenta");
+    private Button btnAdd = new Button(getTranslation("account.add"));
 
-    private Button btnDelete = new Button("Eliminar cuenta");
+    private Button btnDelete = new Button(getTranslation("account.delete"));
 
     private VerticalLayout hlAdd = new VerticalLayout();
 
@@ -132,13 +132,13 @@ public class DashBoardCuentasView extends HorizontalLayout {
         btnAdd.addClickListener(e -> {
             hlAdd.removeAll();
             add(hlAdd);
-            Button btnCreateCuenta = new Button("Crear Cuenta");
+            Button btnCreateCuenta = new Button(getTranslation("account.create"));
             List<String> DNIs = new ArrayList<>();
             for (Cliente cliente : clienteService.findAll()) {
                 DNIs.add(cliente.getUsuario().getDNI());
             }
             cbUsuario.setItems(DNIs);
-            hlAdd.add(new Text("Introduzca el DNI del usuario para crear una cuenta"),
+            hlAdd.add(new Text(getTranslation("account.dni")),
                     cbUsuario,
                     btnCreateCuenta);
             add(hlAdd);
@@ -151,7 +151,7 @@ public class DashBoardCuentasView extends HorizontalLayout {
                     hlAviso.getStyle().set("font-size", "14px");
                     hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
                     hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Cuenta creada con éxito"));
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.success")));
                     hlAdd.add(hlAviso);
                     add(hlAdd);
                 }
@@ -159,7 +159,7 @@ public class DashBoardCuentasView extends HorizontalLayout {
                     hlAviso.getStyle().set("font-size", "14px");
                     hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
                     hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha podido crear la cuenta"));
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.error")));
                     hlAdd.add(hlAviso);
                     add(hlAdd);
                 }
@@ -173,7 +173,7 @@ public class DashBoardCuentasView extends HorizontalLayout {
                 hlAviso.getStyle().set("font-size", "14px");
                 hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
                 hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha seleccionado ninguna cuenta"));
+                hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.accountError")));
                 vlInfo.add(hlAviso);
                 add(vlInfo);
             }
@@ -182,13 +182,13 @@ public class DashBoardCuentasView extends HorizontalLayout {
                     hlAviso.getStyle().set("font-size", "14px");
                     hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
                     hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Cuenta eliminada con éxito"));
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.deleteSuccess")));
                     add(hlAviso);
                 }else{
                     hlAviso.getStyle().set("font-size", "14px");
                     hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
                     hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Error: No se ha podido eliminar la cuenta"));
+                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.deleteError")));
                     add(hlAviso);
                 }
             }
