@@ -1,16 +1,16 @@
 package es.uca.iw.ebz.views.main.layout;
 
-import javax.swing.text.html.ListView;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.server.VaadinSession;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -20,10 +20,15 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
+
 import es.uca.iw.ebz.views.main.HomeView;
-import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.TarjetaView;
-import org.springframework.beans.factory.annotation.Autowired;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
+
+import java.util.List;
+import java.util.Locale;
+import es.uca.iw.ebz.views.main.TransferenciaView;
+
 
 public class MainLayout extends AppLayout{
 	@Autowired
@@ -43,10 +48,16 @@ public class MainLayout extends AppLayout{
     	HorizontalLayout hlContent = new HorizontalLayout();
     	
     	Button btnSignOut = new Button();
+		Button btnUser = new Button();
+		Icon iconUser = new Icon(VaadinIcon.USER);
+		btnUser.getElement().appendChild(iconUser.getElement());
     	Icon icon = new Icon(VaadinIcon.SIGN_OUT);
     	btnSignOut.getElement().appendChild(icon.getElement());
 		btnSignOut.addClickListener(e -> {
 			_authenticatedUser.logout();
+		});
+		btnUser.addClickListener(e -> {
+			UI.getCurrent().navigate("perfil");
 		});
         H1 logo = new H1("EBZ");
         logo.addClassNames("text-l", "m-m");
@@ -56,7 +67,18 @@ public class MainLayout extends AppLayout{
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();
+
+		Select<String> language = new Select<>();
+		language.setItems(List.of("es", "en"));
+		language.setValue(VaadinSession.getCurrent().getLocale().getLanguage());
+		language.setWidth("5%");
+		language.addValueChangeListener(e -> {
+			VaadinSession.getCurrent().setLocale(Locale.forLanguageTag((language.getValue())));
+			UI.getCurrent().getPage().reload();
+		});
         hlContent.add(logo,
+				language,
+				btnUser,
         		btnSignOut);
     	
     	hLayout.setId("header");
@@ -108,7 +130,7 @@ public class MainLayout extends AppLayout{
 
 	private Component[] createMenuItems() {
 	    return new Tab[] { createTab("Inicio", HomeView.class),
-	            createTab("Transferencias", HomeView.class),
+	            createTab("Transferencias", TransferenciaView.class),
 	            createTab("Tarjetas", TarjetaView.class)};
 	}
 

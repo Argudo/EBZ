@@ -41,7 +41,7 @@ public class Tarjeta {
 	
 	@Column(name = "PIN")
 	@NotNull
-	private int _iPin;
+	private String _sPin;
 	
 	@Column(name = "fechaExpiracion")
 	@NotNull
@@ -80,15 +80,15 @@ public class Tarjeta {
 	public Tarjeta() {}
 	
 	//Constructor prepago
-	public Tarjeta(int iPin, Cliente cliente) {
-		this(iPin, new TipoTarjeta(EnumTarjeta.Prepago), null,  cliente);
+	public Tarjeta(String sPin, Cliente cliente) {
+		this(sPin, new TipoTarjeta(EnumTarjeta.Prepago), null,  cliente);
 	}
 
 
 	//Constructor Débito y Credito
-	public Tarjeta(int iPin, TipoTarjeta tipoTarjeta, Cuenta cuenta, Cliente cliente) {
+	public Tarjeta(String sPin, TipoTarjeta tipoTarjeta, Cuenta cuenta, Cliente cliente) {
 		if(tipoTarjeta.getTipo() != EnumTarjeta.Prepago && cuenta == null) throw new IllegalArgumentException("La cuenta no puede ser nula para los tipos débito y crédito");
-		_iPin = iPin;
+		_sPin = sPin;
 		_tipoTarjeta = tipoTarjeta;
 		_cuenta = cuenta;
 		_clienteTitular = cliente;
@@ -122,8 +122,7 @@ public class Tarjeta {
 	
 	private String GenerarCVC() { return GenerarCVC(null); }
 	private String GenerarCVC(Integer valor) {
-		//int iValor = valor == null? new Random().nextInt(1, 999) : valor;
-		int iValor = 2;
+		int iValor = valor == null? new Random().nextInt(998)+1 : valor;
 		String sCVC = String.valueOf(iValor);
 		while(sCVC.length() < 3) {
 			sCVC = "0".concat(sCVC);
@@ -198,20 +197,20 @@ public class Tarjeta {
         return vlTarjeta;
 	}
 
-	public String getStringTipoTarjeta() throws Exception {
+	public String getStringTipoTarjeta() {
 		switch(_tipoTarjeta.getTipo()) {
 		case Debito: return "Débito";
 		case Prepago: return "Prepago";
 		case Credito: return "Crédito";
-		default: throw new Exception("El tipo de la tarjeta no esta entre los esperados");
+		default: return "No encontrado";
 		}
 	}
 
 	public UUID getId() { return _iId; }
 	public String getNumTarjeta() { return _sNumTarjeta; }
 	public void setNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
-	public int getiPin() { return _iPin; }
-	public void setiPin(int iPin) { this._iPin = iPin; }
+	public String getiPin() { return _sPin; }
+	public void setiPin(String iPin) { _sPin = iPin; }
 	public String getFechaExpiracion() { return (String.valueOf(_fechaExpiracion.getMonth()) + "/" + String.valueOf(_fechaExpiracion.getYear()-100)); }
 	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
 	public Date getFechaCreacion() { return _fechaCreacion; }

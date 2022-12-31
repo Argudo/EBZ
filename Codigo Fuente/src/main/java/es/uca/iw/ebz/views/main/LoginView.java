@@ -1,15 +1,21 @@
 package es.uca.iw.ebz.views.main;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
+
+import java.util.List;
+import java.util.Locale;
 
 @AnonymousAllowed
 @PageTitle("Login")
@@ -39,6 +45,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
         setForgotPasswordButtonVisible(false);
         setOpened(true);
+
     }
 
     @Override
