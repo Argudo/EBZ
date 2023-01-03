@@ -2,6 +2,7 @@ package es.uca.iw.ebz.consulta;
 
 //¿Faltan añadir los mensajes? Sí
 
+import es.uca.iw.ebz.mensaje.Mensaje;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 
@@ -37,30 +38,26 @@ public class Consulta {
     @ManyToOne
     private TipoEstado _tipoEstado;
 
-    @ManyToOne()
+    @ManyToOne
     private Usuario _cliente;
 
-    @ManyToOne()
-    private Usuario _admin;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "mensajes")
+    private List<Mensaje> _mensajes;
+
 
     //Añadir lista de mensajes (composición)
 
     public Consulta() {}
 
-    public Consulta(String titulo, String descripcion, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente, Usuario admin){
+    public Consulta(String titulo, String descripcion, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente){
 
         _titulo = titulo;
         _descripcion = descripcion;
         _fechaCreacion = fechaCreacion;
         _tipoEstado = tipoEstado;
         _cliente = cliente;
-        _admin = admin;
 
-    }
-
-    public static List<Consulta> sortByFechaASC(List<Consulta> consultas){
-        consultas.sort((c1, c2) -> c1.getFechaCreacion().compareTo(c2.getFechaCreacion()));
-        return consultas;
     }
 
     //Getters
@@ -78,7 +75,7 @@ public class Consulta {
 
     public Usuario getCliente() { return _cliente; }
 
-    public Usuario getAdmin() { return _admin; }
+    public List<Mensaje> getMensajes() { return _mensajes; }
 
     //Setters
 
@@ -91,6 +88,8 @@ public class Consulta {
     public void setDescripcion(String descripcion) { _descripcion = descripcion; }
 
     public void set_tipoEstado(TipoEstado tipoEstado) { _tipoEstado = tipoEstado; }
+
+    public void setMensajes(Mensaje mensaje) { _mensajes.add(mensaje); }
 
 
 

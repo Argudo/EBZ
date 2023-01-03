@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 
-@PageTitle("Transferencia")
+@PageTitle("Transferencias")
 @Route(value = "transferencia", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class TransferenciaView extends VerticalLayout {
@@ -77,6 +77,14 @@ public class TransferenciaView extends VerticalLayout {
         this._authenticatedUser = _authenticatedUser;
         //End services initialization section
 
+        //Main layout section
+        setMargin(false);
+        setPadding(false);
+        setSpacing(true);
+        setWidthFull();
+        setAlignItems(FlexComponent.Alignment.CENTER);
+        //End main layout section
+
         //Title section
         VerticalLayout vlTitle = new VerticalLayout();
         vlTitle.setWidth("70%");
@@ -100,12 +108,6 @@ public class TransferenciaView extends VerticalLayout {
 
         //Client asignation
         _cliente = _clienteService.findByUsuario(_authenticatedUser.get().get());
-
-        setMargin(false);
-        setPadding(false);
-        setSpacing(true);
-        setWidthFull();
-        setAlignItems(FlexComponent.Alignment.CENTER);
 
         //Transference form section
         VerticalLayout vlForm = new VerticalLayout();
