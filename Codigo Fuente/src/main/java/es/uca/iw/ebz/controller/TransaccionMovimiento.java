@@ -9,13 +9,13 @@ public class TransaccionMovimiento {
 
     private String iban;
 
-    private Float value;
+    private String value;
 
     private String issuer;
 
     private String id;
 
-    public TransaccionMovimiento(String transactionStatus, String transactionType, String concept, String iban, Float value, String issuer, String id) {
+    public TransaccionMovimiento(String transactionStatus, String transactionType, String concept, String iban, String value, String issuer, String id) {
         this.transactionStatus = transactionStatus;
         this.transactionType = transactionType;
         this.concept = concept;
@@ -43,7 +43,7 @@ public class TransaccionMovimiento {
         this.iban = iban;
     }
 
-    public void setValue(Float value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -72,7 +72,7 @@ public class TransaccionMovimiento {
         return iban;
     }
 
-    public Float getValue() {
+    public String getValue() {
         return value;
     }
 
