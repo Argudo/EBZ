@@ -40,7 +40,6 @@ public class ConsultaView extends VerticalLayout {
         //Client asignation
         _cliente = _clienteService.findByUsuario(_authenticatedUser.get().get());
 
-
     }
 
 }
