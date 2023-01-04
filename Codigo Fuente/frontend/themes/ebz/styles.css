@@ -1,5 +1,9 @@
 @import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
 
+.dark-bg{
+    background-color: #252525;
+}
+
 .host{
     margin: 0;
 }

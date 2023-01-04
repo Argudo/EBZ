@@ -8,10 +8,12 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -20,6 +22,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
@@ -59,12 +62,14 @@ public class TarjetaView extends VerticalLayout{
 	private List<TarjetaComponent> aTarjetasComponent = new ArrayList<TarjetaComponent>();
 	
 	private HorizontalLayout hlInformacion = new HorizontalLayout();
-	private HorizontalLayout hlTarjetas = new HorizontalLayout();
-	
-	private Button btnCancelar = new Button("Cancelar tarjeta");
 		
-	
-	VerticalLayout vlDetalleTarjetas = new VerticalLayout();	
+	private HorizontalLayout hlDetalleTarjetas = new HorizontalLayout();
+		private VerticalLayout vlAccionTarjetas = new VerticalLayout();
+			private Button btnRecarga = new Button("Recargar", VaadinIcon.MONEY_DEPOSIT.create());
+			private Button btnCancelarTarjeta = new Button("Eliminar", LumoIcon.CROSS.create());
+		private HorizontalLayout hlTarjetas = new HorizontalLayout();
+		
+	private VerticalLayout vlDetalleTarjetas = new VerticalLayout();	
 		private H3 hNumTarjeta = new H3("Número de tarjeta");
 		private H3 hTipoTarjeta = new H3("Tipo de tarjeta");
 		private H3 hSaldo = new H3("Saldo");
@@ -107,14 +112,14 @@ public class TarjetaView extends VerticalLayout{
 		
 		Scroller scrllTarjetas = new Scroller();
 		scrllTarjetas.setScrollDirection(ScrollDirection.HORIZONTAL);
-		scrllTarjetas.setWidth("67vw");
+		scrllTarjetas.setWidth("100%");
 		scrllTarjetas.setHeight("100%");
 		
 		VerticalLayout vlTarjetas = new VerticalLayout();
-		vlTarjetas.setWidth("70vw");
-		vlTarjetas.setPadding(true);
-		vlTarjetas.setMargin(true);
-		vlTarjetas.setClassName("box");
+		hlDetalleTarjetas.setWidth("70vw");
+		hlDetalleTarjetas.setPadding(true);
+		hlDetalleTarjetas.setMargin(true);
+		hlDetalleTarjetas.setClassName("box");
 		
 		vlDetalleTarjetas.setWidth("50%");
 		vlDetalleTarjetas.setPadding(true);
@@ -204,9 +209,25 @@ public class TarjetaView extends VerticalLayout{
 			ActualizarTarjetas(e.getTarjeta());
 		});
 		
-		scrllTarjetas.setContent(hlTarjetas);		
+		VerticalLayout vlSeparator = new VerticalLayout();
+		vlSeparator.setWidth("2px");
+		vlSeparator.getStyle().set("background-color", "var(--lumo-contrast-10pct)");
+		vlSeparator.getStyle().set("padding", "0");
+		
+		scrllTarjetas.setContent(hlTarjetas);
+		vlTarjetas.setWidth("90%");
+		btnRecarga.setHeightFull();
+		btnRecarga.addThemeVariants(ButtonVariant.LUMO_LARGE);
+		btnCancelarTarjeta.addThemeVariants(ButtonVariant.LUMO_LARGE);
+		btnCancelarTarjeta.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
+		vlAccionTarjetas.setWidth("10%");
+		vlAccionTarjetas.setPadding(false);
+		vlAccionTarjetas.add(btnRecarga, btnCancelarTarjeta);
+		
 		vlTarjetas.add(hTarjeta, new Hr(), scrllTarjetas);
-		add(vlTarjetas, hlInformacion, dlogNT);
+		hlDetalleTarjetas.add(vlTarjetas, vlSeparator, vlAccionTarjetas);
+		add(hlDetalleTarjetas, hlInformacion, dlogNT);
 	}
 	
 	private void CargarDetalles() {
