@@ -10,11 +10,13 @@ import es.uca.iw.ebz.Movimiento.TipoMovimiento;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
 import es.uca.iw.ebz.views.main.DashBoardView;
+import org.atmosphere.cpr.Broadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import javax.annotation.security.PermitAll;
 import java.util.Date;
@@ -35,13 +37,13 @@ public class TransferenciaRestController {
 
 
     @PostMapping("/api/transactions")
-    public TransaccionMovimiento transferencia(@RequestBody final TransaccionMovimiento requestMov){
-       /*Movimiento movimiento = new Movimiento(new Date(), requestMov.getConcept(), TipoMovimiento.RECIBO);
+    public TransaccionMovimiento transferencia(@RequestBody TransaccionMovimiento requestMov){
+       Movimiento movimiento = new Movimiento(new Date(), requestMov.getConcept(), TipoMovimiento.RECIBO);
         Optional<Cuenta> cuenta = _cuentaService.findByNumeroCuenta(requestMov.getIban());
         if(cuenta.isPresent()){
             System.out.println("Cuenta encontrada");
             if(requestMov.getTransactionType().equals("DEPOSIT")){
-                if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), Integer.parseInt(requestMov.getValue())) == null){
+                if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), requestMov.getValue()) == null){
                     requestMov.setTransactionStatus("REJECTED");
                 }
                 else{
@@ -49,7 +51,7 @@ public class TransferenciaRestController {
                     requestMov.setId(UUID.randomUUID().toString());
                 }
             }else{
-                if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), -Integer.parseInt(requestMov.getValue())) == null){ //lo ponemos en negativo
+                if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), -requestMov.getValue()) == null){ //lo ponemos en negativo
                     requestMov.setTransactionStatus("REJECTED");
                 }
                 else{
@@ -60,15 +62,14 @@ public class TransferenciaRestController {
 
         }else {
             requestMov.setTransactionStatus("REJECTED");
+            requestMov.setId(UUID.randomUUID().toString());
         }
-        _movimientoService.añadirRecibo(movimiento, cuenta.get(), Integer.parseInt(requestMov.getValue()));*/
-        requestMov.setTransactionStatus("ACCEPTED");
-        requestMov.setId(UUID.randomUUID().toString());
+        _movimientoService.añadirRecibo(movimiento, cuenta.get(), requestMov.getValue());
         return requestMov;
     }
 
     @PostMapping("/api/payments")
-    public TransaccionTarjeta compraTarjeta(@RequestBody final TransaccionTarjeta requestTarjeta) {
+    public TransaccionTarjeta compraTarjeta(@RequestBody TransaccionTarjeta requestTarjeta) {
         Movimiento movimiento = new Movimiento(new Date(), "Compra " + requestTarjeta.getType() + "en " + requestTarjeta.getShop(), TipoMovimiento.COMPRATARJETA);
         Tarjeta tarjeta = _tarjetaService.findByNumCuenta(requestTarjeta.getCardNumber());
         if (tarjeta != null) {
