@@ -43,14 +43,14 @@ public class TransferenciaRestController {
         if(cuenta.isPresent()){
             System.out.println("Cuenta encontrada");
             if(requestMov.getTransactionType().equals("DEPOSIT")){
-                if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), requestMov.getValue()) == null){
+               if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), requestMov.getValue()) == null){
                     requestMov.setTransactionStatus("REJECTED");
                 }
                 else{
                     requestMov.setTransactionStatus("ACCEPTED");
                     requestMov.setId(UUID.randomUUID().toString());
                 }
-            }else{
+            }else if (requestMov.getTransactionType().equals("WITHDRAWAL")){
                 if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), -requestMov.getValue()) == null){ //lo ponemos en negativo
                     requestMov.setTransactionStatus("REJECTED");
                 }
@@ -64,7 +64,6 @@ public class TransferenciaRestController {
             requestMov.setTransactionStatus("REJECTED");
             requestMov.setId(UUID.randomUUID().toString());
         }
-        _movimientoService.añadirRecibo(movimiento, cuenta.get(), requestMov.getValue());
         return requestMov;
     }
 
@@ -73,7 +72,8 @@ public class TransferenciaRestController {
         Movimiento movimiento = new Movimiento(new Date(), "Compra " + requestTarjeta.getType() + "en " + requestTarjeta.getShop(), TipoMovimiento.COMPRATARJETA);
         Tarjeta tarjeta = _tarjetaService.findByNumCuenta(requestTarjeta.getCardNumber());
         if (tarjeta != null) {
-            if (_movimientoService.compraTarjeta(movimiento, tarjeta, requestTarjeta.getShop(), requestTarjeta.getValue()) == null) {
+            if (_movimientoService.compraTarjeta(movimiento, tarjeta, requestTarjeta.getShop(), requestTarjeta.getValue(),
+                    requestTarjeta.getExpirationMonth(), requestTarjeta.getExpirationYear(), requestTarjeta.getCsc()) == null) {
                 requestTarjeta.setPaymentStatus("REJECTED");
             } else {
                 requestTarjeta.setPaymentStatus("ACCEPTED");

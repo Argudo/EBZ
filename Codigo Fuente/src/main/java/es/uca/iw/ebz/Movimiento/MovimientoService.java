@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -113,7 +114,11 @@ public class MovimientoService {
         return mov;
     }
 
-    public Movimiento compraTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte) {
+    public Movimiento compraTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte,
+                                    int month, int year, String cvv) {
+        String expiracion = month + "/" + year;
+        if(!expiracion.equals(tarjeta.getFechaExpiracion())) new Exception("Fecha de expiración incorrecta");
+        if(!cvv.equals(tarjeta.getCVC())) new Exception("CVV incorrecto");
         switch(tarjeta.getTipoTarjeta()) {
             case Prepago:
                 Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
@@ -143,7 +148,7 @@ public class MovimientoService {
     public Movimiento añadirRecibo(Movimiento movimiento, Cuenta cuenta, float fimporte) {
         if(cuenta.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
         cuenta.setSaldo(cuenta.getSaldo().add(BigDecimal.valueOf(fimporte)));
-
+        _cuentaService.save(cuenta);
         Movimiento mov = _movimientoRepository.save(movimiento);
         Recibo recibo = new Recibo();
         recibo.setCuenta(cuenta);
