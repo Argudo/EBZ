@@ -43,7 +43,7 @@ import es.uca.iw.ebz.views.main.layout.MainLayout;
 
 
 
-@PageTitle("")
+@PageTitle("EBZ")
 @Route(value = "", layout = MainLayout.class)
 @RouteAlias(value = "home", layout = MainLayout.class)
 @PermitAll
@@ -295,7 +295,7 @@ H3 _acBalance = new H3();
 		vlTarjeta.setMargin(true);
 		vlTarjeta.setClassName("box");
 
-		H1 tarjetaTitle = new H1("Tarjetas");
+		H1 tarjetaTitle = new H1("| Tarjetas");
 		tarjetaTitle.setClassName("title");
 
 		if(aTarjetas.size() > 0){
