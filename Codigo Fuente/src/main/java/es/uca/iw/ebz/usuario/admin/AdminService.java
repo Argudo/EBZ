@@ -6,6 +6,7 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +38,10 @@ public class AdminService {
     }
 
     public List<Admin> findAll (){
-        return repoAdmin.findAll();
+        List<Admin> noEli = new ArrayList<Admin>();
+        for(Admin adm: repoAdmin.findAll())
+            if(adm.getUsuario().getFechaEliminacion() == null) noEli.add(adm);
+        return noEli;
     }
 
     public Admin EliminarAdmin(Admin adm){
