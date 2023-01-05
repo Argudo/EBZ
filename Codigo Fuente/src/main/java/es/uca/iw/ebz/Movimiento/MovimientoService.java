@@ -67,10 +67,10 @@ public class MovimientoService {
         _creditoService = creditoService;
     }
 
-    public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) {
-        if(cuentaOrigen.getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
-        if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
-        if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) new Exception("Cuenta origen y destino iguales");
+    public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) throws Exception {
+        if(cuentaOrigen.getSaldo().floatValue() < fimporte) throw new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
+        if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) throw new Exception("Cuenta origen y destino iguales");
         cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(BigDecimal.valueOf(fimporte)));
 
         Movimiento mov = _movimientoRepository.save(movimiento);
@@ -104,6 +104,7 @@ public class MovimientoService {
         if(cuentaOrigen.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
         if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago) throw new Exception("Tarjeta no es de tipo prepago");
         cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(BigDecimal.valueOf(fimporte)));
+        _cuentaService.save(cuentaOrigen);
         //Añadimos la recarga de la tarjeta
         Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
         prepago.setSaldo(prepago.getSaldo() + fimporte);

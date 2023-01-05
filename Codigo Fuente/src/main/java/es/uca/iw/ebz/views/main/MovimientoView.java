@@ -9,11 +9,16 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import es.uca.iw.ebz.Movimiento.DatosMovimiento;
+import es.uca.iw.ebz.Movimiento.Movimiento;
+import es.uca.iw.ebz.Movimiento.MovimientoService;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.layout.MainLayout;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
 @PageTitle("Movimientos")
 @Component
@@ -35,12 +40,32 @@ public class MovimientoView extends VerticalLayout {
     public Paragraph pFecha = new Paragraph();
 
     private AuthenticatedUser authenticatedUser;
+    private MovimientoService movimientoService;
+    private ClienteService clienteService;
 
     private Grid<DatosMovimiento> gridMovimientos = new Grid<>(DatosMovimiento.class, false);
-    public MovimientoView (AuthenticatedUser user) {
+    public MovimientoView (AuthenticatedUser user, MovimientoService movimientoService, ClienteService clienteService) {
         authenticatedUser = user;
+        this.movimientoService = movimientoService;
+        this.clienteService = clienteService;
         H1 hMovimiento = new H1("Mis movimientos");
         hMovimiento.setClassName("title");
+
+        gridMovimientos.addColumn(DatosMovimiento::getOrigen).setWidth("33%");
+        gridMovimientos.addColumn(DatosMovimiento::getDestino).setWidth("33%");
+        gridMovimientos.addColumn(DatosMovimiento::getImporte).setWidth("33%");
+        gridMovimientos.addColumn(DatosMovimiento::getFecha).setWidth("33%");
+
+        //cliente
+        Cliente cliente = clienteService.findByUsuario(authenticatedUser.get().get());
+        //movimientos
+        List<Movimiento> movimientos = movimientoService.findByClienteByFechaASC(cliente);
+
+        for(Movimiento movimiento : movimientos) {
+            DatosMovimiento datosMovimiento = new DatosMovimiento();
+            datosMovimiento = movimientoService.datosMovimientoClass(movimiento);
+            gridMovimientos.setItems(datosMovimiento);
+        }
 
         vlDetalleMovimiento.setWidth("50%");
         vlDetalleMovimiento.setPadding(true);
