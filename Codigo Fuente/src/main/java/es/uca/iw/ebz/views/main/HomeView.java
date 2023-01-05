@@ -445,7 +445,10 @@ H3 _acBalance = new H3();
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t" + ac.getSaldo());
+		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
+		String sBalance = new String(formatImport.format(ac.getSaldo()));
+
+		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t" + sBalance);
 
 		_ae1.addClickListener(e -> {
 			acSelected = ac;
