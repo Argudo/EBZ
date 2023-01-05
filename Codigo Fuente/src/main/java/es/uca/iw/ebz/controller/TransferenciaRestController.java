@@ -37,32 +37,24 @@ public class TransferenciaRestController {
 
 
     @PostMapping("/api/transactions")
-    public TransaccionMovimiento transferencia(@RequestBody TransaccionMovimiento requestMov){
+    public TransaccionMovimiento transferencia(@RequestBody TransaccionMovimiento requestMov) {
        Movimiento movimiento = new Movimiento(new Date(), requestMov.getConcept(), TipoMovimiento.RECIBO);
         Optional<Cuenta> cuenta = _cuentaService.findByNumeroCuenta(requestMov.getIban());
         if(cuenta.isPresent()){
-            System.out.println("Cuenta encontrada");
-            if(requestMov.getTransactionType().equals("DEPOSIT")){
-               if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), requestMov.getValue()) == null){
-                    requestMov.setTransactionStatus("REJECTED");
-                }
-                else{
-                    requestMov.setTransactionStatus("ACCEPTED");
-                    requestMov.setId(UUID.randomUUID().toString());
-                }
-            }else if (requestMov.getTransactionType().equals("WITHDRAWAL")){
-                if(_movimientoService.añadirRecibo(movimiento, cuenta.get(), -requestMov.getValue()) == null){ //lo ponemos en negativo
-                    requestMov.setTransactionStatus("REJECTED");
-                }
-                else{
-                    requestMov.setTransactionStatus("ACCEPTED");
-                    requestMov.setId(UUID.randomUUID().toString());
-                }
+
+            if (requestMov.getTransactionType().equals("WITHDRAWAL")){
+                requestMov.setValue(-requestMov.getValue());
+            }
+            try{
+                _movimientoService.añadirRecibo(movimiento, cuenta.get(), requestMov.getValue());
+                requestMov.setTransactionStatus("ACCEPTED");
+                requestMov.setId(UUID.randomUUID().toString());
+            } catch (Exception e) {
+                requestMov.setTransactionStatus("REJECTED");
             }
 
         }else {
             requestMov.setTransactionStatus("REJECTED");
-            requestMov.setId(UUID.randomUUID().toString());
         }
         return requestMov;
     }
@@ -72,13 +64,15 @@ public class TransferenciaRestController {
         Movimiento movimiento = new Movimiento(new Date(), "Compra " + requestTarjeta.getType() + "en " + requestTarjeta.getShop(), TipoMovimiento.COMPRATARJETA);
         Tarjeta tarjeta = _tarjetaService.findByNumCuenta(requestTarjeta.getCardNumber());
         if (tarjeta != null) {
-            if (_movimientoService.compraTarjeta(movimiento, tarjeta, requestTarjeta.getShop(), requestTarjeta.getValue(),
-                    requestTarjeta.getExpirationMonth(), requestTarjeta.getExpirationYear(), requestTarjeta.getCsc()) == null) {
-                requestTarjeta.setPaymentStatus("REJECTED");
-            } else {
+            try{
+                _movimientoService.compraTarjeta(movimiento, tarjeta, requestTarjeta.getShop(), requestTarjeta.getValue(),
+                        requestTarjeta.getExpirationMonth(), requestTarjeta.getExpirationYear(), requestTarjeta.getCsc());
                 requestTarjeta.setPaymentStatus("ACCEPTED");
                 requestTarjeta.setId(UUID.randomUUID().toString());
-                requestTarjeta.setSecurityToken(999);
+                requestTarjeta.setSecurityToken(000);
+            } catch (Exception e) {
+                //requestTarjeta.setPaymentStatus("REJECTED" + e.getMessage() + tarjeta.getFechaExpiracion());
+                requestTarjeta.setPaymentStatus("REJECTED");
             }
         }else{
             requestTarjeta.setPaymentStatus("REJECTED");
