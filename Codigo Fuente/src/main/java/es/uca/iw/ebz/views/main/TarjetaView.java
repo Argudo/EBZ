@@ -217,7 +217,9 @@ public class TarjetaView extends VerticalLayout{
 		scrllTarjetas.setContent(hlTarjetas);
 		vlTarjetas.setWidth("90%");
 		btnRecarga.setHeightFull();
+		btnRecarga.setEnabled(false);
 		btnRecarga.addThemeVariants(ButtonVariant.LUMO_LARGE);
+		btnCancelarTarjeta.setEnabled(false);
 		btnCancelarTarjeta.addThemeVariants(ButtonVariant.LUMO_LARGE);
 		btnCancelarTarjeta.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
@@ -232,6 +234,7 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
+			btnCancelarTarjeta.setEnabled(true);
 			pNumTarjeta.setText(tarSelected.getNumTarjeta());	
 			pTipoTarjeta.setText(tarSelected.getStringTipoTarjeta());
 			pFechaCaducidad.setText(tarSelected.getFechaExpiracion().toString());
@@ -244,6 +247,7 @@ public class TarjetaView extends VerticalLayout{
 				}
 			});
 			if(tarSelected.getTipoTarjeta() == EnumTarjeta.Prepago) {
+				btnRecarga.setEnabled(true);
 				hSaldo.setText("Saldo");
 				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()) + "€");
 			}
@@ -253,6 +257,8 @@ public class TarjetaView extends VerticalLayout{
 			}			
 		}
 		else {
+			btnRecarga.setEnabled(false);
+			btnCancelarTarjeta.setEnabled(false);
 			vlDetalleTarjetas.getChildren().forEach(child -> {
 				if(child.getClass() != H1.class && child.getClass() != Hr.class) {
 					child.setVisible(false);

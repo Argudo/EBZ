@@ -68,6 +68,14 @@
 	padding-left: 40px;
 }
 
+.nueva-tarjeta-mid{
+	background-image: url("/images/nueva_tarjeta.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 300px;
+	height: 200px;
+}
+
 .tarjeta-mid{
 	background-image: url("/images/tarjeta.png");
 	background-repeat: no-repeat;
