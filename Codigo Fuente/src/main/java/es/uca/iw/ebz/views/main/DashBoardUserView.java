@@ -143,6 +143,7 @@ public class DashBoardUserView extends VerticalLayout {
         
         Button btnDeleteUser = new Button("Eliminar");
         Button btnModificar = new Button("Modificar");
+        btnDeleteUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         btnDeleteUser.addThemeVariants(ButtonVariant.LUMO_ERROR);
         btnModificar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         hlAccionesModificarUsuario.add(btnDeleteUser, btnModificar);

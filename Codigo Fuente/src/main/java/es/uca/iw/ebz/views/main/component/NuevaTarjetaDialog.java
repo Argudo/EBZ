@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -32,6 +30,8 @@ import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
 import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
+import es.uca.iw.ebz.tarjeta.prepago.Prepago;
+import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 
@@ -50,13 +50,15 @@ public class NuevaTarjetaDialog extends Dialog {
 	private TipoCrediticioRepository _tipoCredRepo;
 	private ClienteService _clienteService;
 	private TarjetaService _tarService;
+	private PrepagoService _prepagoService;
 	
-	public NuevaTarjetaDialog(CuentaService cuentaService, ClienteService clienteService, TarjetaService tarService, TipoCrediticioRepository tipoCredRepo) {
+	public NuevaTarjetaDialog(CuentaService cuentaService, ClienteService clienteService, TarjetaService tarService, TipoCrediticioRepository tipoCredRepo, PrepagoService prepagoService) {
 		
 		_cuentaService = cuentaService;
 		_tipoCredRepo = tipoCredRepo;
 		_clienteService = clienteService;
 		_tarService = tarService;
+		_prepagoService = prepagoService;
 
 		setWidth("30vw");
 		setHeaderTitle("Solicitar nueva tarjeta");
@@ -78,7 +80,7 @@ public class NuevaTarjetaDialog extends Dialog {
 		txtPin.setMaxLength(4);
 		txtPin.setMinLength(4);
 		txtPin.setPattern("[0-9]{4}");
-		txtFechaExp.setValue(Integer.toString(new Date().getMonth()) + "/" + Integer.toString(new Date().getYear()+4).substring(1,3));
+		txtFechaExp.setValue(String.valueOf(new Date().getMonth()+1) + "/" + Integer.toString(new Date().getYear()+4).substring(1,3));
 		txtFechaExp.setReadOnly(true);
 		hlInfo.add(txtPin, txtFechaExp);
 	
@@ -154,17 +156,19 @@ public class NuevaTarjetaDialog extends Dialog {
 		
 		sPin = txtPin.getValue();
 		Tarjeta T;
-		if(tp.getTipo() == EnumTarjeta.Prepago)
-			T = new Tarjeta(sPin, _cliente);
+		Prepago P;
+		if(tp.getTipo() == EnumTarjeta.Prepago)	 T = new Tarjeta(sPin, _cliente);
 		else {
 			cuenta = optCuenta.get();
 			T = new Tarjeta(sPin, tp, cuenta, _cliente);
 		}
 		
-		System.out.println("Nueva tarjeta: " + T.getNumTarjeta());
-		
 		try {
 			_tarService.Save(T); 
+			if(tp.getTipo() == EnumTarjeta.Prepago) {
+				P = new Prepago(T);				
+				_prepagoService.Save(P);
+			} 
 			fireEvent(new UpdateEvent(this, false, T));
 		}
 		catch(Exception e) {
