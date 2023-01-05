@@ -1,16 +1,23 @@
 package es.uca.iw.ebz.consulta;
 
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+
 //¿Faltan añadir los mensajes? Sí
 
 import es.uca.iw.ebz.mensaje.Mensaje;
 import es.uca.iw.ebz.usuario.Usuario;
-import es.uca.iw.ebz.usuario.cliente.Cliente;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 public class Consulta {

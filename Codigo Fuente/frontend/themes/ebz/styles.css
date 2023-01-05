@@ -1,5 +1,9 @@
 @import url('line-awesome/dist/line-awesome/css/line-awesome.min.css');
 
+.dark-bg{
+    background-color: #252525;
+}
+
 .host{
     margin: 0;
 }
@@ -67,6 +71,34 @@
 
 .padding40{
 	padding-left: 40px;
+}
+
+.button{
+    --lumo-button-size: var(--lumo-size-m);
+    min-width: calc(var(--lumo-button-size) * 2);
+    height: calc(var(--lumo-button-size) * 2);
+    padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius-m) / 2);
+    margin: var(--lumo-space-xs) 0;
+    box-sizing: border-box;
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    font-weight: 500;
+    color: var(--_lumo-button-color, var(--lumo-primary-text-color));
+    background-color: var(--_lumo-button-background-color, var(--lumo-contrast-5pct));
+    border-radius: var(--lumo-border-radius-m);
+    cursor: var(--lumo-clickable-cursor);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: var(--lumo-font-size-l)
+}
+
+.nueva-tarjeta-mid{
+	background-image: url("/images/nueva_tarjeta.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 300px;
+	height: 200px;
 }
 
 .tarjeta-mid{
