@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.views.main;
 
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
@@ -7,12 +8,14 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import es.uca.iw.ebz.Movimiento.DatosMovimiento;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.layout.MainLayout;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.RolesAllowed;
 
-@PageTitle("Movimiento")
+@PageTitle("Movimientos")
 @Component
 @Route(value = "movimiento", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
@@ -30,8 +33,13 @@ public class MovimientoView extends VerticalLayout {
     public Paragraph pImporte = new Paragraph();
     public Paragraph pConcepto = new Paragraph();
     public Paragraph pFecha = new Paragraph();
-    public MovimientoView () {
-        H1 hMovimiento = new H1("| Detalle del movimiento");
+
+    private AuthenticatedUser authenticatedUser;
+
+    private Grid<DatosMovimiento> gridMovimientos = new Grid<>(DatosMovimiento.class, false);
+    public MovimientoView (AuthenticatedUser user) {
+        authenticatedUser = user;
+        H1 hMovimiento = new H1("Mis movimientos");
         hMovimiento.setClassName("title");
 
         vlDetalleMovimiento.setWidth("50%");
