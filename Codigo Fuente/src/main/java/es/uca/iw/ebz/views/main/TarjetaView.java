@@ -122,7 +122,7 @@ public class TarjetaView extends VerticalLayout{
 	
 	TarjetaView(AuthenticatedUser _authUser, ClienteService _cliService, TarjetaService _tarService, CuentaService _cuentaService, PrepagoService _prepagoService, TipoCrediticioRepository _tipoCredRepo, MovimientoService _movService){
 		_cliente = _cliService.findByUsuario(_authUser.get().get());
-		dlogNT = new NuevaTarjetaDialog(_cuentaService, _cliService, _tarService, _tipoCredRepo);
+		dlogNT = new NuevaTarjetaDialog(_cuentaService, _cliService, _tarService, _tipoCredRepo, _prepagoService);
 		
 		dlogPin.setHeaderTitle("Cambiar PIN");
 		dlogPin.add(txtPinDlog);
@@ -329,7 +329,7 @@ public class TarjetaView extends VerticalLayout{
 		vlSeparator.getStyle().set("padding", "0");
 		
 		scrllTarjetas.setContent(hlTarjetas);
-		vlTarjetas.setWidth("85%");
+		vlTarjetas.setWidth("calc(100% - 250px)");
 		hlActivarTarjeta.add(tgbtnActivacionTarjeta, spanToggle);
 		hlActivarTarjeta.addClassName("button");
 		hlActivarTarjeta.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -343,7 +343,7 @@ public class TarjetaView extends VerticalLayout{
 		btnCambiarPin.setWidthFull();
 		btnCambiarPin.addThemeVariants(ButtonVariant.LUMO_LARGE);
 
-		vlAccionTarjetas.setWidth("15%");
+		vlAccionTarjetas.setWidth("250px");
 		vlAccionTarjetas.setPadding(false);
 		vlAccionTarjetas.add(btnRecarga, hlActivarTarjeta, btnCambiarPin, btnCancelarTarjeta);
 		

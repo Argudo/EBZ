@@ -114,9 +114,9 @@ H3 _acBalance = new H3();
 		HorizontalLayout hlMain = new HorizontalLayout();
 		hlMain.setAlignItems(Alignment.CENTER);
 		hlMain.setWidth("80vw");
-		hlMain.setHeight("30%");
+		hlMain.setHeight("450px");
 		hlMain.setPadding(false);
-		hlMain.setSpacing(true);
+		hlMain.setSpacing(false);
 		hlMain.setMargin(true);
 		hlMain.setClassName("box");
 		//End first layout section
@@ -135,7 +135,6 @@ H3 _acBalance = new H3();
 		if(accountList.size() >= 1){
 
 			VerticalLayout vlAccount = new VerticalLayout();
-			vlAccount.setWidth("70%");
 			vlAccount.setPadding(false);
 			vlAccount.setSpacing(false);
 			vlAccount.setMargin(false);
@@ -181,8 +180,8 @@ H3 _acBalance = new H3();
 
 			Scroller accountScroller = new Scroller();
 			accountScroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
-			accountScroller.setWidth("28%");
-			//accountScroller.setHeight("95%");
+			accountScroller.setWidth("min-width");
+			accountScroller.setHeightFull();
 
 
 			VerticalLayout vlAccountList = new VerticalLayout();
@@ -204,8 +203,14 @@ H3 _acBalance = new H3();
 			accountScroller.setContent(vlAccountList);
 			//End account list layout section
 
+			VerticalLayout vlSeparator = new VerticalLayout();
+			vlSeparator.setWidth("2px");
+			vlSeparator.setHeightFull();
+			vlSeparator.getStyle().set("background-color", "var(--lumo-contrast-10pct)");
+			vlSeparator.getStyle().set("padding", "0");
 			hlMain.add(
 					vlAccount,
+					vlSeparator,
 					accountScroller);
 
 		}else{
@@ -441,14 +446,19 @@ H3 _acBalance = new H3();
 
 	private Component CreateAccountListElement(Cuenta ac){
 		VerticalLayout vlMain = new VerticalLayout();
-		vlMain.setAlignItems(Alignment.CENTER);
+		vlMain.setClassName("button");
+		vlMain.getStyle().set("margin", "0");
+		vlMain.getStyle().set("border-radius", "0");
+		vlMain.getStyle().set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
+		vlMain.setAlignItems(Alignment.START);
 		vlMain.setSpacing(false);
-		vlMain.setWidth("min-width");
+		vlMain.setWidth("100%");
+		vlMain.setHeightFull();
 
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 		String sBalance = new String(formatImport.format(ac.getSaldo()));
 
-		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t" + sBalance);
+		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t| " + sBalance);
 
 		_ae1.addClickListener(e -> {
 			acSelected = ac;

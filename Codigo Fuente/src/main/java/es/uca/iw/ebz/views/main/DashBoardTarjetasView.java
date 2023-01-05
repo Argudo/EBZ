@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
@@ -12,7 +11,6 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -22,8 +20,6 @@ import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,11 +32,10 @@ import com.vaadin.flow.router.Route;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
-import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
-import es.uca.iw.ebz.tarjeta.TipoTarjeta;
 import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
+import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.component.NuevaTarjetaDialog;
@@ -80,11 +75,13 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private CuentaService _cuentaService;
 	@Autowired
 	private TipoCrediticioRepository _tipoCredRepo;
+	@Autowired
+	private PrepagoService _prepagoService;
 	
 	private NuevaTarjetaDialog dlogNT;
 	
 	public DashBoardTarjetasView(CuentaService _cuentaService, ClienteService _clienteService, TarjetaService _tarService, TipoCrediticioRepository _tipoCredRepo) {
-		dlogNT = new NuevaTarjetaDialog(_cuentaService, _clienteService, _tarService, _tipoCredRepo);
+		dlogNT = new NuevaTarjetaDialog(_cuentaService, _clienteService, _tarService, _tipoCredRepo, _prepagoService);
 		hGrid.setClassName("title");
 		hInfo.setClassName("title");
 		
