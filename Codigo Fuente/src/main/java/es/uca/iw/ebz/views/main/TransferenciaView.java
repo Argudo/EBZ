@@ -202,8 +202,12 @@ public class TransferenciaView extends VerticalLayout {
                         frmTransfer.add(new Paragraph("El importe es obligatorio."));
                     }else{*/
                         Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.INTERNO);
+                    try {
                         _movimientoService.añadirMovimientoCuenta(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), cbAccount2.getValue(), nfBalance.getValue().floatValue());
-                        CargarFormulario(true);
+                    } catch (Exception ex) {
+
+                    }
+                    CargarFormulario(true);
                         frmTransfer.add(new Paragraph("El traspaso se ha realizado correctamente."));
                     //}
 
@@ -237,8 +241,12 @@ public class TransferenciaView extends VerticalLayout {
                         frmTransfer.add(new Paragraph("El importe es obligatorio."));
                     }else{*/
                         Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.EXTERNO);
+                    try {
                         _movimientoService.añadirMovimientoCuenta(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), tfDestinyAccount.getValue(), nfBalance.getValue().floatValue());
-                        CargarFormulario(false);
+                    } catch (Exception ex) {
+
+                    }
+                    CargarFormulario(false);
                         frmTransfer.add(new Paragraph("La transferencia se ha realizado correctamente."));
                    // }
 

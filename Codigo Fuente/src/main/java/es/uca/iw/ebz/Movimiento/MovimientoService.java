@@ -67,10 +67,10 @@ public class MovimientoService {
         _creditoService = creditoService;
     }
 
-    public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) {
-        if(cuentaOrigen.getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
-        if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
-        if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) new Exception("Cuenta origen y destino iguales");
+    public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) throws Exception {
+        if(cuentaOrigen.getSaldo().floatValue() < fimporte) throw new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
+        if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) throw new Exception("Cuenta origen y destino iguales");
         cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(BigDecimal.valueOf(fimporte)));
 
         Movimiento mov = _movimientoRepository.save(movimiento);
@@ -102,8 +102,9 @@ public class MovimientoService {
     public Movimiento recargaTarjeta(Movimiento movimiento, Cuenta cuentaOrigen, Tarjeta tarjeta, float fimporte) throws Exception {
         if(cuentaOrigen.getSaldo().floatValue() < fimporte) throw new Exception("Saldo insuficiente");
         if(cuentaOrigen.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
-        if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago)throw new Exception("Tarjeta no es de tipo prepago");
-        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().add(BigDecimal.valueOf(fimporte)));
+        if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago) throw new Exception("Tarjeta no es de tipo prepago");
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(BigDecimal.valueOf(fimporte)));
+        _cuentaService.save(cuentaOrigen);
         //Añadimos la recarga de la tarjeta
         Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
         prepago.setSaldo(prepago.getSaldo() + fimporte);
@@ -235,6 +236,47 @@ public class MovimientoService {
                 Recibo recibo = _reciboService.findByMovimiento(movimiento);
                 datos.put("Origen", recibo.getCuenta().getNumeroCuenta());
                 datos.put("Importe", recibo.getImporte());
+                break;
+        }
+        return datos;
+    }
+
+    public DatosMovimiento datosMovimientoClass(Movimiento movimiento){
+        DatosMovimiento datos = new DatosMovimiento();
+        datos.setId(movimiento.getId().toString());
+        datos.setFecha(movimiento.getFecha());
+        datos.setTipo(movimiento.getTipo().toString());
+        datos.setConcepto(movimiento.getsConcpeto());
+
+        switch (movimiento.getTipo()) {
+            case INTERNO:
+                Interno interno = _internoService.findByMovimiento(movimiento);
+                datos.setOrigen(interno.getCuentaOrigen().getNumeroCuenta());
+                datos.setDestino(interno.getCuentaDestino().getNumeroCuenta());
+                datos.setImporte(Float.toString(interno.getImporte()));
+                break;
+            case EXTERNO:
+                Externo externo = _externoService.findByMovimiento(movimiento);
+                datos.setOrigen(externo.getCuentaPropia().getNumeroCuenta());
+                datos.setDestino(externo.getNumCuentaAjena());
+                datos.setImporte(Float.toString(externo.getImporte()));
+                break;
+            case COMPRATARJETA:
+                CompraTarjeta compraTarjeta = _compraTarjetaService.findByMovimiento(movimiento);
+                datos.setOrigen(compraTarjeta.getTarjeta().getNumTarjeta());
+                datos.setDestino( compraTarjeta.getDestino());
+                datos.setImporte(Float.toString(compraTarjeta.getImporte()));
+                break;
+            case RECARGATARJETA:
+                RecargaTarjeta recargaTarjeta = _recargaTarjetaService.findByMovimiento(movimiento);
+                datos.setOrigen(recargaTarjeta.getCuenta().getNumeroCuenta());
+                datos.setDestino(  recargaTarjeta.getTarjeta().getNumTarjeta());
+                datos.setImporte(Float.toString(recargaTarjeta.getImporte()));
+                break;
+            case RECIBO:
+                Recibo recibo = _reciboService.findByMovimiento(movimiento);
+                datos.setOrigen(recibo.getCuenta().getNumeroCuenta());
+                datos.setImporte(Float.toString(recibo.getImporte()));
                 break;
         }
         return datos;
