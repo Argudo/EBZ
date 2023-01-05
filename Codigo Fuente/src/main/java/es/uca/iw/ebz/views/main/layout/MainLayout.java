@@ -2,6 +2,7 @@ package es.uca.iw.ebz.views.main.layout;
 
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.server.VaadinSession;
+import es.uca.iw.ebz.views.main.NoticiasView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -131,7 +132,8 @@ public class MainLayout extends AppLayout{
 	private Component[] createMenuItems() {
 	    return new Tab[] { createTab("Inicio", HomeView.class),
 	            createTab("Transferencias", TransferenciaView.class),
-	            createTab("Tarjetas", TarjetaView.class)};
+	            createTab("Tarjetas", TarjetaView.class),
+				createTab("Noticias", NoticiasView.class)};
 	}
 
 	private static Tab createTab(String text,

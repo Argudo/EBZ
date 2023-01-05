@@ -136,20 +136,24 @@ public class TransferenciaView extends VerticalLayout {
 
         cbAccount1 = new ComboBox<String>("Cuenta origen");
         cbAccount1.setItems(asAccounts);
+        cbAccount1.setRequired(true);
         cbAccount1.setRequiredIndicatorVisible(true);
         cbAccount1.setErrorMessage("La cuenta origen es obligatoria");
 
         cbAccount2 = new ComboBox<String>("Cuenta destino");
         cbAccount2.setItems(asAccounts);
+        cbAccount2.setRequired(true);
         cbAccount2.setRequiredIndicatorVisible(true);
         cbAccount2.setErrorMessage("La cuenta destino es obligatoria");
 
         tfDestinyAccount = new TextField("Cuenta destino");
+        tfDestinyAccount.setRequired(true);
         tfDestinyAccount.setRequiredIndicatorVisible(true);
         tfDestinyAccount.setMinLength(20);
         tfDestinyAccount.setErrorMessage("La cuenta destino es obligatoria");
 
         tfConcept = new TextField("Concepto (mínimo 10 caracteres)");
+        tfConcept.setRequired(true);
         tfConcept.setRequiredIndicatorVisible(true);
         tfConcept.setMinLength(10);
         tfConcept.setErrorMessage("El concepto no cumple con el mínimo de caracteres.");

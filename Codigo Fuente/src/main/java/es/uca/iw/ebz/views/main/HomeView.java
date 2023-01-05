@@ -8,16 +8,16 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
+import es.uca.iw.ebz.consulta.Consulta;
+import es.uca.iw.ebz.consulta.ConsultaService;
 import es.uca.iw.ebz.usuario.TipoUsuario;
+import es.uca.iw.ebz.views.main.component.DetallesCuentaDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -43,7 +43,7 @@ import es.uca.iw.ebz.views.main.layout.MainLayout;
 
 
 
-@PageTitle("")
+@PageTitle("EBZ")
 @Route(value = "", layout = MainLayout.class)
 @RouteAlias(value = "home", layout = MainLayout.class)
 @PermitAll
@@ -65,6 +65,9 @@ private ClienteService _clienteService;
 private UsuarioService _usuarioService;
 
 @Autowired
+private ConsultaService _consultaService;
+
+@Autowired
 private AuthenticatedUser _authenticatedUser;
 
 //La cuenta que usaremos para ir actualizando el primer layout.
@@ -72,21 +75,25 @@ static Cuenta acSelected = null;
 
 private Cliente _cliente;
 
+private DetallesCuentaDialog dlogDC;
+
 //Atributos del layout de la cuenta.
 H2 _acNumber = new H2();
 H3 _acBalance = new H3();
 
-	public HomeView(MovimientoService _movimientoService, CuentaService _cuentaService,
-					TarjetaService _tarjetaService, ClienteService _clienteService,
-					UsuarioService _usuarioService, AuthenticatedUser _authenticatedUser) {
+	public HomeView(MovimientoService movimientoService, CuentaService cuentaService,
+					TarjetaService tarjetaService, ClienteService clienteService,
+					UsuarioService usuarioService, ConsultaService consultaService,
+					AuthenticatedUser authenticatedUser) {
 
 		//Services initialization section
-		this._movimientoService = _movimientoService;
-		this._cuentaService = _cuentaService;
-		this._tarjetaService = _tarjetaService;
-		this._clienteService = _clienteService;
-		this._usuarioService = _usuarioService;
-		this._authenticatedUser = _authenticatedUser;
+		_movimientoService = movimientoService;
+		_cuentaService = cuentaService;
+		_tarjetaService = tarjetaService;
+		_clienteService = clienteService;
+		_usuarioService = usuarioService;
+		_consultaService = consultaService;
+		_authenticatedUser = authenticatedUser;
 		//End services initialization section
 
 
@@ -94,6 +101,8 @@ H3 _acBalance = new H3();
 
 		//Client asignation
 		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
+
+		//Account
 
 		setMargin(false);
 		setPadding(false);
@@ -153,7 +162,7 @@ H3 _acBalance = new H3();
 			flAccountButtons.setJustifyContentMode(JustifyContentMode.EVENLY);
 
 			Component cTarjeta = CreateButton("Tarjetas", VaadinIcon.CREDIT_CARD);
-			Component cEstadisticas = CreateButton("Estadísticas", VaadinIcon.BAR_CHART_H);
+			Component cEstadisticas = CreateButton("Información de la cuenta", VaadinIcon.INFO);
 			Component cMovimientos = CreateButton("Movimientos", VaadinIcon.EXCHANGE);
 			Component cTransferencias = CreateButton("Transferencias", VaadinIcon.MONEY_EXCHANGE);
 			flAccountButtons.add(
@@ -250,12 +259,14 @@ H3 _acBalance = new H3();
 		List<Movimiento> mvList = _movimientoService.findByClienteByFechaASC(_cliente);
 
 		if(mvList.size() < 1){
-
 			H2 mvMessage = new H2("No tienes movimientos actualmente.");
 			flAccountMovements.setAlignItems(Alignment.CENTER);
 			flAccountMovements.add(mvMessage);
 
 		}else{
+			H2 mvTitle = new H2("Últimos movimientos");
+			mvTitle.setClassName("subtitle");
+			flAccountMovements.add(mvTitle);
 			int cont = 0;
 			List<Component> mvComponentList = new ArrayList<>();
 			for(Movimiento m: mvList){
@@ -271,14 +282,31 @@ H3 _acBalance = new H3();
 			}
 		}
 
-		Component cNotification1 = CreateNotification();
-		Component cNotification2 = CreateNotification();
-		Component cNotification3 = CreateNotification();
+		List<Consulta> cnList = _consultaService.findByCliente(_authenticatedUser.get().get());
 
-		flAccountNotifications.add(
-				cNotification1,
-				cNotification2,
-				cNotification3);
+		if(cnList.size() < 1){
+			H2 cnMessage = new H2("No tienes consultas actualmente.");
+			flAccountNotifications.setAlignItems(Alignment.CENTER);
+			flAccountNotifications.add(cnMessage);
+
+		}else{
+			H2 ntTitle = new H2("Últimas consultas");
+			ntTitle.setClassName("subtitle");
+			flAccountNotifications.add(ntTitle);
+			int cont = 0;
+			List<Component> cnComponentList = new ArrayList<>();
+			for(Consulta c: cnList){
+				if(cont < 3){
+					cnComponentList.add(CreateNotification(c));
+					cont++;
+				}
+				if(cont >= 3) break;
+			}
+
+			for(Component c: cnComponentList){
+				flAccountNotifications.add(c);
+			}
+		}
 
 		hlAccountMove.add(
 				flAccountMovements,
@@ -295,8 +323,8 @@ H3 _acBalance = new H3();
 		vlTarjeta.setMargin(true);
 		vlTarjeta.setClassName("box");
 
-		H1 tarjetaTitle = new H1("Tarjetas");
-		tarjetaTitle.setClassName("title");
+		H2 tarjetaTitle = new H2("Tarjetas");
+		tarjetaTitle.setClassName("subtitle");
 
 		if(aTarjetas.size() > 0){
 			Scroller scrollTarjeta = new Scroller();
@@ -346,6 +374,9 @@ H3 _acBalance = new H3();
 		btnFunc.getElement().appendChild(icon.getElement());
 		Paragraph pDescription = new Paragraph(sName);
 
+		btnFunc.addClickListener( e -> {
+			dlogDC.open();
+		});
 
 		vlMain.add(
 				btnFunc,
@@ -378,12 +409,31 @@ H3 _acBalance = new H3();
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		Paragraph _mv1 = new Paragraph(mv.getsConcpeto() + "  " + _movimientoService.datosMovimiento(mv).get("Importe"));
+		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
+		String sBalance = new String(formatImport.format(_movimientoService.datosMovimiento(mv).get("Importe")));
+
+		Paragraph _mv1 = new Paragraph(mv.getsConcpeto() + " - " + sBalance);
 
 		//_mv1.addClickListener();
 
 		vlMain.add(
 				_mv1);
+
+		return vlMain;
+
+	}
+
+	private Component CreateNotification(Consulta c){
+		VerticalLayout vlMain = new VerticalLayout();
+		vlMain.setAlignItems(Alignment.CENTER);
+		vlMain.setSpacing(false);
+		vlMain.setWidth("min-width");
+
+		Paragraph _nt1 = new Paragraph(c.getTitulo() + " - " + c.getTipoEstado().toString());
+
+		//_nt1.addClickListener();
+
+		vlMain.add(_nt1);
 
 		return vlMain;
 
@@ -395,7 +445,10 @@ H3 _acBalance = new H3();
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t" + ac.getSaldo());
+		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
+		String sBalance = new String(formatImport.format(ac.getSaldo()));
+
+		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t" + sBalance);
 
 		_ae1.addClickListener(e -> {
 			acSelected = ac;
@@ -409,21 +462,6 @@ H3 _acBalance = new H3();
 
 	}
 
-	private Component CreateNotification(){
-		VerticalLayout vlMain = new VerticalLayout();
-		vlMain.setAlignItems(Alignment.CENTER);
-		vlMain.setSpacing(false);
-		vlMain.setWidth("min-width");
-
-		Paragraph _nt1 = new Paragraph("Y la gente lo sabe");
-
-		//_nt1.addClickListener();
-
-		vlMain.add(_nt1);
-
-		return vlMain;
-
-	}
 
 	/*private Component AccountHorizontal(Cuenta account){
 
@@ -446,6 +484,8 @@ H3 _acBalance = new H3();
 	//Función para actualizar la info de la cuenta que mostramos en el primer layout
 	private void updateAccountInfo() {
 		_acNumber.setText(acSelected.getNumeroCuenta());
+
+		dlogDC = new DetallesCuentaDialog(_cliente, acSelected);
 
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 		_acBalance.setText(formatImport.format(acSelected.getSaldo()));

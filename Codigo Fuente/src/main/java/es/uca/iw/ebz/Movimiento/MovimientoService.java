@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -113,16 +114,20 @@ public class MovimientoService {
         return mov;
     }
 
-    public Movimiento compraTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte) {
+    public Movimiento compraTarjeta(Movimiento movimiento, Tarjeta tarjeta, String sDestino, float fimporte,
+                                    int month, int year, String cvv) throws Exception {
+        String expiracion = month + "/" + year;
+        if(!expiracion.equals(tarjeta.getFechaExpiracion())) throw new Exception("Fecha de expiración incorrecta");
+        if(!cvv.equals(tarjeta.getCVC())) throw new Exception("CVV incorrecto");
         switch(tarjeta.getTipoTarjeta()) {
             case Prepago:
                 Prepago prepago = _prepagoService.findByTarjeta(tarjeta);
-                if(prepago.getSaldo() < fimporte) new Exception("Saldo insuficiente");
+                if(prepago.getSaldo() < fimporte) throw new Exception("Saldo insuficiente");
                 prepago.setSaldo(prepago.getSaldo() - fimporte);
                 _prepagoService.Save(prepago);
                 break;
             case Debito:
-                if(tarjeta.getCuenta().getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
+                if(tarjeta.getCuenta().getSaldo().floatValue() < fimporte) throw new Exception("Saldo insuficiente");
                 tarjeta.getCuenta().setSaldo(tarjeta.getCuenta().getSaldo().add(BigDecimal.valueOf(fimporte)));
                 _cuentaService.save(tarjeta.getCuenta());
                 break;
@@ -140,10 +145,10 @@ public class MovimientoService {
         return mov;
     }
 
-    public Movimiento añadirRecibo(Movimiento movimiento, Cuenta cuenta, float fimporte) {
-        if(cuenta.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
+    public Movimiento añadirRecibo(Movimiento movimiento, Cuenta cuenta, float fimporte) throws Exception {
+        if(cuenta.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
         cuenta.setSaldo(cuenta.getSaldo().add(BigDecimal.valueOf(fimporte)));
-
+        _cuentaService.save(cuenta);
         Movimiento mov = _movimientoRepository.save(movimiento);
         Recibo recibo = new Recibo();
         recibo.setCuenta(cuenta);

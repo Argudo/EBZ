@@ -211,7 +211,7 @@ public class Tarjeta {
 	public void setNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
 	public String getiPin() { return _sPin; }
 	public void setiPin(String iPin) { _sPin = iPin; }
-	public String getFechaExpiracion() { return (String.valueOf(_fechaExpiracion.getMonth()) + "/" + String.valueOf(_fechaExpiracion.getYear()-100)); }
+	public String getFechaExpiracion() { return (String.valueOf(String.valueOf(_fechaExpiracion.getMonth() + 1)) + "/" + String.valueOf(_fechaExpiracion.getYear()-100)); }
 	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
 	public Date getFechaCreacion() { return _fechaCreacion; }
 	public void setFechaCreacion(Date fechaCreacion) { this._fechaCreacion = fechaCreacion; }
