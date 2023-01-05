@@ -15,9 +15,12 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.layout.MainLayout;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @PageTitle("Movimientos")
@@ -39,6 +42,7 @@ public class MovimientoView extends VerticalLayout {
     public Paragraph pConcepto = new Paragraph();
     public Paragraph pFecha = new Paragraph();
 
+    @Autowired
     private AuthenticatedUser authenticatedUser;
     private MovimientoService movimientoService;
     private ClienteService clienteService;
@@ -57,15 +61,18 @@ public class MovimientoView extends VerticalLayout {
         gridMovimientos.addColumn(DatosMovimiento::getFecha).setWidth("33%");
 
         //cliente
-        Cliente cliente = clienteService.findByUsuario(authenticatedUser.get().get());
+        //Cliente cliente = clienteService.findByUsuario(authenticatedUser.get().get());
         //movimientos
-        List<Movimiento> movimientos = movimientoService.findByClienteByFechaASC(cliente);
-
+       /* List<Movimiento> movimientos = movimientoService.findByClienteByFechaASC(cliente);
+        List<DatosMovimiento> datosMovimientos = new ArrayList<>();
         for(Movimiento movimiento : movimientos) {
             DatosMovimiento datosMovimiento = new DatosMovimiento();
             datosMovimiento = movimientoService.datosMovimientoClass(movimiento);
-            gridMovimientos.setItems(datosMovimiento);
+            datosMovimientos.add(datosMovimiento);
         }
+
+        gridMovimientos.setItems(datosMovimientos);
+        vlDetalleMovimiento.add(gridMovimientos);*/
 
         vlDetalleMovimiento.setWidth("50%");
         vlDetalleMovimiento.setPadding(true);
