@@ -16,20 +16,41 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import es.uca.iw.ebz.Cuenta.Cuenta;
+import es.uca.iw.ebz.Cuenta.CuentaService;
+import es.uca.iw.ebz.usuario.TipoUsuario;
+import es.uca.iw.ebz.usuario.cliente.Cliente;
+import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.main.layout.MainLayout;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Cuenta")
 @Route(value = "cuenta", layout = MainLayout.class)
+@RolesAllowed({ "Cliente" })
+public class CuentaView extends VerticalLayout implements BeforeEnterObserver {
 
-public class CuentaView extends VerticalLayout {
+    @Autowired
+    private AuthenticatedUser _authenticatedUser;
 
-    //@Autowired
-    //Cuenta account;
+    @Autowired
+    private CuentaService _cuentaService;
 
-    public CuentaView(){
+    @Autowired
+    private ClienteService _clienteService;
+
+    private Cuenta _cuenta;
+
+    private Cliente _cliente;
+
+    public CuentaView(AuthenticatedUser authenticatedUser, CuentaService cuentaService, ClienteService _clienteService){
 
         setMargin(false);
         setPadding(false);
@@ -147,13 +168,13 @@ public class CuentaView extends VerticalLayout {
 
         H3 hAccountNumber = new H3("Número de cuenta");
         Paragraph pAccountNumber = new Paragraph("XXXX XXXX XXXX XXXX");
-        //Paragraph pAccountNumber = new Paragraph(account.getNumeroCuenta());
+        //Paragraph pAccountNumber = new Paragraph(_cuenta.getNumeroCuenta());
         H3 hBalance = new H3("Saldo");
         Paragraph pBalance = new Paragraph("100.000,45€");
-        //Paragraph pBalance = new Paragraph(formatImport.format(account.getSaldo()));
+        //Paragraph pBalance = new Paragraph(formatImport.format(_cuenta.getSaldo()));
         H3 hCreationDate = new H3("Fecha de creación");
         Paragraph pCreationDate = new Paragraph("Fecha");
-        //Paragraph pCreationDate = new Paragraph(dateFormat.format(account.getFechaCreacion()));
+        //Paragraph pCreationDate = new Paragraph(dateFormat.format(_cuenta.getFechaCreacion()));
         H3 hAccountHolder = new H3("Titular de la cuenta");
         Paragraph pAccountHolder = new Paragraph("Nombre y apellidos");
 
@@ -171,6 +192,13 @@ public class CuentaView extends VerticalLayout {
 
         return vlAccountDetails;
 
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        /*if(_authenticatedUser.get().isPresent()){
+            if(_authenticatedUser.get().get() == ) event.rerouteTo(HomeView.class);
+        }*/
     }
 
 }
