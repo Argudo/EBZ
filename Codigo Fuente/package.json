@@ -8,6 +8,7 @@
     "@polymer/iron-meta": "3.0.1",
     "@polymer/iron-resizable-behavior": "3.0.1",
     "@polymer/polymer": "3.5.1",
+    "@vaadin-component-factory/vcf-toggle-button": "1.0.3",
     "@vaadin/accordion": "23.2.6",
     "@vaadin/app-layout": "23.2.6",
     "@vaadin/avatar": "23.2.6",
@@ -148,6 +149,7 @@
       "@polymer/iron-meta": "3.0.1",
       "@polymer/iron-resizable-behavior": "3.0.1",
       "@polymer/polymer": "3.5.1",
+      "@vaadin-component-factory/vcf-toggle-button": "1.0.3",
       "@vaadin/accordion": "23.2.6",
       "@vaadin/app-layout": "23.2.6",
       "@vaadin/avatar": "23.2.6",
@@ -276,7 +278,7 @@
       "workbox-core": "6.5.0",
       "workbox-precaching": "6.5.0"
     },
-    "hash": "cbe5dcf7055edbe1139d419986f2e647c1712e36924b905739832a827648a6ee"
+    "hash": "ea659403535192b8251b4e02c2db7cf5ce004937451fdb2addb64e36ad13fce6"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -396,6 +398,7 @@
     "date-fns": "$date-fns",
     "lit": "$lit",
     "proj4": "$proj4",
-    "line-awesome": "$line-awesome"
+    "line-awesome": "$line-awesome",
+    "@vaadin-component-factory/vcf-toggle-button": "$@vaadin-component-factory/vcf-toggle-button"
   }
 }

@@ -66,6 +66,10 @@ public class Tarjeta {
 	@Column(name = "CVC")
 	private String _cvc;
 	
+	@Column(name = "estaActiva")
+	@NotNull
+	private Boolean _estaActiva;
+	
 	@ManyToOne
 	@NotNull
 	private TipoTarjeta _tipoTarjeta;
@@ -96,6 +100,7 @@ public class Tarjeta {
 		_cvc = GenerarCVC();
 		_fechaCreacion = new Date();
 		_fechaExpiracion = GenerarFechaExpiracion();
+		_estaActiva = true;
 	}
 
 	private String GenerarNumTarjeta() {
@@ -224,4 +229,6 @@ public class Tarjeta {
 	public void setCVC(int cvc) { _cvc = GenerarCVC(cvc); }
 	public Cuenta getCuenta() { return _cuenta; }
 	public Cliente getCliente() { return this._clienteTitular; }
+	public Boolean getActiva() { return _estaActiva; }
+	public void setActiva(Boolean estaActiva) { _estaActiva = estaActiva; }
 }

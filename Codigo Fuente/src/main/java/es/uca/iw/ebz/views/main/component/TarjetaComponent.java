@@ -36,21 +36,9 @@ public class TarjetaComponent extends Component {
 	}
 	
 	public TarjetaComponent() {
-		
-	}
-	
-	public TarjetaComponent(Boolean esNuevaTarjeta) {
     	_vlTarjeta = new VerticalLayout();
-    	DateFormat dateFormat = new SimpleDateFormat("mm/yy");  
-        String fechaExpiracion = "00/00";  
-        H5 hNueva = new H5("+");
         _vlTarjeta.getStyle().set("display", "flex").set("justify-content", "center");
-        hNueva.setClassName("nueva-tarjeta-mid");
-        _vlTarjeta.add(new H4("EBZ"),
-        			   hNueva,
-        			   new H6(fechaExpiracion)
-        			 );
-        _vlTarjeta.setClassName("tarjeta-mid");
+        _vlTarjeta.setClassName("nueva-tarjeta-mid");
         _vlTarjeta.setWidth("300px");
         _vlTarjeta.setHeight("200px");
         _vlTarjeta.setPadding(false);

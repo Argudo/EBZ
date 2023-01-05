@@ -99,10 +99,10 @@ public class MovimientoService {
         return mov;
     }
 
-    public Movimiento recargaTarjeta(Movimiento movimiento, Cuenta cuentaOrigen, Tarjeta tarjeta, float fimporte) {
-        if(cuentaOrigen.getSaldo().floatValue() < fimporte) new Exception("Saldo insuficiente");
-        if(cuentaOrigen.getFechaEliminacion() != null) new Exception("Cuenta origen eliminado");
-        if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago) new Exception("Tarjeta no es de tipo prepago");
+    public Movimiento recargaTarjeta(Movimiento movimiento, Cuenta cuentaOrigen, Tarjeta tarjeta, float fimporte) throws Exception {
+        if(cuentaOrigen.getSaldo().floatValue() < fimporte) throw new Exception("Saldo insuficiente");
+        if(cuentaOrigen.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
+        if(tarjeta.getTipoTarjeta() != EnumTarjeta.Prepago)throw new Exception("Tarjeta no es de tipo prepago");
         cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().add(BigDecimal.valueOf(fimporte)));
         //Añadimos la recarga de la tarjeta
         Prepago prepago = _prepagoService.findByTarjeta(tarjeta);

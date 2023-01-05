@@ -1,31 +1,45 @@
 package es.uca.iw.ebz.views.main;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
+import es.uca.iw.ebz.Movimiento.Movimiento;
+import es.uca.iw.ebz.Movimiento.MovimientoService;
+import es.uca.iw.ebz.Movimiento.TipoMovimiento;
 import es.uca.iw.ebz.tarjeta.EnumTarjeta;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
@@ -54,6 +68,8 @@ public class TarjetaView extends VerticalLayout{
 	private PrepagoService _prepagoService;
 	@Autowired
 	private TipoCrediticioRepository _tipoCredRepo;
+	@Autowired
+	private MovimientoService _movService;
 	
 	static TarjetaComponent tcSelected = null;
 	static Tarjeta tarSelected = null;
@@ -66,7 +82,18 @@ public class TarjetaView extends VerticalLayout{
 	private HorizontalLayout hlDetalleTarjetas = new HorizontalLayout();
 		private VerticalLayout vlAccionTarjetas = new VerticalLayout();
 			private Button btnRecarga = new Button("Recargar", VaadinIcon.MONEY_DEPOSIT.create());
+				private Dialog dlogRecarga = new Dialog();
+				private VerticalLayout vlRecarga = new VerticalLayout();
+				private ComboBox<String> cbCuentas = new ComboBox<String>("Seleccione una cuenta");
+				private NumberField txtCantidad = new NumberField("Cantidad");
+				private Button btnRecargaDlog = new Button("Depositar");
+				private Button btnCancelarDlog = new Button(LumoIcon.CROSS.create());
 			private Button btnCancelarTarjeta = new Button("Eliminar", LumoIcon.CROSS.create());
+				private ConfirmDialog dlogEliminarTarjeta = new ConfirmDialog();
+			private Button btnCambiarPin = new Button("Nuevo PIN", LumoIcon.RELOAD.create());
+			private HorizontalLayout hlActivarTarjeta = new HorizontalLayout();
+				private ToggleButton tgbtnActivacionTarjeta = new ToggleButton();
+				private Span spanToggle = new Span();
 		private HorizontalLayout hlTarjetas = new HorizontalLayout();
 		
 	private VerticalLayout vlDetalleTarjetas = new VerticalLayout();	
@@ -88,14 +115,77 @@ public class TarjetaView extends VerticalLayout{
 	VerticalLayout vlTransacciones = new VerticalLayout();
 	
 	private NuevaTarjetaDialog dlogNT;
+	private Dialog dlogPin = new Dialog();
+		private TextField txtPinDlog = new TextField("Introduzca el nuevo PIN");
+		private Button btnCerrarDlog = new Button(LumoIcon.CROSS.create());
+		private Button btnPinDlog = new Button("Guardar");
 	
-	TarjetaView(AuthenticatedUser _authUser, ClienteService _cliService, TarjetaService _tarService, CuentaService _cuentaService, PrepagoService _prepagoService, TipoCrediticioRepository _tipoCredRepo){
+	TarjetaView(AuthenticatedUser _authUser, ClienteService _cliService, TarjetaService _tarService, CuentaService _cuentaService, PrepagoService _prepagoService, TipoCrediticioRepository _tipoCredRepo, MovimientoService _movService){
+		_cliente = _cliService.findByUsuario(_authUser.get().get());
 		dlogNT = new NuevaTarjetaDialog(_cuentaService, _cliService, _tarService, _tipoCredRepo);
+		
+		dlogPin.setHeaderTitle("Cambiar PIN");
+		dlogPin.add(txtPinDlog);
+		btnCerrarDlog.addThemeVariants(ButtonVariant.LUMO_ICON);
+		btnCerrarDlog.addThemeVariants(ButtonVariant.LUMO_ERROR);
+		btnPinDlog.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+		dlogPin.getHeader().add(btnCerrarDlog);
+		dlogPin.getFooter().add(btnPinDlog);
+		txtPinDlog.setMaxLength(4);
+		txtPinDlog.setMinLength(4);
+		
+		btnPinDlog.addClickListener(e -> {
+			if(txtPinDlog.getValue().length() != 4 || !txtPinDlog.getValue().matches("\\d{4}")) { txtPinDlog.getElement().setAttribute("invalid", ""); txtPinDlog.setErrorMessage("El pin debe tener 4 números");}
+			else {tarSelected.setiPin(txtPinDlog.getValue()); _tarService.Save(tarSelected); pPin.setText(txtPinDlog.getValue()); dlogPin.close(); }
+		});
+		
+		dlogRecarga.setHeaderTitle("Recargar tarjeta");
+		btnCancelarDlog.addThemeVariants(ButtonVariant.LUMO_ICON);
+		btnCancelarDlog.addThemeVariants(ButtonVariant.LUMO_ERROR);
+		btnCancelarDlog.addClickListener(e -> dlogRecarga.close());
+		btnRecargaDlog.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+		dlogRecarga.getHeader().add(btnCancelarDlog);
+		dlogRecarga.getFooter().add(btnRecargaDlog);
+		dlogRecarga.setWidth("20vw");
+		List<String> aCuentas = new ArrayList<String>();
+		_cuentaService.findByCliente(_cliente).forEach(c -> aCuentas.add(c.getNumeroCuenta()));
+		cbCuentas.setItems(aCuentas);
+		cbCuentas.setWidthFull();
+		Div euroSuffix = new Div(); euroSuffix.setText("€");
+		txtCantidad.setSuffixComponent(euroSuffix);
+		txtCantidad.setWidthFull();
+		vlRecarga.add(new Hr(), cbCuentas, txtCantidad);
+		dlogRecarga.add(vlRecarga);
+		btnRecargaDlog.addClickListener(ev -> {
+			Movimiento movRecarga = new Movimiento(new Date(), "Recarga tarjeta " + tarSelected.getNumTarjeta(), TipoMovimiento.RECARGATARJETA);
+			try {				
+				_movService.recargaTarjeta(movRecarga, _cuentaService.findByNumeroCuenta(cbCuentas.getValue()).get(), tarSelected, txtCantidad.getValue().floatValue());
+				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()) + "€");
+				Notification notification = Notification.show("El deposito de " + txtCantidad.getValue() + "€" + " desde " + cbCuentas.getValue() + " se ha realizado correctamente");
+				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+				dlogRecarga.close();
+			}
+			catch(Exception e) {
+				txtCantidad.getElement().setAttribute("invalid", ""); txtCantidad.setErrorMessage(e.getMessage());
+			}
+		});
+		
+		dlogEliminarTarjeta.setHeader("Eliminar tarjeta");
+		dlogEliminarTarjeta.setCancelable(true);
+		dlogEliminarTarjeta.setCancelText("Descartar");
+		dlogEliminarTarjeta.addCancelListener(event -> dlogEliminarTarjeta.close());
+		dlogEliminarTarjeta.setConfirmText("Eliminar");
+		dlogEliminarTarjeta.setConfirmButtonTheme("error primary");
+		dlogEliminarTarjeta.addConfirmListener(event -> {
+			tarSelected.setFechaCancelacion(new Date());
+			_tarService.Save(tarSelected);
+			ActualizarTarjetas(tarSelected, false);
+		});
+		
 		setWidthFull();
 		setPadding(true);
 		setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER); 
 		setAlignItems(FlexComponent.Alignment.CENTER);
-		_cliente = _cliService.findByUsuario(_authUser.get().get());
 		List<Tarjeta> aTarjetas = _tarService.findByCliente(_cliente);
 		textCvc.setReadOnly(true);
 		textCvc.setClassName("padding40");
@@ -172,32 +262,34 @@ public class TarjetaView extends VerticalLayout{
 		}
 		
 		hlTarjetas.getChildren().forEach(child -> {
-			child.getElement().addEventListener("click", e -> {				
-				if(tcSelected == null) {
-					tcSelected = TarjetaComponent.class.cast(child);
-					tcSelected.seleccionarTarjeta();
-					tarSelected = tcSelected.getTarjeta();
-					CargarDetalles();
-				}
-				
-				if(tcSelected != TarjetaComponent.class.cast(child)) {
-					tcSelected.deseleccionarTarjeta();
-					tcSelected = TarjetaComponent.class.cast(child);
-					tcSelected.seleccionarTarjeta();
-					tarSelected = tcSelected.getTarjeta();
-					CargarDetalles();
-				}
-				else if((tcSelected == TarjetaComponent.class.cast(child) && tcSelected.getSelected())) {
-					tcSelected.deseleccionarTarjeta();
-					CargarDetalles();
-				}
-				else {
-					tcSelected = TarjetaComponent.class.cast(child);
-					tcSelected.seleccionarTarjeta();
-					tarSelected = tcSelected.getTarjeta();
-					CargarDetalles();
-				}
-			});
+			if(child != tNewCard) {				
+				child.getElement().addEventListener("click", e -> {				
+					if(tcSelected == null) {
+						tcSelected = TarjetaComponent.class.cast(child);
+						tcSelected.seleccionarTarjeta();
+						tarSelected = tcSelected.getTarjeta();
+						CargarDetalles();
+					}
+					
+					if(tcSelected != TarjetaComponent.class.cast(child)) {
+						tcSelected.deseleccionarTarjeta();
+						tcSelected = TarjetaComponent.class.cast(child);
+						tcSelected.seleccionarTarjeta();
+						tarSelected = tcSelected.getTarjeta();
+						CargarDetalles();
+					}
+					else if((tcSelected == TarjetaComponent.class.cast(child) && tcSelected.getSelected())) {
+						tcSelected.deseleccionarTarjeta();
+						CargarDetalles();
+					}
+					else {
+						tcSelected = TarjetaComponent.class.cast(child);
+						tcSelected.seleccionarTarjeta();
+						tarSelected = tcSelected.getTarjeta();
+						CargarDetalles();
+					}
+				});
+			}
 		});
 		
 		tNewCard.getElement().addEventListener("click", e ->{			
@@ -206,7 +298,28 @@ public class TarjetaView extends VerticalLayout{
 		});
 		
 		dlogNT.addUpdateListener(e -> {
-			ActualizarTarjetas(e.getTarjeta());
+			ActualizarTarjetas(e.getTarjeta(), true);
+		});
+		
+		btnRecarga.addClickListener(e -> {
+			if(btnRecarga.isEnabled()) {
+				dlogRecarga.open();
+			}
+		});
+		
+		btnCambiarPin.addClickListener(e -> { dlogPin.open(); });
+		
+		tgbtnActivacionTarjeta.addValueChangeListener(e -> {
+			spanToggle.setText(e.getValue()? "Activada" : "Desactivada");
+			if(tcSelected.getSelected()) {				
+				tarSelected.setActiva(e.getValue());
+				_tarService.Save(tarSelected);
+			}
+		});
+		
+		btnCancelarTarjeta.addClickListener(e -> {
+			dlogEliminarTarjeta.setText("¿Estás seguro de que quieres eliminar tu tarjeta " + tarSelected.getNumTarjeta() + "? Este cambio es irreversible."); 
+			dlogEliminarTarjeta.open();
 		});
 		
 		VerticalLayout vlSeparator = new VerticalLayout();
@@ -215,17 +328,23 @@ public class TarjetaView extends VerticalLayout{
 		vlSeparator.getStyle().set("padding", "0");
 		
 		scrllTarjetas.setContent(hlTarjetas);
-		vlTarjetas.setWidth("90%");
-		btnRecarga.setHeightFull();
-		btnRecarga.setEnabled(false);
+		vlTarjetas.setWidth("85%");
+		hlActivarTarjeta.add(tgbtnActivacionTarjeta, spanToggle);
+		hlActivarTarjeta.addClassName("button");
+		hlActivarTarjeta.setAlignItems(FlexComponent.Alignment.CENTER);
+		hlActivarTarjeta.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+		hlActivarTarjeta.setWidthFull();
+		btnRecarga.setSizeFull();
 		btnRecarga.addThemeVariants(ButtonVariant.LUMO_LARGE);
-		btnCancelarTarjeta.setEnabled(false);
+		btnCancelarTarjeta.setWidthFull();
 		btnCancelarTarjeta.addThemeVariants(ButtonVariant.LUMO_LARGE);
 		btnCancelarTarjeta.addThemeVariants(ButtonVariant.LUMO_ERROR);
+		btnCambiarPin.setWidthFull();
+		btnCambiarPin.addThemeVariants(ButtonVariant.LUMO_LARGE);
 
-		vlAccionTarjetas.setWidth("10%");
+		vlAccionTarjetas.setWidth("15%");
 		vlAccionTarjetas.setPadding(false);
-		vlAccionTarjetas.add(btnRecarga, btnCancelarTarjeta);
+		vlAccionTarjetas.add(btnRecarga, hlActivarTarjeta, btnCambiarPin, btnCancelarTarjeta);
 		
 		vlTarjetas.add(hTarjeta, new Hr(), scrllTarjetas);
 		hlDetalleTarjetas.add(vlTarjetas, vlSeparator, vlAccionTarjetas);
@@ -235,12 +354,24 @@ public class TarjetaView extends VerticalLayout{
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
 			btnCancelarTarjeta.setEnabled(true);
+			btnCambiarPin.setEnabled(true);
+			hlActivarTarjeta.setEnabled(true);
+			tgbtnActivacionTarjeta.setEnabled(true);
+			spanToggle.getStyle().set("color", "var(--_lumo-button-color, var(--lumo-primary-text-color))");
 			pNumTarjeta.setText(tarSelected.getNumTarjeta());	
 			pTipoTarjeta.setText(tarSelected.getStringTipoTarjeta());
 			pFechaCaducidad.setText(tarSelected.getFechaExpiracion().toString());
 			pPin.setText(String.valueOf(tarSelected.getiPin()));
 			textCvc.setValue(tarSelected.getCVC());
 			textPin.setValue(String.valueOf(tarSelected.getiPin()));
+			if(tarSelected.getActiva()) {
+				spanToggle.setText("Activada");
+				tgbtnActivacionTarjeta.setValue(true);				
+			}
+			else {
+				spanToggle.setText("Desactivada");
+				tgbtnActivacionTarjeta.setValue(false);
+			}
 			vlDetalleTarjetas.getChildren().forEach(child -> {
 				if(child.getClass() != H1.class || child.getClass() != Hr.class) {
 					child.setVisible(true);
@@ -252,6 +383,7 @@ public class TarjetaView extends VerticalLayout{
 				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()) + "€");
 			}
 			else {
+				btnRecarga.setEnabled(false);
 				hSaldo.setText("Número de cuenta");
 				pSaldo.setText(tarSelected.getCuenta().getNumeroCuenta());
 			}			
@@ -259,6 +391,11 @@ public class TarjetaView extends VerticalLayout{
 		else {
 			btnRecarga.setEnabled(false);
 			btnCancelarTarjeta.setEnabled(false);
+			btnCambiarPin.setEnabled(false);
+			hlActivarTarjeta.setEnabled(false);
+			tgbtnActivacionTarjeta.setEnabled(false);
+			tgbtnActivacionTarjeta.setValue(false);			
+			spanToggle.getStyle().set("color", "var(--lumo-disabled-text-color)");
 			vlDetalleTarjetas.getChildren().forEach(child -> {
 				if(child.getClass() != H1.class && child.getClass() != Hr.class) {
 					child.setVisible(false);
@@ -267,35 +404,41 @@ public class TarjetaView extends VerticalLayout{
 		}
 	}
 	
-	private void ActualizarTarjetas(Tarjeta T) {
-		TarjetaComponent tarComp = new TarjetaComponent(T);
-		aTarjetasComponent.add(tarComp);
-		hlTarjetas.add(tarComp);
-		tarComp.getElement().addEventListener("click", e -> {				
-			if(tcSelected == null) {
-				tcSelected = TarjetaComponent.class.cast(tarComp);
-				tcSelected.seleccionarTarjeta();
-				tarSelected = tcSelected.getTarjeta();
-				CargarDetalles();
-			}
-			
-			if(tcSelected != TarjetaComponent.class.cast(tarComp)) {
-				tcSelected.deseleccionarTarjeta();
-				tcSelected = TarjetaComponent.class.cast(tarComp);
-				tcSelected.seleccionarTarjeta();
-				tarSelected = tcSelected.getTarjeta();
-				CargarDetalles();
-			}
-			else if((tcSelected == TarjetaComponent.class.cast(tarComp) && tcSelected.getSelected())) {
-				tcSelected.deseleccionarTarjeta();
-				CargarDetalles();
-			}
-			else {
-				tcSelected = TarjetaComponent.class.cast(tarComp);
-				tcSelected.seleccionarTarjeta();
-				tarSelected = tcSelected.getTarjeta();
-				CargarDetalles();
-			}
-		});
+	private void ActualizarTarjetas(Tarjeta T, Boolean esNueva) {
+		if(esNueva) {			
+			TarjetaComponent tarComp = new TarjetaComponent(T);
+			aTarjetasComponent.add(tarComp);
+			hlTarjetas.add(tarComp);
+			tarComp.getElement().addEventListener("click", e -> {				
+				if(tcSelected == null) {
+					tcSelected = TarjetaComponent.class.cast(tarComp);
+					tcSelected.seleccionarTarjeta();
+					tarSelected = tcSelected.getTarjeta();
+					CargarDetalles();
+				}
+				
+				if(tcSelected != TarjetaComponent.class.cast(tarComp)) {
+					tcSelected.deseleccionarTarjeta();
+					tcSelected = TarjetaComponent.class.cast(tarComp);
+					tcSelected.seleccionarTarjeta();
+					tarSelected = tcSelected.getTarjeta();
+					CargarDetalles();
+				}
+				else if((tcSelected == TarjetaComponent.class.cast(tarComp) && tcSelected.getSelected())) {
+					tcSelected.deseleccionarTarjeta();
+					CargarDetalles();
+				}
+				else {
+					tcSelected = TarjetaComponent.class.cast(tarComp);
+					tcSelected.seleccionarTarjeta();
+					tarSelected = tcSelected.getTarjeta();
+					CargarDetalles();
+				}
+			});
+		}
+		else {
+			aTarjetasComponent.remove(tcSelected);
+			hlTarjetas.remove(tcSelected);
+		}
 	}
 }
