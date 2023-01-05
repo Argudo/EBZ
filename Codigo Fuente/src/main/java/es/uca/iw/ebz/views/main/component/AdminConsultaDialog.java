@@ -10,7 +10,6 @@ import com.vaadin.flow.component.messages.MessageList;
 import com.vaadin.flow.component.messages.MessageListItem;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import es.uca.iw.ebz.consulta.Consulta;
-import es.uca.iw.ebz.consulta.ConsultaService;
 import es.uca.iw.ebz.mensaje.Mensaje;
 import es.uca.iw.ebz.mensaje.MensajeService;
 import es.uca.iw.ebz.usuario.TipoUsuario;
@@ -18,18 +17,16 @@ import es.uca.iw.ebz.usuario.admin.Admin;
 import es.uca.iw.ebz.usuario.admin.AdminService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
-import org.checkerframework.checker.units.qual.A;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ClienteConsultaDialog extends Dialog {
+public class AdminConsultaDialog extends Dialog {
 
     private Consulta _consulta;
 
-    private Cliente _cliente;
+    private Admin _admin;
 
     private MensajeService _mensajeService;
 
@@ -39,12 +36,12 @@ public class ClienteConsultaDialog extends Dialog {
 
     private ClienteService _clienteService;
 
-    public ClienteConsultaDialog(Consulta consulta,Cliente cliente, AdminService adminService,
+    public AdminConsultaDialog(Consulta consulta,Admin admin, AdminService adminService,
                                  ClienteService clienteService, MensajeService mensajeService) {
 
         //Services initialization section
         _consulta = consulta;
-        _cliente = cliente;
+        _admin = admin;
         _mensajeService = mensajeService;
         _clienteService = clienteService;
         _adminService = adminService;
@@ -73,10 +70,10 @@ public class ClienteConsultaDialog extends Dialog {
         MessageList msgList = new MessageList();
         MessageInput msgInput = new MessageInput();
         msgInput.addSubmitListener( submitEvent -> {
-            Mensaje lastMsg = new Mensaje(new Date(), submitEvent.getValue(), _cliente.getUsuario());
+            Mensaje lastMsg = new Mensaje(new Date(), submitEvent.getValue(), _admin.getUsuario());
             _consulta.setMensajes(lastMsg);
             List<MessageListItem> items = new ArrayList<>(msgList.getItems());
-            items.add(new MessageListItem(lastMsg.getTexto(), lastMsg.getFecha().toInstant(), _cliente.getNombre()));
+            items.add(new MessageListItem(lastMsg.getTexto(), lastMsg.getFecha().toInstant(), _admin.getNombre()));
             msgList.setItems(items);
         });
 
@@ -105,5 +102,4 @@ public class ClienteConsultaDialog extends Dialog {
 
 
     }
-
 }
