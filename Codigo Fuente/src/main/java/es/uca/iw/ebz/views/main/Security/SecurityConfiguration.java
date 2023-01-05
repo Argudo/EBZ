@@ -24,8 +24,13 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests().requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll();
+        http.csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/api/**"));
+        http.authorizeRequests()
+                .requestMatchers(
+                        new AntPathRequestMatcher("/images/*.png"),
+                        new AntPathRequestMatcher("/swagger-ui.html"),
+                        new AntPathRequestMatcher("/swagger-ui/**")
+                ).permitAll().requestMatchers(new AntPathRequestMatcher("api/**")).authenticated();
         super.configure(http);
         setLoginView(http, LoginView.class, LOGOUT_URL);
     }
