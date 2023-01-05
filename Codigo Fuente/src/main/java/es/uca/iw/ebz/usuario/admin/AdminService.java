@@ -60,5 +60,9 @@ public class AdminService {
         }
         return result;
     }
+    
+    public Admin findByUsuario(Usuario user) {
+        return repoAdmin.findByusuario(user);
+    }
 
 }
