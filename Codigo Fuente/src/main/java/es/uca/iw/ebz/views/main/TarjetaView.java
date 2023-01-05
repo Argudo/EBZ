@@ -166,7 +166,8 @@ public class TarjetaView extends VerticalLayout{
 				dlogRecarga.close();
 			}
 			catch(Exception e) {
-				txtCantidad.getElement().setAttribute("invalid", ""); txtCantidad.setErrorMessage(e.getMessage());
+				if(e.getMessage().contains("Cuenta")) { cbCuentas.getElement().setAttribute("invalid", ""); cbCuentas.setErrorMessage(e.getMessage()); }
+				else txtCantidad.getElement().setAttribute("invalid", ""); txtCantidad.setErrorMessage(e.getMessage());
 			}
 		});
 		
