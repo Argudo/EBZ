@@ -9,6 +9,7 @@ import com.vaadin.flow.component.messages.MessageInput;
 import com.vaadin.flow.component.messages.MessageList;
 import com.vaadin.flow.component.messages.MessageListItem;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.ConsultaService;
 import es.uca.iw.ebz.mensaje.Mensaje;
@@ -38,6 +39,8 @@ public class ClienteConsultaDialog extends Dialog {
     private AdminService _adminService;
 
     private ClienteService _clienteService;
+
+    private RadioButtonGroup<String> rdGroup;
 
     public ClienteConsultaDialog(Consulta consulta,Cliente cliente, AdminService adminService,
                                  ClienteService clienteService, MensajeService mensajeService) {

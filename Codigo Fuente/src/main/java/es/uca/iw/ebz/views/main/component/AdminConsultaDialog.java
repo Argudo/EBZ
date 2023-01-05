@@ -77,6 +77,10 @@ public class AdminConsultaDialog extends Dialog {
             msgList.setItems(items);
         });
 
+        //Radio button group for query state
+
+        //End radio button group for query state
+
         List<Mensaje> lista = _consulta.getMensajes();
 
         for(Mensaje m: lista){
