@@ -62,7 +62,7 @@ public class TransferenciaRestController {
     @PostMapping("/api/payments")
     public TransaccionTarjeta compraTarjeta(@RequestBody TransaccionTarjeta requestTarjeta) {
         Movimiento movimiento = new Movimiento(new Date(), "Compra " + requestTarjeta.getType() + "en " + requestTarjeta.getShop(), TipoMovimiento.COMPRATARJETA);
-        Tarjeta tarjeta = _tarjetaService.findByNumCuenta(requestTarjeta.getCardNumber());
+        Tarjeta tarjeta = _tarjetaService.findByNumTarjeta(requestTarjeta.getCardNumber());
         if (tarjeta != null) {
             try{
                 _movimientoService.compraTarjeta(movimiento, tarjeta, requestTarjeta.getShop(), requestTarjeta.getValue(),

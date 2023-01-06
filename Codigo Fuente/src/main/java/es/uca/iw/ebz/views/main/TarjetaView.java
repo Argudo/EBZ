@@ -116,7 +116,7 @@ public class TarjetaView extends VerticalLayout{
 	
 	private NuevaTarjetaDialog dlogNT;
 	private Dialog dlogPin = new Dialog();
-		private TextField txtPinDlog = new TextField("Introduzca el nuevo PIN");
+		private PasswordField txtPinDlog = new PasswordField("Introduzca el nuevo PIN");
 		private Button btnCerrarDlog = new Button(LumoIcon.CROSS.create());
 		private Button btnPinDlog = new Button("Guardar");
 	
@@ -134,10 +134,21 @@ public class TarjetaView extends VerticalLayout{
 		txtPinDlog.setMaxLength(4);
 		txtPinDlog.setMinLength(4);
 		
-		btnPinDlog.addClickListener(e -> {
-			if(txtPinDlog.getValue().length() != 4 || !txtPinDlog.getValue().matches("\\d{4}")) { txtPinDlog.getElement().setAttribute("invalid", ""); txtPinDlog.setErrorMessage("El pin debe tener 4 números");}
-			else {tarSelected.setiPin(txtPinDlog.getValue()); _tarService.Save(tarSelected); pPin.setText(txtPinDlog.getValue()); dlogPin.close(); }
+		btnPinDlog.addClickListener(ev -> {
+			try {
+				if(txtPinDlog.getValue().length() != 4 || !txtPinDlog.getValue().matches("\\d{4}")) { txtPinDlog.getElement().setAttribute("invalid", ""); txtPinDlog.setErrorMessage("El pin debe tener 4 números");}
+				else {
+					tarSelected.setiPin(txtPinDlog.getValue()); 
+					_tarService.Update(tarSelected); 
+					textPin.setValue(txtPinDlog.getValue()); 
+					Notification not = Notification.show("Se ha cambiado el PIN correctamente");
+					not.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+					dlogPin.close(); 
+					}				
+			}catch(Exception e) { txtPinDlog.getElement().setAttribute("invalid", ""); txtPinDlog.setErrorMessage(e.getMessage()); e.printStackTrace();}
 		});
+		
+		btnCerrarDlog.addClickListener(e -> dlogPin.close());
 		
 		dlogRecarga.setHeaderTitle("Recargar tarjeta");
 		btnCancelarDlog.addThemeVariants(ButtonVariant.LUMO_ICON);
@@ -179,7 +190,9 @@ public class TarjetaView extends VerticalLayout{
 		dlogEliminarTarjeta.setConfirmButtonTheme("error primary");
 		dlogEliminarTarjeta.addConfirmListener(event -> {
 			tarSelected.setFechaCancelacion(new Date());
-			_tarService.Save(tarSelected);
+			try {
+				_tarService.Update(tarSelected);
+			} catch (Exception e) { e.printStackTrace(); }
 			ActualizarTarjetas(tarSelected, false);
 		});
 		
@@ -251,10 +264,13 @@ public class TarjetaView extends VerticalLayout{
 		for(Tarjeta t: aTarjetas) {
 			aTarjetasComponent.add(new TarjetaComponent(t));
 		}
-		tcSelected = aTarjetasComponent.get(0);
-		tcSelected.seleccionarTarjeta();
-		tarSelected = tcSelected.getTarjeta();
-		CargarDetalles();
+		if(aTarjetasComponent.size() > 0) {				
+			tcSelected = aTarjetasComponent.get(0);
+			tcSelected.seleccionarTarjeta();
+			tarSelected = tcSelected.getTarjeta();
+			CargarDetalles();
+		}
+		
 		TarjetaComponent tNewCard = new TarjetaComponent();
 		hlTarjetas.add(tNewCard); 
 		
@@ -310,11 +326,13 @@ public class TarjetaView extends VerticalLayout{
 		
 		btnCambiarPin.addClickListener(e -> { dlogPin.open(); });
 		
-		tgbtnActivacionTarjeta.addValueChangeListener(e -> {
-			spanToggle.setText(e.getValue()? "Activada" : "Desactivada");
+		tgbtnActivacionTarjeta.addValueChangeListener(ev -> {
+			spanToggle.setText(ev.getValue()? "Activada" : "Desactivada");
 			if(tcSelected.getSelected()) {				
-				tarSelected.setActiva(e.getValue());
-				_tarService.Save(tarSelected);
+				tarSelected.setActiva(ev.getValue());
+				try {
+					_tarService.Update(tarSelected);
+				} catch (Exception e) { e.printStackTrace(); }
 			}
 		});
 		
