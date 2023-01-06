@@ -11,6 +11,7 @@ import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -20,9 +21,13 @@ import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LitRenderer;
@@ -61,6 +66,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Boolean estadoBusqueda = false;
 	private Grid<Cliente> gridCliente = new Grid<>(Cliente.class, false);
 	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
+	Notification notCambios = new Notification("Tiene aún cambios pendientes, presione 'Guardar'");
 	
 	
 	private Cliente _cliente;
@@ -114,9 +120,61 @@ public class DashBoardTarjetasView extends HorizontalLayout{
         List<Cliente> aClientes = new ArrayList<Cliente>();
         gridCliente.setItems(aClientes);
         /*Grid Tarjeta*/
-        gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader("Tipo de tarjeta");
-        gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader("Número de tarjeta");
-        gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader("Fecha de expiración");
+        notCambios.setDuration(0);
+    	notCambios.setPosition(Position.TOP_STRETCH);
+    	notCambios.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+        gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader("Tipo de tarjeta").setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader("Fecha Exp.").setSortable(true).setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader("Número de tarjeta").setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
+            TextField pinField = new TextField();
+            pinField.setValue(tarjeta.getiPin());
+            pinField.setWidth("100px");
+            pinField.addValueChangeListener(event -> {  
+            	if(!notCambios.isOpened()) notCambios.open();
+            	tarjeta.setiPin(event.getValue());
+            });
+            
+            return pinField;
+        })).setHeader("PIN").setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
+        	 HorizontalLayout layout = new HorizontalLayout();
+        	    TextField cvcField = new TextField();
+        	    cvcField.setWidth("100px");
+        	    cvcField.setValue(tarjeta.getCVC());
+        	    cvcField.setReadOnly(true);
+        	    Button refreshButton = new Button(new Icon(VaadinIcon.REFRESH));
+        	    refreshButton.addClickListener(event -> {
+        	        // generate a new CVC and set it in the tarjeta object
+        	    	if(!notCambios.isOpened()) notCambios.open();
+        	        String newCvc = tarjeta.GenerarCVC();
+        	        tarjeta.setCVC(newCvc);
+        	        cvcField.setValue(newCvc);
+        	    });
+        	    layout.add(cvcField, refreshButton);
+        	    return layout;
+        })).setHeader("CVC").setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
+            Button saveButton = new Button("Guardar");
+            saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            saveButton.addClickListener(event -> {
+                try {
+                	notCambios.close();
+					_tarService.Update(tarjeta);
+					Notification not = Notification.show("Se realizaron los cambios correctamente");
+	    	    	not.setPosition(Position.MIDDLE);
+	    	    	not.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                	aTarjeta.removeAll(aTarjeta);
+                	aTarjeta.addAll((Collection<Tarjeta>) _tarService.findByCliente(_cliente));
+                	gridTarjeta.setItems(aTarjeta);
+				} catch (Exception e1) {
+					Notification not = Notification.show("Se ha encontrado el siguiente error: " + e1.getMessage());
+	    	    	not.setPosition(Position.TOP_STRETCH);
+	    	    	not.addThemeVariants(NotificationVariant.LUMO_ERROR);
+				}
+            });
+            return saveButton;
+        })).setHeader("Cambios").setTextAlign(ColumnTextAlign.CENTER);
         
 		hlBuscador.add(pDNI,
 					   txtDNI,
@@ -169,6 +227,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	            "<vaadin-button style=\"padding: 0; margin: 4px\" theme=\"secondary\" @click=\"${handleClick}\"><vaadin-icon icon=\"vaadin:eye\"></vaadin-icon></vaadin-button>")
 	            .withFunction("handleClick",
 	                    cliente -> {	 
+	                    	_cliente = cliente;
 	                    	aTarjetas.removeAll(aTarjetas);
 	                    	aTarjetas.addAll((Collection<Tarjeta>) _tarService.findByCliente(cliente));
 	                    	gridTarjeta.setItems(aTarjetas);

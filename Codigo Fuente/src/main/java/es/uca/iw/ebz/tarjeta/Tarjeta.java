@@ -128,7 +128,7 @@ public class Tarjeta {
 		return sNumTarjeta;
 	}
 	
-	private String GenerarCVC() { return GenerarCVC(null); }
+	public String GenerarCVC() { return GenerarCVC(null); }
 	private String GenerarCVC(Integer valor) {
 		int iValor = valor == null? new Random().nextInt(998)+1 : valor;
 		String sCVC = String.valueOf(iValor);
