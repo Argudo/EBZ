@@ -1,11 +1,13 @@
 package es.uca.iw.ebz.views.main;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import es.uca.iw.ebz.Movimiento.DatosMovimiento;
@@ -24,23 +26,12 @@ import java.util.Date;
 import java.util.List;
 
 @PageTitle("Movimientos")
-@Component
 @Route(value = "movimiento", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class MovimientoView extends VerticalLayout {
     private VerticalLayout vlDetalleMovimiento = new VerticalLayout();
+    private H1 hHeader = new H1("Mis movimientos");
 
-    private H3 hOrigen = new H3("Origen");
-    private H3 hDestino = new H3("Destino");
-    private H3 hImporte = new H3("Importe");
-    private H3 hConcepto = new H3("Concepto");
-    private H3 hFecha = new H3("Fecha");
-
-    public Paragraph pOrigen = new Paragraph();
-    public Paragraph pDestino = new Paragraph();
-    public Paragraph pImporte = new Paragraph();
-    public Paragraph pConcepto = new Paragraph();
-    public Paragraph pFecha = new Paragraph();
 
     @Autowired
     private AuthenticatedUser authenticatedUser;
@@ -52,18 +43,18 @@ public class MovimientoView extends VerticalLayout {
         authenticatedUser = user;
         this.movimientoService = movimientoService;
         this.clienteService = clienteService;
-        H1 hMovimiento = new H1("Mis movimientos");
-        hMovimiento.setClassName("title");
+        add(hHeader);
 
-        gridMovimientos.addColumn(DatosMovimiento::getOrigen).setWidth("33%");
-        gridMovimientos.addColumn(DatosMovimiento::getDestino).setWidth("33%");
-        gridMovimientos.addColumn(DatosMovimiento::getImporte).setWidth("33%");
-        gridMovimientos.addColumn(DatosMovimiento::getFecha).setWidth("33%");
+        gridMovimientos.addColumn(DatosMovimiento::getOrigen).setHeader("Origen").setAutoWidth(true);
+        gridMovimientos.addColumn(DatosMovimiento::getDestino).setHeader("Destino").setAutoWidth(true);
+        gridMovimientos.addColumn(DatosMovimiento::getConcepto).setHeader("Concepto").setAutoWidth(true);
+        gridMovimientos.addColumn(DatosMovimiento::getImporte).setHeader("Importe").setSortable(true);
+        gridMovimientos.addColumn(DatosMovimiento::getFecha).setHeader("Fecha").setSortable(true).setAutoWidth(true);
 
         //cliente
-        //Cliente cliente = clienteService.findByUsuario(authenticatedUser.get().get());
+        Cliente cliente = clienteService.findByUsuario(authenticatedUser.get().get());
         //movimientos
-       /* List<Movimiento> movimientos = movimientoService.findByClienteByFechaASC(cliente);
+        List<Movimiento> movimientos = movimientoService.findByClienteByFechaASC(cliente);
         List<DatosMovimiento> datosMovimientos = new ArrayList<>();
         for(Movimiento movimiento : movimientos) {
             DatosMovimiento datosMovimiento = new DatosMovimiento();
@@ -71,34 +62,35 @@ public class MovimientoView extends VerticalLayout {
             datosMovimientos.add(datosMovimiento);
         }
 
-        gridMovimientos.setItems(datosMovimientos);
-        vlDetalleMovimiento.add(gridMovimientos);*/
+        GridListDataView<DatosMovimiento> dataView = gridMovimientos.setItems(datosMovimientos);
 
-        vlDetalleMovimiento.setWidth("50%");
-        vlDetalleMovimiento.setPadding(true);
-        vlDetalleMovimiento.setMargin(true);
-        vlDetalleMovimiento.setSpacing(false);
-        vlDetalleMovimiento.setClassName("show Movimiento");
+        TextField searchField = new TextField();
+        searchField.setWidth("50%");
+        searchField.setPlaceholder("Search");
+        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        searchField.addValueChangeListener(e -> dataView.refreshAll());
+        add(searchField);
+        if(movimientos != null){
+            add(gridMovimientos);
+        }else{
+            add(new H2("No tienes ningún movimiento actualmente"));
+        }
 
-        //ejemplo
-        pOrigen.setText("Cuenta 1");
-        pDestino.setText("Cuenta 2");
-        pImporte.setText("1000");
-        pConcepto.setText("Pago de la luz");
-        pFecha.setText("01/01/2020");
-        vlDetalleMovimiento.add(hMovimiento,
-                new Hr(),
-                hOrigen,
-                pOrigen,
-                hDestino,
-                pDestino,
-                hImporte,
-                pImporte,
-                hConcepto,
-                pConcepto,
-                hFecha,
-                pFecha);
-        add(vlDetalleMovimiento);
+        dataView.addFilter(mov -> {
+            String searchTerm = searchField.getValue().trim();
+
+            if (searchTerm.isEmpty()) return true;
+
+            boolean matchesFullName = mov.getOrigen().contains(searchTerm);
+            boolean matchesEmail = mov.getDestino().contains(searchTerm);
+            boolean matchesProfession = mov.getConcepto().contains(searchTerm);
+
+            return matchesFullName || matchesEmail || matchesProfession;
+        });
+
+
     }
+
 
 }

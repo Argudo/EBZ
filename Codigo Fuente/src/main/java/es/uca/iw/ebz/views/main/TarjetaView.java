@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.componentfactory.ToggleButton;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
