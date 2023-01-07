@@ -30,7 +30,7 @@ import java.util.List;
 @RolesAllowed({ "Cliente" })
 public class MovimientoView extends VerticalLayout {
     private VerticalLayout vlDetalleMovimiento = new VerticalLayout();
-    private H1 hHeader = new H1("Mis movimientos");
+    private H1 hHeader = new H1(getTranslation("movement.home"));
 
 
     @Autowired
@@ -45,11 +45,11 @@ public class MovimientoView extends VerticalLayout {
         this.clienteService = clienteService;
         add(hHeader);
 
-        gridMovimientos.addColumn(DatosMovimiento::getOrigen).setHeader("Origen").setAutoWidth(true);
-        gridMovimientos.addColumn(DatosMovimiento::getDestino).setHeader("Destino").setAutoWidth(true);
-        gridMovimientos.addColumn(DatosMovimiento::getConcepto).setHeader("Concepto").setAutoWidth(true);
-        gridMovimientos.addColumn(DatosMovimiento::getImporte).setHeader("Importe").setSortable(true);
-        gridMovimientos.addColumn(DatosMovimiento::getFecha).setHeader("Fecha").setSortable(true).setAutoWidth(true);
+        gridMovimientos.addColumn(DatosMovimiento::getOrigen).setHeader(getTranslation("movement.origin")).setAutoWidth(true);
+        gridMovimientos.addColumn(DatosMovimiento::getDestino).setHeader(getTranslation("movement.destination")).setAutoWidth(true);
+        gridMovimientos.addColumn(DatosMovimiento::getConcepto).setHeader(getTranslation("movement.concept")).setAutoWidth(true);
+        gridMovimientos.addColumn(DatosMovimiento::getImporte).setHeader(getTranslation("movement.amount")).setSortable(true);
+        gridMovimientos.addColumn(DatosMovimiento::getFecha).setHeader(getTranslation("movement.date")).setSortable(true).setAutoWidth(true);
 
         //cliente
         Cliente cliente = clienteService.findByUsuario(authenticatedUser.get().get());
@@ -65,8 +65,8 @@ public class MovimientoView extends VerticalLayout {
         GridListDataView<DatosMovimiento> dataView = gridMovimientos.setItems(datosMovimientos);
 
         TextField searchField = new TextField();
-        searchField.setWidth("50%");
-        searchField.setPlaceholder("Search");
+        searchField.setWidth("30%");
+        searchField.setPlaceholder(getTranslation("movement.search"));
         searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
         searchField.setValueChangeMode(ValueChangeMode.EAGER);
         searchField.addValueChangeListener(e -> dataView.refreshAll());
@@ -74,7 +74,7 @@ public class MovimientoView extends VerticalLayout {
         if(movimientos != null){
             add(gridMovimientos);
         }else{
-            add(new H2("No tienes ningún movimiento actualmente"));
+            add(new H2(getTranslation("movement.nomov")));
         }
 
         dataView.addFilter(mov -> {
