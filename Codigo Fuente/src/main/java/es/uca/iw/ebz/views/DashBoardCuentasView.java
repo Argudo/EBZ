@@ -82,6 +82,8 @@ public class DashBoardCuentasView extends HorizontalLayout {
         vlSeparator.getStyle().set("background-color", "var(--lumo-contrast-10pct)");
         vlSeparator.getStyle().set("padding", "0");
 
+        btnDelete.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
         vlGrid.add(hGrid,
                 new Hr(),
                 gridCuenta,
@@ -95,10 +97,10 @@ public class DashBoardCuentasView extends HorizontalLayout {
         List<Cuenta> aCuenta = new ArrayList<Cuenta>();
         /*Grid Tarjeta*/
         aCuenta = _cuentaService.loadCuentas();
-        gridCuenta.addColumn(Cuenta::getNumeroCuenta).setHeader("Número de tarjeta");
-        gridCuenta.addColumn(Cuenta::getFechaCreacion).setHeader("Fecha de creación");
-        gridCuenta.addColumn(Cuenta::getSaldo).setHeader("Saldo");
-        gridCuenta.addColumn(Cuenta::getDNICliente).setHeader("DNI Cliente");
+        gridCuenta.addColumn(Cuenta::getNumeroCuenta).setHeader("Número de tarjeta").setAutoWidth(true).setSortable(true);
+        gridCuenta.addColumn(Cuenta::getFechaCreacion).setHeader("Fecha de creación").setAutoWidth(true).setSortable(true);
+        gridCuenta.addColumn(Cuenta::getSaldo).setHeader("Saldo").setSortable(true);
+        gridCuenta.addColumn(Cuenta::getDNICliente).setHeader("DNI Cliente").setAutoWidth(true).setSortable(true);
         GridListDataView<Cuenta> dataView = gridCuenta.setItems(aCuenta);
 
         //comboBox
