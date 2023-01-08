@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.hash.Hashing;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H4;
@@ -109,23 +111,24 @@ public class Tarjeta {
 		switch(_tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,8).toUpperCase();
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,5).toUpperCase();
 				break;
 			case Credito:
 				sNumTarjeta += "10";
-				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,8).toUpperCase();
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,5).toUpperCase();
 				break;
 			case Prepago:
 				sNumTarjeta += "20";
 				String cliente_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_clienteTitular.getUsuario().getDNI(), StandardCharsets.UTF_8).toString());
-				sNumTarjeta += cliente_sha256.substring(0,8).toUpperCase();
+				sNumTarjeta += cliente_sha256.substring(0,5).toUpperCase();
 				break;
 		}
+		sNumTarjeta += GenerarCVC();
 		sNumTarjeta += CalculateCheckDigit(sNumTarjeta);
 		return sNumTarjeta;
 	}
 	
-	private String GenerarCVC() { return GenerarCVC(null); }
+	public String GenerarCVC() { return GenerarCVC(null); }
 	private String GenerarCVC(Integer valor) {
 		int iValor = valor == null? new Random().nextInt(998)+1 : valor;
 		String sCVC = String.valueOf(iValor);
@@ -213,7 +216,7 @@ public class Tarjeta {
 
 	public UUID getId() { return _iId; }
 	public String getNumTarjeta() { return _sNumTarjeta; }
-	public void setNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
+	public void setNumTarjeta() { _sNumTarjeta = GenerarNumTarjeta(); }
 	public String getiPin() { return _sPin; }
 	public void setiPin(String iPin) { _sPin = iPin; }
 	public String getFechaExpiracion() { return (String.valueOf(String.valueOf(_fechaExpiracion.getMonth() + 1)) + "/" + String.valueOf(_fechaExpiracion.getYear()-100)); }

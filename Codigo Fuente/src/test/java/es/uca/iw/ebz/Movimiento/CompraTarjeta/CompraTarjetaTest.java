@@ -20,7 +20,7 @@ public class CompraTarjetaTest {
     public void shouldProvideTarjeta() {
         assertThat(compraTarjetaTest.getTarjeta().getNumTarjeta().equals(ObjectMother.createTestTarjeta().getNumTarjeta())).isTrue();
         Tarjeta tarjeta = ObjectMother.createTestTarjeta();
-        tarjeta.setNumTarjeta("1234567890123456");
+        tarjeta.setNumTarjeta();
         compraTarjetaTest.setTarjeta(tarjeta);
         assertThat(compraTarjetaTest.getTarjeta().getNumTarjeta() == "1234567890123456").isTrue();
     }
