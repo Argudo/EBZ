@@ -398,7 +398,7 @@
     "date-fns": "$date-fns",
     "lit": "$lit",
     "proj4": "$proj4",
-    "line-awesome": "$line-awesome",
-    "@vaadin-component-factory/vcf-toggle-button": "$@vaadin-component-factory/vcf-toggle-button"
+    "@vaadin-component-factory/vcf-toggle-button": "$@vaadin-component-factory/vcf-toggle-button",
+    "line-awesome": "$line-awesome"
   }
 }

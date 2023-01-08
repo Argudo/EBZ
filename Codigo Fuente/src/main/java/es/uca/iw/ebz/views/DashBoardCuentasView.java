@@ -6,15 +6,17 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,10 +25,12 @@ import com.vaadin.flow.router.Route;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
+import es.uca.iw.ebz.Movimiento.DatosMovimiento;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.views.component.CreateAccountDialog;
 import es.uca.iw.ebz.views.layout.AdminLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,13 +44,12 @@ public class DashBoardCuentasView extends HorizontalLayout {
 
     private H1 hGrid = new H1(getTranslation("account.home"));
 
-    private H2 hInfo = new H2(getTranslation("account.search"));
+    private H2 hInfo = new H2(getTranslation("dashboard.search"));
     private HorizontalLayout hlBuscador = new HorizontalLayout();
 
     private ComboBox<String> cbUsuario = new ComboBox<>(getTranslation("account.home"));
     private Button btnBuscar = new Button();
     private Paragraph pDNI = new Paragraph(getTranslation("account.number"));
-    private HorizontalLayout hlAviso = new HorizontalLayout();
     private Grid<Cuenta> gridCuenta = new Grid<>(Cuenta.class, false);
 
     private Button btnAdd = new Button(getTranslation("account.add"));
@@ -54,6 +57,8 @@ public class DashBoardCuentasView extends HorizontalLayout {
     private Button btnDelete = new Button(getTranslation("account.delete"));
 
     private VerticalLayout hlAdd = new VerticalLayout();
+
+    private CreateAccountDialog createAccountDialog;
 
     @Autowired
     private ClienteService _clienteService;
@@ -86,9 +91,6 @@ public class DashBoardCuentasView extends HorizontalLayout {
         hlBuscador.setAlignItems(FlexComponent.Alignment.END);
         pDNI.getStyle().set("fontWeight", "600");
         btnBuscar.getElement().appendChild(new Icon("lumo", "search").getElement());
-        hlAviso.setAlignItems(FlexComponent.Alignment.CENTER);
-        hlAviso.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        hlAviso.setWidth("100%");
         /*Grid cliente*/
         List<Cuenta> aCuenta = new ArrayList<Cuenta>();
         /*Grid Tarjeta*/
@@ -97,7 +99,7 @@ public class DashBoardCuentasView extends HorizontalLayout {
         gridCuenta.addColumn(Cuenta::getFechaCreacion).setHeader("Fecha de creación");
         gridCuenta.addColumn(Cuenta::getSaldo).setHeader("Saldo");
         gridCuenta.addColumn(Cuenta::getDNICliente).setHeader("DNI Cliente");
-        gridCuenta.setItems(aCuenta);
+        GridListDataView<Cuenta> dataView = gridCuenta.setItems(aCuenta);
 
         //comboBox
         List<String> aCuentas = new ArrayList<>();
@@ -111,7 +113,6 @@ public class DashBoardCuentasView extends HorizontalLayout {
         vlInfo.add(hInfo,
                 new Hr(),
                 hlBuscador,
-                hlAviso,
                 btnDelete);
 
         setHeight("100%");
@@ -120,66 +121,59 @@ public class DashBoardCuentasView extends HorizontalLayout {
                 vlInfo);
 
         btnAdd.addClickListener(e -> {
-            hlAdd.removeAll();
-            add(hlAdd);
-            Button btnCreateCuenta = new Button(getTranslation("account.create"));
+
+
             List<String> DNIs = new ArrayList<>();
             for (Cliente cliente : clienteService.findAll()) {
                 DNIs.add(cliente.getUsuario().getDNI());
             }
-            cbUsuario.setItems(DNIs);
-            hlAdd.add(new Text(getTranslation("account.dni")),
-                    cbUsuario,
-                    btnCreateCuenta);
-            add(hlAdd);
-            btnCreateCuenta.addClickListener(event -> {
-                Usuario usuario = usuarioService.findBysDNI(cbUsuario.getValue());
-                Cliente cliente = clienteService.findByUsuario(usuario);
-                Cuenta cuenta = new Cuenta();
-                cuenta.setCliente(cliente);
-                if(cuentaService.añadirCuenta(cuenta) != null) {
-                    hlAviso.getStyle().set("font-size", "14px");
-                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
-                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.success")));
-                    hlAdd.add(hlAviso);
-                    add(hlAdd);
-                }
-                else {
-                    hlAviso.getStyle().set("font-size", "14px");
-                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
-                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.error")));
-                    hlAdd.add(hlAviso);
-                    add(hlAdd);
-                }
-            });
+            createAccountDialog = new CreateAccountDialog(DNIs, cuentaService, usuarioService, clienteService);
+            createAccountDialog.open();
+
         });
 
         btnDelete.addClickListener(e -> {
-            hlAviso.removeAll();
-            add(vlInfo);
             if(cbUsuario.getValue() == null){
-                hlAviso.getStyle().set("font-size", "14px");
-                hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
-                hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.accountError")));
-                vlInfo.add(hlAviso);
-                add(vlInfo);
+                Notification notification = new Notification();
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+
+                Div text = new Div(new Text(getTranslation("account.accountError")));
+
+                Button closeButton = new Button(new Icon("lumo", "cross"));
+                closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+                closeButton.getElement().setAttribute("aria-label", "Close");
+                closeButton.addClickListener(event -> {
+                    notification.close();
+                });
+
+                HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+                layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+                notification.add(layout);
+                notification.open();
             }
             else {
                 if(cuentaService.delete2(cbUsuario.getValue())){
-                    hlAviso.getStyle().set("font-size", "14px");
-                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
-                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.deleteSuccess")));
-                    add(hlAviso);
+                    Notification notification = Notification.show(getTranslation("account.deleteSuccess"));
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 }else{
-                    hlAviso.getStyle().set("font-size", "14px");
-                    hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
-                    hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-                    hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("account.deleteError")));
-                    add(hlAviso);
+                    Notification notification = new Notification();
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+
+                    Div text = new Div(new Text(getTranslation("account.deleteError")));
+
+                    Button closeButton = new Button(new Icon("lumo", "cross"));
+                    closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+                    closeButton.getElement().setAttribute("aria-label", "Close");
+                    closeButton.addClickListener(event -> {
+                        notification.close();
+                    });
+
+                    HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+                    layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+                    notification.add(layout);
+                    notification.open();
                 }
             }
         });

@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.views;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.*;
