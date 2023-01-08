@@ -16,6 +16,7 @@ import es.uca.iw.ebz.Movimiento.MovimientoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.component.DetalleMovimientoDialog;
 import es.uca.iw.ebz.views.layout.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,6 +36,7 @@ public class MovimientoView extends VerticalLayout {
     private AuthenticatedUser authenticatedUser;
     private MovimientoService movimientoService;
     private ClienteService clienteService;
+    private DetalleMovimientoDialog detalleMovimientoDialog;
 
     private Grid<DatosMovimiento> gridMovimientos = new Grid<>(DatosMovimiento.class, false);
     public MovimientoView (AuthenticatedUser user, MovimientoService movimientoService, ClienteService clienteService) {
@@ -42,7 +44,7 @@ public class MovimientoView extends VerticalLayout {
         this.movimientoService = movimientoService;
         this.clienteService = clienteService;
         add(hHeader);
-
+        gridMovimientos.addColumn(DatosMovimiento::getTipo).setHeader(getTranslation("movement.type")).setAutoWidth(true).setSortable(true);
         gridMovimientos.addColumn(DatosMovimiento::getOrigen).setHeader(getTranslation("movement.origin")).setAutoWidth(true);
         gridMovimientos.addColumn(DatosMovimiento::getDestino).setHeader(getTranslation("movement.destination")).setAutoWidth(true);
         gridMovimientos.addColumn(DatosMovimiento::getConcepto).setHeader(getTranslation("movement.concept")).setAutoWidth(true);
@@ -83,11 +85,15 @@ public class MovimientoView extends VerticalLayout {
             boolean matchesFullName = mov.getOrigen().contains(searchTerm);
             boolean matchesEmail = mov.getDestino().contains(searchTerm);
             boolean matchesProfession = mov.getConcepto().contains(searchTerm);
+            boolean matchesTipo = mov.getTipo().contains(searchTerm);
 
-            return matchesFullName || matchesEmail || matchesProfession;
+            return matchesFullName || matchesEmail || matchesProfession || matchesTipo;
         });
 
-
+        gridMovimientos.addItemClickListener(movimiento -> {
+            detalleMovimientoDialog = new DetalleMovimientoDialog(movimiento.getItem());
+            detalleMovimientoDialog.open();
+        });
     }
 
 
