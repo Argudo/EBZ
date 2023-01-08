@@ -13,7 +13,7 @@ public class Noticia {
 
     @Id
     @GeneratedValue
-    @Column (name = "id")
+    @Column(name = "id", length=16)
     private UUID _id;
 
     @Column (name = "titulo")
