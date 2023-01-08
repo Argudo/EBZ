@@ -1,7 +1,5 @@
 package es.uca.iw.ebz.controller;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.Movimiento.Movimiento;
@@ -9,16 +7,12 @@ import es.uca.iw.ebz.Movimiento.MovimientoService;
 import es.uca.iw.ebz.Movimiento.TipoMovimiento;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
-import es.uca.iw.ebz.views.main.DashBoardView;
-import org.atmosphere.cpr.Broadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import javax.annotation.security.PermitAll;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,7 +55,7 @@ public class TransferenciaRestController {
 
     @PostMapping("/api/payments")
     public TransaccionTarjeta compraTarjeta(@RequestBody TransaccionTarjeta requestTarjeta) {
-        Movimiento movimiento = new Movimiento(new Date(), "Compra " + requestTarjeta.getType() + "en " + requestTarjeta.getShop(), TipoMovimiento.COMPRATARJETA);
+        Movimiento movimiento = new Movimiento(new Date(), "Compra " + requestTarjeta.getType() + " en " + requestTarjeta.getShop(), TipoMovimiento.COMPRATARJETA);
         Tarjeta tarjeta = _tarjetaService.findByNumCuenta(requestTarjeta.getCardNumber());
         if (tarjeta != null) {
             try{

@@ -1,14 +1,9 @@
 package es.uca.iw.ebz;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.server.VaadinSession;
-import es.uca.iw.ebz.usuario.admin.Admin;
-import es.uca.iw.ebz.usuario.admin.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +14,6 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
@@ -38,6 +32,8 @@ import es.uca.iw.ebz.usuario.TipoUsuario;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioRepository;
 import es.uca.iw.ebz.usuario.UsuarioService;
+import es.uca.iw.ebz.usuario.admin.Admin;
+import es.uca.iw.ebz.usuario.admin.AdminService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;

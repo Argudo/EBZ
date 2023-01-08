@@ -265,7 +265,7 @@ public class MovimientoService {
                 CompraTarjeta compraTarjeta = _compraTarjetaService.findByMovimiento(movimiento);
                 datos.setOrigen(compraTarjeta.getTarjeta().getNumTarjeta());
                 datos.setDestino( compraTarjeta.getDestino());
-                datos.setImporte(Float.toString(compraTarjeta.getImporte()));
+                datos.setImporte(Float.toString(-compraTarjeta.getImporte()));
                 break;
             case RECARGATARJETA:
                 RecargaTarjeta recargaTarjeta = _recargaTarjetaService.findByMovimiento(movimiento);
@@ -275,7 +275,8 @@ public class MovimientoService {
                 break;
             case RECIBO:
                 Recibo recibo = _reciboService.findByMovimiento(movimiento);
-                datos.setOrigen(recibo.getCuenta().getNumeroCuenta());
+                datos.setOrigen("TRANSFERENCIA");
+                datos.setDestino(recibo.getCuenta().getNumeroCuenta());
                 datos.setImporte(Float.toString(recibo.getImporte()));
                 break;
         }
