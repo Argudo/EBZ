@@ -2,7 +2,7 @@ package es.uca.iw.ebz.views.main.layout;
 
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.server.VaadinSession;
-import es.uca.iw.ebz.views.main.NoticiasView;
+import es.uca.iw.ebz.views.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -22,13 +22,10 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
 
-import es.uca.iw.ebz.views.main.HomeView;
-import es.uca.iw.ebz.views.main.TarjetaView;
 import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
 
 import java.util.List;
 import java.util.Locale;
-import es.uca.iw.ebz.views.main.TransferenciaView;
 
 
 public class MainLayout extends AppLayout{
@@ -133,7 +130,8 @@ public class MainLayout extends AppLayout{
 	    return new Tab[] { createTab("Inicio", HomeView.class),
 	            createTab("Transferencias", TransferenciaView.class),
 	            createTab("Tarjetas", TarjetaView.class),
-				createTab("Noticias", NoticiasView.class)};
+				createTab("Noticias", NoticiasView.class),
+				createTab("Consultas", ConsultaView.class)};
 	}
 
 	private static Tab createTab(String text,

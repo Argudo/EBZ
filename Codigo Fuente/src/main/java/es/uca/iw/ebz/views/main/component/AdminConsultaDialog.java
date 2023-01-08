@@ -9,7 +9,10 @@ import com.vaadin.flow.component.messages.MessageInput;
 import com.vaadin.flow.component.messages.MessageList;
 import com.vaadin.flow.component.messages.MessageListItem;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import es.uca.iw.ebz.consulta.Consulta;
+import es.uca.iw.ebz.consulta.EnumEstado;
+import es.uca.iw.ebz.consulta.TipoEstado;
 import es.uca.iw.ebz.mensaje.Mensaje;
 import es.uca.iw.ebz.mensaje.MensajeService;
 import es.uca.iw.ebz.usuario.TipoUsuario;
@@ -35,6 +38,9 @@ public class AdminConsultaDialog extends Dialog {
     private AdminService _adminService;
 
     private ClienteService _clienteService;
+
+    private RadioButtonGroup<String> rdGroup;
+
 
     public AdminConsultaDialog(Consulta consulta,Admin admin, AdminService adminService,
                                  ClienteService clienteService, MensajeService mensajeService) {
@@ -94,10 +100,31 @@ public class AdminConsultaDialog extends Dialog {
             }
         }
 
+        rdGroup = new RadioButtonGroup<>();
+        rdGroup.setLabel("Estado de la consulta");
+        rdGroup.setItems("Pendiente", "Abierto", "Cerrado");
+        rdGroup.setValue(_consulta.getTipoEstado().toString());
+        rdGroup.addValueChangeListener( e-> {
+            switch(rdGroup.getValue()){
+                case "Pendiente":
+                    _consulta.set_tipoEstado(new TipoEstado(EnumEstado.Pendiente));
+                    break;
+
+                case "Abierto":
+                    _consulta.set_tipoEstado(new TipoEstado(EnumEstado.Abierto));
+                    break;
+
+                case "Cerrado":
+                    _consulta.set_tipoEstado(new TipoEstado(EnumEstado.Cerrado));
+                    break;
+            }
+        });
+
+
         vlChat.add(
                 msgList,
-                msgInput
-        );
+                rdGroup,
+                msgInput);
 
         add(vlChat);
 
