@@ -84,7 +84,9 @@ public class ClienteConsultaDialog extends Dialog {
             _mensajeService.Save(lastMsg);
             _consulta.setMensajes(lastMsg);
             List<MessageListItem> items = new ArrayList<>(msgList.getItems());
-            items.add(new MessageListItem(lastMsg.getTexto(), lastMsg.getFecha().toInstant(), _cliente.getNombre()));
+            MessageListItem msgAux = new MessageListItem(lastMsg.getTexto(), lastMsg.getFecha().toInstant(), _cliente.getNombre());
+            msgAux.setUserColorIndex(3);
+            items.add(msgAux);
             msgList.setItems(items);
         });
 
@@ -95,11 +97,15 @@ public class ClienteConsultaDialog extends Dialog {
             List<MessageListItem> items = new ArrayList<>(msgList.getItems());
             if(tpUser == TipoUsuario.Cliente){
                 Cliente clAux = _clienteService.findByUsuario(m.getAutor());
-                items.add(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), clAux.getNombre()));
+                MessageListItem msgAux = new MessageListItem(m.getTexto(), m.getFecha().toInstant(), clAux.getNombre());
+                msgAux.setUserColorIndex(3);
+                items.add(msgAux);
                 msgList.setItems(items);
             }else{
                 Admin adAux = _adminService.findByUsuario(m.getAutor());
-                items.add(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), adAux.getNombre()));
+                MessageListItem msgAux = new MessageListItem(m.getTexto(), m.getFecha().toInstant(), adAux.getNombre());
+                msgAux.setUserColorIndex(1);
+                items.add(msgAux);
                 msgList.setItems(items);
             }
         }
