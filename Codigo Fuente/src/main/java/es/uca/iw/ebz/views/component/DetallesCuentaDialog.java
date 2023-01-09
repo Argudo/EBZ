@@ -21,19 +21,19 @@ public class DetallesCuentaDialog extends Dialog {
     private Cuenta _cuenta;
 
     //Dialog elements section
-    private H3 hNumCuenta = new H3("Número de cuenta");
+    private H3 hNumCuenta = new H3(getTranslation("account.number"));
 
     private Paragraph pNumCuenta = new Paragraph();
 
-    private H3 hSaldo = new H3("Saldo");
+    private H3 hSaldo = new H3(getTranslation("account.balance"));
 
     private Paragraph pBalance = new Paragraph();
 
-    private H3 hFechaCreacion = new H3("Fecha de creación");
+    private H3 hFechaCreacion = new H3(getTranslation("account.date"));
 
     private Paragraph pFechaCreacion = new Paragraph();
 
-    private H3 hTitular = new H3("Titular de la cuenta");
+    private H3 hTitular = new H3(getTranslation("account.holder"));
 
     private Paragraph pTitular = new Paragraph();
 
@@ -55,7 +55,7 @@ public class DetallesCuentaDialog extends Dialog {
 
         //Dialog configuration section
         setWidth("30vw");
-        setHeaderTitle("Detalles de la cuenta");
+        setHeaderTitle(getTranslation("account.detail"));
 
         Button btnCancelar = new Button(new Icon(VaadinIcon.CLOSE));
         btnCancelar.addThemeVariants(ButtonVariant.LUMO_ICON);

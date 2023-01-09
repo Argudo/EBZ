@@ -133,7 +133,7 @@ public class MainLayout extends AppLayout{
 	            createTab(getTranslation("mainLayout.cards"), TarjetaView.class),
 				createTab(getTranslation("mainLayout.movement"), MovimientoView.class),
 				createTab(getTranslation("mainLayout.notices"), NoticiasView.class),
-				createTab("Consultas", ConsultaView.class)};
+				createTab(getTranslation("mainLayout.query"), ConsultaView.class)};
 	}
 
 	private static Tab createTab(String text,

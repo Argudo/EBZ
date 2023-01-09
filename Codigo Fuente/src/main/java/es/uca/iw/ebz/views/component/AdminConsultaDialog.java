@@ -59,7 +59,7 @@ public class AdminConsultaDialog extends Dialog {
 
         //Dialog configuration section
         setWidth("40vw");
-        setHeaderTitle("Detalles de la consulta \"" + _consulta.getTitulo() + "\"");
+        setHeaderTitle(getTranslation("query.detail") + " \"" + _consulta.getTitulo() + "\"");
 
         Button btnCancelar = new Button(new Icon(VaadinIcon.CLOSE));
         btnCancelar.addThemeVariants(ButtonVariant.LUMO_ICON);
