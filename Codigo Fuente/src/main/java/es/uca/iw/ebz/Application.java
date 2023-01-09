@@ -133,7 +133,7 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			cli2.setTipoUsuario(TipoUsuario.Cliente);
 			usuario.save(cli);
 			usuario.save(cli2);
-			Cliente cliente = new Cliente("Juán del Marqués", new Date(), new Date(), TipoCliente.Persona, cli);
+			Cliente cliente = new Cliente("Juan del Marqués", new Date(), new Date(), TipoCliente.Persona, cli);
 			clienteRepo.save(cliente);
 			clienteRepo.save(new Cliente("Natalia Reina", new Date(), new Date(), TipoCliente.Persona, cli2));
 			Cuenta cuenta = new Cuenta();
