@@ -11,6 +11,7 @@ import com.vaadin.flow.component.messages.MessageListItem;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import es.uca.iw.ebz.consulta.Consulta;
+import es.uca.iw.ebz.consulta.ConsultaService;
 import es.uca.iw.ebz.consulta.EnumEstado;
 import es.uca.iw.ebz.consulta.TipoEstado;
 import es.uca.iw.ebz.mensaje.Mensaje;
@@ -33,9 +34,9 @@ public class AdminConsultaDialog extends Dialog {
 
     private MensajeService _mensajeService;
 
-    private MessageInput _msgInput;
-
     private AdminService _adminService;
+
+    private ConsultaService _consultaService;
 
     private ClienteService _clienteService;
 
@@ -43,13 +44,15 @@ public class AdminConsultaDialog extends Dialog {
 
 
     public AdminConsultaDialog(Consulta consulta,Admin admin, AdminService adminService,
-                                 ClienteService clienteService, MensajeService mensajeService) {
+                               ClienteService clienteService, MensajeService mensajeService,
+                               ConsultaService consultaService) {
 
         //Services initialization section
         _consulta = consulta;
         _admin = admin;
         _mensajeService = mensajeService;
         _clienteService = clienteService;
+        _consultaService = consultaService;
         _adminService = adminService;
 
         //End services initialization section
@@ -68,7 +71,6 @@ public class AdminConsultaDialog extends Dialog {
         VerticalLayout vlChat = new VerticalLayout();
         vlChat.setWidthFull();
 
-
         //End chat layout section
 
 
@@ -76,8 +78,10 @@ public class AdminConsultaDialog extends Dialog {
         MessageList msgList = new MessageList();
         MessageInput msgInput = new MessageInput();
         msgInput.addSubmitListener( submitEvent -> {
-            Mensaje lastMsg = new Mensaje(new Date(), submitEvent.getValue(), _admin.getUsuario());
+            Mensaje lastMsg = new Mensaje(new Date(), submitEvent.getValue(), _admin.getUsuario(), _consulta);
+            _consultaService.Save(_consulta);
             _consulta.setMensajes(lastMsg);
+            _mensajeService.Save(lastMsg);
             List<MessageListItem> items = new ArrayList<>(msgList.getItems());
             items.add(new MessageListItem(lastMsg.getTexto(), lastMsg.getFecha().toInstant(), _admin.getNombre()));
             msgList.setItems(items);
@@ -91,12 +95,15 @@ public class AdminConsultaDialog extends Dialog {
 
         for(Mensaje m: lista){
             TipoUsuario tpUser = m.getAutor().getTipoUsuario();
+            List<MessageListItem> items = new ArrayList<>(msgList.getItems());
             if(tpUser == TipoUsuario.Cliente){
                 Cliente clAux = _clienteService.findByUsuario(m.getAutor());
-                msgList.setItems(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), clAux.getNombre()));
+                items.add(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), clAux.getNombre()));
+                msgList.setItems(items);
             }else{
                 Admin adAux = _adminService.findByUsuario(m.getAutor());
-                msgList.setItems(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), adAux.getNombre()));
+                items.add(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), adAux.getNombre()));
+                msgList.setItems(items);
             }
         }
 

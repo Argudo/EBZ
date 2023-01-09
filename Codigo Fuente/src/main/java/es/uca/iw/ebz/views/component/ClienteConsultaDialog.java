@@ -36,14 +36,15 @@ public class ClienteConsultaDialog extends Dialog {
 
     private MensajeService _mensajeService;
 
-    private MessageInput _msgInput;
+    private ConsultaService _consultaService;
 
     private AdminService _adminService;
 
     private ClienteService _clienteService;
 
     public ClienteConsultaDialog(Consulta consulta,Cliente cliente, AdminService adminService,
-                                 ClienteService clienteService, MensajeService mensajeService) {
+                                 ClienteService clienteService, MensajeService mensajeService,
+                                 ConsultaService consultaService) {
 
         //Services initialization section
         _consulta = consulta;
@@ -51,6 +52,7 @@ public class ClienteConsultaDialog extends Dialog {
         _mensajeService = mensajeService;
         _clienteService = clienteService;
         _adminService = adminService;
+        _consultaService = consultaService;
 
         //End services initialization section
 
@@ -75,8 +77,11 @@ public class ClienteConsultaDialog extends Dialog {
         //Chat elements section
         MessageList msgList = new MessageList();
         MessageInput msgInput = new MessageInput();
+        msgInput.setSizeFull();
         msgInput.addSubmitListener( submitEvent -> {
-            Mensaje lastMsg = new Mensaje(new Date(), submitEvent.getValue(), _cliente.getUsuario());
+            Mensaje lastMsg = new Mensaje(new Date(), submitEvent.getValue(), _cliente.getUsuario(), _consulta);
+            _consultaService.Save(_consulta);
+            _mensajeService.Save(lastMsg);
             _consulta.setMensajes(lastMsg);
             List<MessageListItem> items = new ArrayList<>(msgList.getItems());
             items.add(new MessageListItem(lastMsg.getTexto(), lastMsg.getFecha().toInstant(), _cliente.getNombre()));
@@ -87,12 +92,15 @@ public class ClienteConsultaDialog extends Dialog {
 
         for(Mensaje m: lista){
             TipoUsuario tpUser = m.getAutor().getTipoUsuario();
+            List<MessageListItem> items = new ArrayList<>(msgList.getItems());
             if(tpUser == TipoUsuario.Cliente){
                 Cliente clAux = _clienteService.findByUsuario(m.getAutor());
-                msgList.setItems(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), clAux.getNombre()));
+                items.add(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), clAux.getNombre()));
+                msgList.setItems(items);
             }else{
                 Admin adAux = _adminService.findByUsuario(m.getAutor());
-                msgList.setItems(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), adAux.getNombre()));
+                items.add(new MessageListItem(m.getTexto(), m.getFecha().toInstant(), adAux.getNombre()));
+                msgList.setItems(items);
             }
         }
 

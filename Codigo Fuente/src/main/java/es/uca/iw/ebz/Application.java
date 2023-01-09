@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import es.uca.iw.ebz.consulta.EnumEstado;
+import es.uca.iw.ebz.consulta.TipoEstado;
+import es.uca.iw.ebz.consulta.TipoEstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -86,6 +89,9 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 
 	@Autowired
 	AdminService adminService;
+
+	@Autowired
+	TipoEstadoRepository tipoEstadoRepository;
 	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -93,6 +99,13 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		if(tipoEstadoRepository.count() == 0){
+			tipoEstadoRepository.save(new TipoEstado(EnumEstado.Pendiente));
+			tipoEstadoRepository.save(new TipoEstado(EnumEstado.Abierto));
+			tipoEstadoRepository.save(new TipoEstado(EnumEstado.Cerrado));
+		}
+
 		if(tipoTarRepo.count() == 0) {
 			tipoTarRepo.save(new TipoTarjeta(1, "Debito"));
 			tipoTarRepo.save(new TipoTarjeta(2, "Crédito"));

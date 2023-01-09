@@ -276,8 +276,7 @@ H3 _acBalance = new H3();
 				if(cont < 3){
 					mvComponentList.add(CreateMovement(m));
 					cont++;
-				}
-				if(cont >= 3) break;
+				}else break;
 			}
 
 			for(Component c: mvComponentList){
@@ -377,9 +376,12 @@ H3 _acBalance = new H3();
 		btnFunc.getElement().appendChild(icon.getElement());
 		Paragraph pDescription = new Paragraph(sName);
 
-		btnFunc.addClickListener( e -> {
-			dlogDC.open();
-		});
+		if(vI == VaadinIcon.INFO){
+			btnFunc.addClickListener( e -> {
+				dlogDC.open();
+			});
+		}
+
 
 		vlMain.add(
 				btnFunc,
@@ -432,7 +434,7 @@ H3 _acBalance = new H3();
 		vlMain.setSpacing(false);
 		vlMain.setWidth("min-width");
 
-		Paragraph _nt1 = new Paragraph(c.getTitulo() + " - " + c.getTipoEstado().toString());
+		Paragraph _nt1 = new Paragraph(c.getTitulo() + " - " + c.getTipoEstado().getTipo().toString());
 
 		//_nt1.addClickListener();
 

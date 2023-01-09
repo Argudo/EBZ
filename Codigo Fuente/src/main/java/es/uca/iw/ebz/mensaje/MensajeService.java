@@ -15,7 +15,7 @@ public class MensajeService {
     @Autowired
     public MensajeService(MensajeRepository mensajeRepository) { _mensajeRepository = mensajeRepository; }
 
-    public void Save(Mensaje m) { _mensajeRepository.save(m); }
+    public Mensaje Save(Mensaje m) { return _mensajeRepository.save(m); }
 
     public void Delete(Mensaje m) {
         m.setFechaEliminacion(new Date());
@@ -25,6 +25,6 @@ public class MensajeService {
     public List<Mensaje> findByAutor(Usuario usuario) {
         return _mensajeRepository.findBy_autor(usuario);
     }
-    
+
 
 }

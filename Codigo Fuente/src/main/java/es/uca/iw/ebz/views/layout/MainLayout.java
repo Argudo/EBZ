@@ -2,7 +2,6 @@ package es.uca.iw.ebz.views.layout;
 
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.server.VaadinSession;
-import es.uca.iw.ebz.views.main.*;
 import es.uca.iw.ebz.views.*;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
 
-import es.uca.iw.ebz.views.main.Security.AuthenticatedUser;
+
 
 import java.util.List;
 import java.util.Locale;

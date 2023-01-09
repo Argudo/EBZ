@@ -1,6 +1,8 @@
 package es.uca.iw.ebz.views;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -8,18 +10,26 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.ConsultaService;
+import es.uca.iw.ebz.consulta.EnumEstado;
+import es.uca.iw.ebz.consulta.TipoEstado;
+import es.uca.iw.ebz.mensaje.Mensaje;
 import es.uca.iw.ebz.mensaje.MensajeService;
 import es.uca.iw.ebz.usuario.admin.AdminService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.component.ClienteConsultaDialog;
 import es.uca.iw.ebz.views.layout.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.awt.*;
+import java.util.Date;
 
 @PageTitle("Consultas")
 @Route(value = "consultas", layout = MainLayout.class)
@@ -48,6 +58,14 @@ public class ConsultaView extends VerticalLayout {
     private Tab tabNuevo = new Tab("Nueva consulta");
 
     private Tab tabConsultas = new Tab("Ver consultas");
+
+    private TextField tfTitulo;
+
+    private TextField tfDescripcion;
+
+    private Button btnQuery;
+
+    private Grid<Consulta> gridQuery = new Grid<>(Consulta.class,false);
 
 
 
@@ -98,10 +116,69 @@ public class ConsultaView extends VerticalLayout {
 
         //New query layout section
         FormLayout frmNewQuery = new FormLayout();
-        frmNewQuery.setWidth("70vw");
+        frmNewQuery.setWidthFull();
+        frmNewQuery.setResponsiveSteps(
+
+                new FormLayout.ResponsiveStep("0",1)
+
+        );
+
+        tfTitulo = new TextField("Título");
+        tfTitulo.setRequired(true);
+        tfTitulo.setRequiredIndicatorVisible(true);
+        tfTitulo.setMinLength(10);
+        tfTitulo.setErrorMessage("El título de la consulta es obligatorio");
+
+        tfDescripcion = new TextField("Descripción");
+        tfDescripcion.setRequired(true);
+        tfDescripcion.setRequiredIndicatorVisible(true);
+        tfDescripcion.setMinLength(20);
+        tfDescripcion.setErrorMessage("El título de la consulta es obligatorio");
+
+        btnQuery = new Button("Crear consulta");
+
+        btnQuery.addClickListener( ev -> {
+            Consulta query = new Consulta(tfTitulo.getValue(),new Date(),new TipoEstado(EnumEstado.Pendiente), _cliente.getUsuario());
+            query = _consultaService.Save(query);
+            Mensaje msg = new Mensaje(new Date(), tfDescripcion.getValue(), _cliente.getUsuario(), query);
+            msg = _mensajeService.Save(msg);
+            query.setMensajes(msg);
+
+            removeAll();
+            tabs.setSelectedTab(tabConsultas);
+            add(tabs, vlTitleHistorial);
+        });
+
+        frmNewQuery.add(
+                tfTitulo,
+                tfDescripcion,
+                btnQuery);
 
         vlTitleNew.add(new Hr(), frmNewQuery);
         //End new query layout section
+
+        //Query record section
+        //Grid initialization section
+        gridQuery.setWidthFull();
+        gridQuery.addColumn(Consulta::getTitulo).setHeader(getTranslation("query.title")).setAutoWidth(true);
+        gridQuery.addColumn(Consulta::getFechaCreacion).setHeader(getTranslation("query.date")).setSortable(true).setAutoWidth(true);
+        gridQuery.addComponentColumn(consulta -> {
+            Button btnQuery = new Button("Chat");
+            ClienteConsultaDialog ccLog = new ClienteConsultaDialog(consulta, _cliente, _adminService, _clienteService, _mensajeService, _consultaService);
+            btnQuery.addClickListener( e -> {
+                ccLog.open();
+            });
+
+            return btnQuery;
+        }).setHeader("Chat").setAutoWidth(true);
+
+        gridQuery.setItems(_consultaService.findByCliente(_cliente.getUsuario()));
+
+        //End grid initialization section
+
+        vlTitleHistorial.add(new Hr(), gridQuery);
+        //End query record section
+
 
         //Tab section
         tabs.add(tabConsultas, tabNuevo);
@@ -114,6 +191,8 @@ public class ConsultaView extends VerticalLayout {
             if(tabNuevo.isSelected()){
                 add(tabs, vlTitleNew);
             }else{
+                gridQuery.setItems(_consultaService.findByCliente(_cliente.getUsuario()));
+                gridQuery.getDataProvider().refreshAll();
                 add(tabs, vlTitleHistorial);
             }
         });

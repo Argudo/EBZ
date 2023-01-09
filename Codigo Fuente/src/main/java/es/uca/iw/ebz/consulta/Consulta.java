@@ -1,17 +1,11 @@
 package es.uca.iw.ebz.consulta;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 //¿Faltan añadir los mensajes? Sí
@@ -24,16 +18,12 @@ public class Consulta {
 
     @Id
     @GeneratedValue
-    @Column (name = "id")
+    @Column (name = "id", length = 16)
     private UUID _id;
 
     @Column (name = "titulo")
     @NotNull
     private String _titulo;
-
-    @Column (name = "descripcion")
-    @NotNull
-    private String _descripcion;
 
     @Column (name = "fechaCreacion")
     @NotNull
@@ -48,8 +38,7 @@ public class Consulta {
     @ManyToOne
     private Usuario _cliente;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "mensajes")
+    @OneToMany(mappedBy = "_consulta", fetch = FetchType.EAGER)
     private List<Mensaje> _mensajes;
 
 
@@ -57,13 +46,13 @@ public class Consulta {
 
     public Consulta() {}
 
-    public Consulta(String titulo, String descripcion, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente){
+    public Consulta(String titulo, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente){
 
         _titulo = titulo;
-        _descripcion = descripcion;
         _fechaCreacion = fechaCreacion;
         _tipoEstado = tipoEstado;
         _cliente = cliente;
+        _mensajes = new ArrayList<>();
 
     }
 
@@ -75,8 +64,6 @@ public class Consulta {
     public Date getFechaEliminacion() { return _fechaEliminacion; }
 
     public String getTitulo() { return _titulo; }
-
-    public String getDescripcion() { return _descripcion; }
 
     public TipoEstado getTipoEstado() { return _tipoEstado; }
 
@@ -92,14 +79,9 @@ public class Consulta {
 
     public void setTitulo(String titulo) { _titulo = titulo; }
 
-    public void setDescripcion(String descripcion) { _descripcion = descripcion; }
-
     public void set_tipoEstado(TipoEstado tipoEstado) { _tipoEstado = tipoEstado; }
 
     public void setMensajes(Mensaje mensaje) { _mensajes.add(mensaje); }
-
-
-
 
 
 }
