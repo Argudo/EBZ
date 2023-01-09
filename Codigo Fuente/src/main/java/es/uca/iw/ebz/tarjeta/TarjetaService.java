@@ -30,11 +30,21 @@ public class TarjetaService {
 		_tarRepository = tarRepository;
 	}
 	
-	public void Save(Tarjeta T) {
-		_tarRepository.save(T);
+	public void Save(Tarjeta T) throws Exception {
+		if(findByNumTarjeta(T.getNumTarjeta()) == null)
+			_tarRepository.save(T);
+		else
+			throw new Exception("El número de tarjeta creado ya existe");
 	}
 	
-	public void Delete(Tarjeta T) {
+	public void Update(Tarjeta T) throws Exception {
+		if(findByNumTarjeta(T.getNumTarjeta()) != null)
+			_tarRepository.save(T);
+		else
+			throw new Exception("No se encontro la tarjeta");
+	}
+	
+	public void Delete(Tarjeta T) throws Exception {
 		T.setFechaCancelacion(new Date());
 		Save(T);
 	}
@@ -72,8 +82,8 @@ public class TarjetaService {
 		return _tarRepository.findAllBy_cuenta(cuenta);
 	}
 	
-	public Tarjeta findByNumCuenta(String sNumCuenta) {
-		return _tarRepository.findBy_sNumTarjeta(sNumCuenta);
+	public Tarjeta findByNumTarjeta(String sNumTarjeta) {
+		return _tarRepository.findByNumTarjeta(sNumTarjeta);
 	}
 	
 	public long Count() {

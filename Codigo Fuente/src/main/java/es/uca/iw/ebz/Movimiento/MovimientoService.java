@@ -275,7 +275,7 @@ public class MovimientoService {
                 break;
             case RECIBO:
                 Recibo recibo = _reciboService.findByMovimiento(movimiento);
-                datos.setOrigen("TRANSFERENCIA");
+                datos.setOrigen("-");
                 datos.setDestino(recibo.getCuenta().getNumeroCuenta());
                 datos.setImporte(Float.toString(recibo.getImporte()));
                 break;

@@ -8,12 +8,15 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
+import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep.LabelsPosition;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
@@ -75,6 +78,10 @@ public class DashBoardUserView extends VerticalLayout {
 
     private ComboBox<TipoCliente> cbTipoCliente = new ComboBox<>("Tipo de cliente");
     private HorizontalLayout hlAviso = new HorizontalLayout();
+    
+    private ConfirmDialog cdlogNuevoUsuario = new ConfirmDialog();
+    	private FormLayout fFormNuevoUsuario = new FormLayout();
+    	private Paragraph plog = new Paragraph();
 
     private UsuarioService usuarioService;
     private ClienteService clienteService;
@@ -85,6 +92,9 @@ public class DashBoardUserView extends VerticalLayout {
         this.clienteService = clienteService;
         this.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         this.setAlignItems(FlexComponent.Alignment.CENTER);
+        
+        fFormNuevoUsuario.setResponsiveSteps(new ResponsiveStep("0", 1, LabelsPosition.ASIDE));
+        fFormNuevoUsuario.add(new Hr(), plog);
         
         tabs.add(tabNuevo, tabModificar);
         
@@ -222,25 +232,43 @@ public class DashBoardUserView extends VerticalLayout {
         btnSave.addClickListener(e -> {
             Usuario usuario = new Usuario(tfUsername.getValue(), tfPassword.getValue());
             usuario.setTipoUsuario(TipoUsuario.Cliente);
-            Cliente clienteTest;
             usuarioService.save(usuario);
             Cliente cliente = new Cliente(tfName.getValue(), java.util.Date.from(dpBirthDate.getValue().atStartOfDay()
-                    .atZone(ZoneId.systemDefault())
-                    .toInstant()), new Date(), cbTipoCliente.getValue(), usuario);
-            clienteTest = clienteService.save(cliente);
-            if (clienteTest != null) {
-            	Notification notification = Notification.show("Cliente creado con éxito");
-            	notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-            	notification.setPosition(Notification.Position.MIDDLE);
-            	formNuevoUsuario.getChildren().forEach(child -> child.getElement().setProperty("value", ""));
+            		.atZone(ZoneId.systemDefault())
+            		.toInstant()), new Date(), cbTipoCliente.getValue(), usuario);
+            String content = "<div><b>¿Estás seguro de que quieres crear el siguiente usuario?" + 
+	            				 "<br></b>| Nombre: <b>" + cliente.getNombre() + 
+	            				 "<br></b>| DNI: <b>" + usuario.getDNI() + 
+	            				 "<br></b>| Fecha de nacimiento: <b>" + String.valueOf(cliente.getFechaNacimiento().getDate()) + "/" + String.valueOf(cliente.getFechaNacimiento().getMonth() + 1) + "/" + String.valueOf(cliente.getFechaNacimiento().getYear()+1900)  + 
+            				 "</b></div>";
+            Html html = new Html(content);
+            plog.removeAll();
+            plog.add(html);
+            cdlogNuevoUsuario.setText(fFormNuevoUsuario);
+            cdlogNuevoUsuario.setHeader("Nuevo usuario");
+            cdlogNuevoUsuario.setCancelable(true);
+            cdlogNuevoUsuario.setCancelButtonTheme("error");
+            cdlogNuevoUsuario.setConfirmButtonTheme("success primary");
+            cdlogNuevoUsuario.setConfirmText("Guardar");
+            cdlogNuevoUsuario.addConfirmListener(event -> {
+            	Cliente clienteTest;
+            	clienteTest = clienteService.save(cliente);
+            	if (clienteTest != null) {
+            		Notification notification = Notification.show("Cliente creado con éxito");
+            		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            		notification.setPosition(Notification.Position.MIDDLE);
+            		formNuevoUsuario.getChildren().forEach(child -> child.getElement().setProperty("value", ""));
+            		
+            	}else {
+            		Notification notification = Notification.show("Error: No se ha podido crear el cliente");
+            		notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+            		notification.setPosition(Notification.Position.MIDDLE);
+            	}
             	
-            }else {
-            	Notification notification = Notification.show("Error: No se ha podido crear el cliente");
-            	notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-            	notification.setPosition(Notification.Position.MIDDLE);
-            }
-
-            vlDashboard.add(hlAviso);
+            	vlDashboard.add(hlAviso);      
+            });
+            cdlogNuevoUsuario.open();
+            
         });
         
         btnVaciar.addClickListener(e -> {
