@@ -15,7 +15,7 @@ public class NoticiaService {
     @Autowired
     public NoticiaService(NoticiaRepository noticiaRepository) { _noticiaRepository = noticiaRepository; }
 
-    public void Save(Noticia n) { _noticiaRepository.save(n); }
+    public Noticia Save(Noticia n) { return _noticiaRepository.save(n); }
 
     public void Delete(Noticia n) {
         n.setFechaEliminacion(new Date());
@@ -23,5 +23,7 @@ public class NoticiaService {
     }
 
     public List<Noticia> findAll() { return _noticiaRepository.findAll(); }
+
+    public List<Noticia> findByFechaEliminacionIsNull() { return _noticiaRepository.findBy_fechaEliminacionIsNull(); }
 
 }

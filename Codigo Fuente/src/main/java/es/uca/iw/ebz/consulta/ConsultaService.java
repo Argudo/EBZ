@@ -18,7 +18,7 @@ public class ConsultaService {
     @Autowired
     public ConsultaService(ConsultaRepository consultaRepository) { _consultaRepository = consultaRepository; }
 
-    public void Save(Consulta c) { _consultaRepository.save(c); }
+    public Consulta Save(Consulta c) { return _consultaRepository.save(c); }
 
     public void Delete(Consulta c) {
         c.setFechaEliminacion(new Date());

@@ -1,14 +1,11 @@
 package es.uca.iw.ebz.usuario;
 
-import es.uca.iw.ebz.usuario.cliente.Cliente;
-import es.uca.iw.ebz.views.main.Security.SecurityConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.DatatypeConverter;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,14 +27,13 @@ public class UsuarioService {
     }
 
     public Usuario save(Usuario user){
-        user.setContraseña(passwordEncoder.encode(user.getContraseña()));
-
+        if(user.getId() == null) user.setContraseña(passwordEncoder.encode(user.getContraseña()));
         repoUsuario.save(user);
         return user;
     }
 
     public Usuario CambiarContraseña(Usuario user, String Contraseña){
-        user.setContraseña(passwordEncoder.encode(user.getContraseña()));
+        user.setContraseña(passwordEncoder.encode(Contraseña));
 
         repoUsuario.save(user);
         return user;
@@ -60,7 +56,12 @@ public class UsuarioService {
         return usr;
     }
 
-    public List<Usuario> findAll() { return repoUsuario.findAll(); }
+    public List<Usuario> findAll() {
+        List<Usuario> noEli = new ArrayList<Usuario>();
+        for(Usuario use: repoUsuario.findAll())
+            if(use.getFechaEliminacion() == null) noEli.add(use);
+        return noEli;
+    }
 
     public List<Usuario> findNotEliminated() { return repoUsuario.findBydFechaEliminacionIsNull(); }
 

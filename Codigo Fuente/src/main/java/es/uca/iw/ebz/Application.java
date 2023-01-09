@@ -1,14 +1,12 @@
 package es.uca.iw.ebz;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.server.VaadinSession;
-import es.uca.iw.ebz.usuario.admin.Admin;
-import es.uca.iw.ebz.usuario.admin.AdminService;
+import es.uca.iw.ebz.consulta.EnumEstado;
+import es.uca.iw.ebz.consulta.TipoEstado;
+import es.uca.iw.ebz.consulta.TipoEstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -37,6 +35,8 @@ import es.uca.iw.ebz.usuario.TipoUsuario;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioRepository;
 import es.uca.iw.ebz.usuario.UsuarioService;
+import es.uca.iw.ebz.usuario.admin.Admin;
+import es.uca.iw.ebz.usuario.admin.AdminService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteRepository;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
@@ -89,6 +89,9 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 
 	@Autowired
 	AdminService adminService;
+
+	@Autowired
+	TipoEstadoRepository tipoEstadoRepository;
 	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -96,6 +99,13 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		if(tipoEstadoRepository.count() == 0){
+			tipoEstadoRepository.save(new TipoEstado(EnumEstado.Pendiente));
+			tipoEstadoRepository.save(new TipoEstado(EnumEstado.Abierto));
+			tipoEstadoRepository.save(new TipoEstado(EnumEstado.Cerrado));
+		}
+
 		if(tipoTarRepo.count() == 0) {
 			tipoTarRepo.save(new TipoTarjeta(1, "Debito"));
 			tipoTarRepo.save(new TipoTarjeta(2, "Crédito"));
@@ -123,7 +133,7 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			cli2.setTipoUsuario(TipoUsuario.Cliente);
 			usuario.save(cli);
 			usuario.save(cli2);
-			Cliente cliente = new Cliente("Juán del Marqués", new Date(), new Date(), TipoCliente.Persona, cli);
+			Cliente cliente = new Cliente("Juan del Marqués", new Date(), new Date(), TipoCliente.Persona, cli);
 			clienteRepo.save(cliente);
 			clienteRepo.save(new Cliente("Natalia Reina", new Date(), new Date(), TipoCliente.Persona, cli2));
 			Cuenta cuenta = new Cuenta();

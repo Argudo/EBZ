@@ -1,9 +1,6 @@
 package es.uca.iw.ebz.Movimiento;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +25,9 @@ public class Movimiento {
     @NotNull
     private TipoMovimiento tipo;
 
+    @Version
+    private Integer version;
+
     public Movimiento() {}
 
     public Movimiento(Date fecha, String sConcpeto, TipoMovimiento tipo) {
@@ -47,9 +47,13 @@ public class Movimiento {
     public TipoMovimiento getTipo() {return tipo;}
     public String getsConcpeto() {return sConcpeto;}
 
+    public Integer getVersion() {return version;}
+
     //setters
     public void setId(UUID id) {this.id = id;}
     public void setFecha(Date fecha) {Fecha = fecha;}
     public void setTipo(TipoMovimiento tipo) {this.tipo = tipo;}
     public void setsConcpeto(String sConcpeto) {this.sConcpeto = sConcpeto;}
+
+    public void setVersion(Integer version) {this.version = version;}
 }

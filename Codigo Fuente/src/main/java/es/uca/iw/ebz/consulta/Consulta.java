@@ -1,32 +1,29 @@
 package es.uca.iw.ebz.consulta;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 //¿Faltan añadir los mensajes? Sí
 
 import es.uca.iw.ebz.mensaje.Mensaje;
 import es.uca.iw.ebz.usuario.Usuario;
-import es.uca.iw.ebz.usuario.cliente.Cliente;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
 public class Consulta {
 
     @Id
     @GeneratedValue
-    @Column (name = "id")
+    @Column (name = "id", length = 16)
     private UUID _id;
 
     @Column (name = "titulo")
     @NotNull
     private String _titulo;
-
-    @Column (name = "descripcion")
-    @NotNull
-    private String _descripcion;
 
     @Column (name = "fechaCreacion")
     @NotNull
@@ -41,22 +38,24 @@ public class Consulta {
     @ManyToOne
     private Usuario _cliente;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "mensajes")
+    @OneToMany(mappedBy = "_consulta", fetch = FetchType.EAGER)
     private List<Mensaje> _mensajes;
+
+    @Version
+    private Integer version;
 
 
     //Añadir lista de mensajes (composición)
 
     public Consulta() {}
 
-    public Consulta(String titulo, String descripcion, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente){
+    public Consulta(String titulo, Date fechaCreacion, TipoEstado tipoEstado, Usuario cliente){
 
         _titulo = titulo;
-        _descripcion = descripcion;
         _fechaCreacion = fechaCreacion;
         _tipoEstado = tipoEstado;
         _cliente = cliente;
+        _mensajes = new ArrayList<>();
 
     }
 
@@ -69,13 +68,12 @@ public class Consulta {
 
     public String getTitulo() { return _titulo; }
 
-    public String getDescripcion() { return _descripcion; }
-
     public TipoEstado getTipoEstado() { return _tipoEstado; }
 
     public Usuario getCliente() { return _cliente; }
 
     public List<Mensaje> getMensajes() { return _mensajes; }
+    public Integer getVersion() { return version; }
 
     //Setters
 
@@ -85,14 +83,10 @@ public class Consulta {
 
     public void setTitulo(String titulo) { _titulo = titulo; }
 
-    public void setDescripcion(String descripcion) { _descripcion = descripcion; }
-
     public void set_tipoEstado(TipoEstado tipoEstado) { _tipoEstado = tipoEstado; }
 
     public void setMensajes(Mensaje mensaje) { _mensajes.add(mensaje); }
-
-
-
+    public void setVersion(Integer version) { this.version = version; }
 
 
 }

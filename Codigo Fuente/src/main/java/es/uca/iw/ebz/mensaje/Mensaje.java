@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.mensaje;
 
+import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.TipoEstado;
 import es.uca.iw.ebz.usuario.Usuario;
 
@@ -13,7 +14,7 @@ public class Mensaje {
 
     @Id
     @GeneratedValue
-    @Column (name = "id")
+    @Column (name = "id", length = 16)
     private UUID _id;
 
     @Column (name = "fecha")
@@ -30,13 +31,20 @@ public class Mensaje {
     @ManyToOne
     private Usuario _autor;
 
+    @ManyToOne
+    private Consulta _consulta;
+
+    @Version
+    private Integer version;
+
     public Mensaje() {}
 
-    public Mensaje(Date fecha, String texto, Usuario autor){
+    public Mensaje(Date fecha, String texto, Usuario autor, Consulta consulta){
 
         _fecha = fecha;
         _texto = texto;
         _autor = autor;
+        _consulta = consulta;
 
     }
 
@@ -49,6 +57,7 @@ public class Mensaje {
     public String getTexto() { return _texto; }
 
     public Usuario getAutor() { return _autor; }
+    public Integer getVersion() { return version; }
 
     //Setters
 
@@ -61,6 +70,6 @@ public class Mensaje {
     public void setAutor(Usuario autor) { _autor = autor; }
 
     public void setFechaEliminacion(Date fecha) { _fechaEliminacion = fecha; }
-
+    public void setVersion(Integer version) { this.version = version; }
 
 }

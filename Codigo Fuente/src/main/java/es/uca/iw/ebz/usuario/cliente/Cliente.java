@@ -57,6 +57,12 @@ public class Cliente {
 	@ManyToOne
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario usuario;
+
+	@Version
+	private Integer version;
+
+	public void setVersion(Integer version) {this.version = version;}
+	public Integer getVersion() {return version;}
 	public Usuario getUsuario (){ return this.usuario; }
 	public void setUsuario(Usuario user){ this.usuario = user; }
 

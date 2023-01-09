@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.hash.Hashing;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H4;
@@ -26,6 +28,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
+import org.springframework.data.annotation.Version;
 
 
 @Entity
@@ -66,6 +69,10 @@ public class Tarjeta {
 	@Column(name = "CVC")
 	private String _cvc;
 	
+	@Column(name = "estaActiva")
+	@NotNull
+	private Boolean _estaActiva;
+	
 	@ManyToOne
 	@NotNull
 	private TipoTarjeta _tipoTarjeta;
@@ -76,6 +83,9 @@ public class Tarjeta {
 	
 	@OneToOne
 	Cuenta _cuenta;
+
+	@Version
+	private Integer version;
 	
 	public Tarjeta() {}
 	
@@ -96,6 +106,7 @@ public class Tarjeta {
 		_cvc = GenerarCVC();
 		_fechaCreacion = new Date();
 		_fechaExpiracion = GenerarFechaExpiracion();
+		_estaActiva = true;
 	}
 
 	private String GenerarNumTarjeta() {
@@ -104,23 +115,24 @@ public class Tarjeta {
 		switch(_tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,8).toUpperCase();
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,5).toUpperCase();
 				break;
 			case Credito:
 				sNumTarjeta += "10";
-				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,8).toUpperCase();
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,5).toUpperCase();
 				break;
 			case Prepago:
 				sNumTarjeta += "20";
 				String cliente_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_clienteTitular.getUsuario().getDNI(), StandardCharsets.UTF_8).toString());
-				sNumTarjeta += cliente_sha256.substring(0,8).toUpperCase();
+				sNumTarjeta += cliente_sha256.substring(0,5).toUpperCase();
 				break;
 		}
+		sNumTarjeta += GenerarCVC();
 		sNumTarjeta += CalculateCheckDigit(sNumTarjeta);
 		return sNumTarjeta;
 	}
 	
-	private String GenerarCVC() { return GenerarCVC(null); }
+	public String GenerarCVC() { return GenerarCVC(null); }
 	private String GenerarCVC(Integer valor) {
 		int iValor = valor == null? new Random().nextInt(998)+1 : valor;
 		String sCVC = String.valueOf(iValor);
@@ -208,10 +220,10 @@ public class Tarjeta {
 
 	public UUID getId() { return _iId; }
 	public String getNumTarjeta() { return _sNumTarjeta; }
-	public void setNumTarjeta(String sNumTarjeta) { this._sNumTarjeta = sNumTarjeta; }
+	public void setNumTarjeta() { _sNumTarjeta = GenerarNumTarjeta(); }
 	public String getiPin() { return _sPin; }
 	public void setiPin(String iPin) { _sPin = iPin; }
-	public String getFechaExpiracion() { return (String.valueOf(_fechaExpiracion.getMonth()) + "/" + String.valueOf(_fechaExpiracion.getYear()-100)); }
+	public String getFechaExpiracion() { return (String.valueOf(String.valueOf(_fechaExpiracion.getMonth() + 1)) + "/" + String.valueOf(_fechaExpiracion.getYear()-100)); }
 	public void setFechaExpiracion(Date fechaExpiracion) { this._fechaExpiracion = fechaExpiracion; }
 	public Date getFechaCreacion() { return _fechaCreacion; }
 	public void setFechaCreacion(Date fechaCreacion) { this._fechaCreacion = fechaCreacion; }
@@ -224,4 +236,9 @@ public class Tarjeta {
 	public void setCVC(int cvc) { _cvc = GenerarCVC(cvc); }
 	public Cuenta getCuenta() { return _cuenta; }
 	public Cliente getCliente() { return this._clienteTitular; }
+	public Boolean getActiva() { return _estaActiva; }
+	public void setActiva(Boolean estaActiva) { _estaActiva = estaActiva; }
+
+	public void setVersion(int version) { this.version = version; }
+	public int getVersion() { return version; }
 }
