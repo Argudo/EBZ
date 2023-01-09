@@ -1,9 +1,6 @@
 package es.uca.iw.ebz.noticia;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
@@ -31,6 +28,9 @@ public class Noticia {
     @Column (name = "fechaEliminacion")
     private Date _fechaEliminacion;
 
+    @Version
+    private Integer version;
+
     public Noticia() {}
 
     public Noticia(String titulo, String descripcion, Date fecha) {
@@ -52,6 +52,8 @@ public class Noticia {
 
     public String getDescripcion() { return _descripcion; }
 
+    public Integer getVersion() { return version; }
+
     //Getters
     public void setId(UUID id) { _id = id; }
 
@@ -62,6 +64,8 @@ public class Noticia {
     public void setTitulo(String titulo) { _titulo = titulo; }
 
     public void setDescripcion(String descripcion) { _descripcion = descripcion; }
+
+    public void setVersion(Integer version) { this.version = version; }
 
 
 }

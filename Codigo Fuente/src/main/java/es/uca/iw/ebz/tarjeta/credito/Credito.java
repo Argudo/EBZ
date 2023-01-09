@@ -2,11 +2,7 @@ package es.uca.iw.ebz.tarjeta.credito;
 
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +28,9 @@ public class Credito {
 	@OneToOne
 	@NotNull
 	TipoCrediticio _tipo;
+
+	@Version
+	private Integer version;
 	
 	public Credito() {}
 	
@@ -48,4 +47,7 @@ public class Credito {
 	public void setDeuda(float fDeuda) { _fDeuda = fDeuda; }
 	public TipoCrediticio getTipo() { return _tipo; }
 	public void setTipo(TipoCrediticio tipo) { _tipo = tipo; }
+
+	public void setVersion(Integer version) {this.version = version;}
+	public Integer getVersion() {return version;}
 }

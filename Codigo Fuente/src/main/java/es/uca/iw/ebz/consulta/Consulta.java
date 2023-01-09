@@ -41,6 +41,9 @@ public class Consulta {
     @OneToMany(mappedBy = "_consulta", fetch = FetchType.EAGER)
     private List<Mensaje> _mensajes;
 
+    @Version
+    private Integer version;
+
 
     //Añadir lista de mensajes (composición)
 
@@ -70,6 +73,7 @@ public class Consulta {
     public Usuario getCliente() { return _cliente; }
 
     public List<Mensaje> getMensajes() { return _mensajes; }
+    public Integer getVersion() { return version; }
 
     //Setters
 
@@ -82,6 +86,7 @@ public class Consulta {
     public void set_tipoEstado(TipoEstado tipoEstado) { _tipoEstado = tipoEstado; }
 
     public void setMensajes(Mensaje mensaje) { _mensajes.add(mensaje); }
+    public void setVersion(Integer version) { this.version = version; }
 
 
 }

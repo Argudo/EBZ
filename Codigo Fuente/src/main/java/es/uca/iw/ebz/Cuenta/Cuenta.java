@@ -39,6 +39,9 @@ public class Cuenta {
     @JoinColumn(name = "cliente_id", nullable = false)
     @NotNull
     private Cliente cliente;
+
+    @Version
+    private Integer version;
     public Cuenta() {}
 
     public Cuenta(String sNumeroCuenta, float fSaldo, Date fechaCreacion) {
@@ -64,6 +67,7 @@ public class Cuenta {
     public Date getFechaEliminacion() {return fechaEliminacion;}
     public Cliente getCliente() {return cliente;}
     public String getDNICliente() {return cliente.getUsuario().getDNI();}
+    public Integer getVersion() {return version;}
 
     //setters
     public void setNumeroCuenta(String sNumeroCuenta) {this.sNumeroCuenta = sNumeroCuenta;}
@@ -71,6 +75,7 @@ public class Cuenta {
     public void setFechaCreacion(Date fechaCreacion) {this.fechaCreacion = fechaCreacion;}
     public void setFechaEliminacion(Date fechaEliminacion) {this.fechaEliminacion = fechaEliminacion;}
     public void setCliente(Cliente cliente) {this.cliente = cliente;}
+    public void setVersion(Integer version) {this.version = version;}
 
     @Override
     public String toString() {

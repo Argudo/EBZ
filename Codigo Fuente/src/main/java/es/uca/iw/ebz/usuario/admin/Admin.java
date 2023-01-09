@@ -35,5 +35,10 @@ public class Admin {
         this.usuario = usuario;
     }
 
+    @Version
+    private Integer version;
+
+    public void setVersion(Integer version) {this.version = version;}
+    public Integer getVersion() {return version;}
     //hay que hacer noticia y hacer la referencia.
 }

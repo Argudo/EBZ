@@ -28,6 +28,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
+import org.springframework.data.annotation.Version;
 
 
 @Entity
@@ -82,6 +83,9 @@ public class Tarjeta {
 	
 	@OneToOne
 	Cuenta _cuenta;
+
+	@Version
+	private Integer version;
 	
 	public Tarjeta() {}
 	
@@ -234,4 +238,7 @@ public class Tarjeta {
 	public Cliente getCliente() { return this._clienteTitular; }
 	public Boolean getActiva() { return _estaActiva; }
 	public void setActiva(Boolean estaActiva) { _estaActiva = estaActiva; }
+
+	public void setVersion(int version) { this.version = version; }
+	public int getVersion() { return version; }
 }
