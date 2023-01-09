@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
@@ -51,35 +52,50 @@ public class CreateAccountDialog extends Dialog {
         add(new Hr(), vlInfo);
 
         _btnCreateAccount.addClickListener(e -> {
-            Usuario usuario = usuarioService.findBysDNI(_cmbDni.getValue());
-            Cliente cliente = clienteService.findByUsuario(usuario);
-            Cuenta cuenta = new Cuenta();
-            cuenta.setCliente(cliente);
-            if(cuentaService.añadirCuenta(cuenta) != null) {
-                Notification notification = Notification.show(getTranslation("account.success"));
-                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                close();
-            }
-            else {
-                Notification notification = new Notification();
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 
-                Div text = new Div(new Text(getTranslation("account.error")));
+            com.vaadin.flow.component.confirmdialog.ConfirmDialog dialog = new ConfirmDialog();
+            dialog.setHeader(getTranslation("confirm.title"));
+            dialog.setText(getTranslation("confirm.body"));
 
-                Button closeButton = new Button(new Icon("lumo", "cross"));
-                closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-                closeButton.getElement().setAttribute("aria-label", "Close");
-                closeButton.addClickListener(event -> {
-                    notification.close();
-                });
+            dialog.setCancelable(true);
 
-                HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-                layout.setAlignItems(FlexComponent.Alignment.CENTER);
+            dialog.setCancelText(getTranslation("confirm.no"));
 
-                notification.add(layout);
-                notification.open();
-                close();
-            }
+            dialog.setConfirmText(getTranslation("confirm.yes"));
+            dialog.addConfirmListener(event ->  {
+                Usuario usuario = usuarioService.findBysDNI(_cmbDni.getValue());
+                Cliente cliente = clienteService.findByUsuario(usuario);
+                Cuenta cuenta = new Cuenta();
+                cuenta.setCliente(cliente);
+                if(cuentaService.añadirCuenta(cuenta) != null) {
+                    Notification notification = Notification.show(getTranslation("account.success"));
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    close();
+                }
+                else {
+                    Notification notification = new Notification();
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+
+                    Div text = new Div(new Text(getTranslation("account.error")));
+
+                    Button closeButton = new Button(new Icon("lumo", "cross"));
+                    closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+                    closeButton.getElement().setAttribute("aria-label", "Close");
+                    closeButton.addClickListener(ee-> {
+                        notification.close();
+                    });
+
+                    HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+                    layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+                    notification.add(layout);
+                    notification.open();
+                    close();
+                }
+                ;});
+
+            dialog.open();
+
         });
     }
 
