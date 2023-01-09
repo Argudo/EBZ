@@ -123,7 +123,7 @@ H3 _acBalance = new H3();
 
 
 		//Account information and buttons section
-		Component userName = new H1("Bienvenido de nuevo");
+		Component userName = new H1(getTranslation(home.welcome));
 		//Username section
 		if(_cliente != null) userName = CreateUserNameBanner(_cliente.getNombre());
 		//Component userName = CreateUserNameBanner(_authenticatedUser.get().get().getUsuario());
