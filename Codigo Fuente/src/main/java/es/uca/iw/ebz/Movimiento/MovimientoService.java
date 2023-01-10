@@ -72,6 +72,7 @@ public class MovimientoService {
         if(cuentaOrigen.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
         if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) throw new Exception("Cuenta origen y destino iguales");
         cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(BigDecimal.valueOf(fimporte)));
+        _cuentaService.save(cuentaOrigen);
 
         Movimiento mov = _movimientoRepository.save(movimiento);
         switch (movimiento.getTipo()) {
@@ -82,7 +83,7 @@ public class MovimientoService {
                     new Exception("Cuenta destino eliminado");
                 }
                 _cuentaDestino.setSaldo(_cuentaDestino.getSaldo().add(BigDecimal.valueOf(fimporte)));
-                _cuentaService.save(cuentaOrigen);
+
                 _cuentaService.save(_cuentaDestino);
 
                 Interno interno = new Interno(fimporte, cuentaOrigen, _cuentaDestino, mov);
