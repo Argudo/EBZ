@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class MovimientoService {
         _creditoService = creditoService;
     }
 
-    public Movimiento añadirMovimientoCuenta(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) throws Exception {
+    public Movimiento nuevoMovimiento(Movimiento movimiento, Cuenta cuentaOrigen, String cuentaDestino, float fimporte) throws Exception {
         if(cuentaOrigen.getSaldo().floatValue() < fimporte) throw new Exception("Saldo insuficiente");
         if(cuentaOrigen.getFechaEliminacion() != null) throw new Exception("Cuenta origen eliminado");
         if(cuentaOrigen.getNumeroCuenta().equals(cuentaDestino)) throw new Exception("Cuenta origen y destino iguales");

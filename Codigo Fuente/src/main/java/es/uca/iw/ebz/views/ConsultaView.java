@@ -55,9 +55,9 @@ public class ConsultaView extends VerticalLayout {
 
     private Tabs tabs = new Tabs();
 
-    private Tab tabNuevo = new Tab("Nueva consulta");
+    private Tab tabNuevo = new Tab(getTranslation("query.new"));
 
-    private Tab tabConsultas = new Tab("Ver consultas");
+    private Tab tabConsultas = new Tab(getTranslation("query.see"));
 
     private TextField tfTitulo;
 
@@ -98,7 +98,7 @@ public class ConsultaView extends VerticalLayout {
         vlTitleNew.setMargin(true);
         vlTitleNew.setClassName("box");
 
-        H1 hTitleNew = new H1("| Nueva consulta");
+        H1 hTitleNew = new H1(getTranslation("query.newquery"));
         hTitleNew.setClassName("title");
         vlTitleNew.add(hTitleNew);
 
@@ -109,7 +109,7 @@ public class ConsultaView extends VerticalLayout {
         vlTitleHistorial.setMargin(true);
         vlTitleHistorial.setClassName("box");
 
-        H1 hTitleHistorial = new H1("| Historial de consultas");
+        H1 hTitleHistorial = new H1(getTranslation("query.history"));
         hTitleHistorial.setClassName("title");
         vlTitleHistorial.add(hTitleHistorial);
         //End title section
@@ -123,19 +123,19 @@ public class ConsultaView extends VerticalLayout {
 
         );
 
-        tfTitulo = new TextField("Título");
+        tfTitulo = new TextField(getTranslation("query.title"));
         tfTitulo.setRequired(true);
         tfTitulo.setRequiredIndicatorVisible(true);
         tfTitulo.setMinLength(10);
-        tfTitulo.setErrorMessage("El título de la consulta es obligatorio");
+        tfTitulo.setErrorMessage(getTranslation("query.titleob"));
 
-        tfDescripcion = new TextField("Descripción");
+        tfDescripcion = new TextField(getTranslation("notice.description"));
         tfDescripcion.setRequired(true);
         tfDescripcion.setRequiredIndicatorVisible(true);
         tfDescripcion.setMinLength(20);
-        tfDescripcion.setErrorMessage("El título de la consulta es obligatorio");
+        tfDescripcion.setErrorMessage(getTranslation("query.descob"));
 
-        btnQuery = new Button("Crear consulta");
+        btnQuery = new Button(getTranslation("query.create"));
 
         btnQuery.addClickListener( ev -> {
             Consulta query = new Consulta(tfTitulo.getValue(),new Date(),new TipoEstado(EnumEstado.Pendiente), _cliente.getUsuario());
