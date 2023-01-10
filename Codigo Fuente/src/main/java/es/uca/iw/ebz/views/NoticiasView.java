@@ -3,6 +3,7 @@ package es.uca.iw.ebz.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -45,7 +46,7 @@ public class NoticiasView extends VerticalLayout {
             vlTitle.setMargin(true);
             vlTitle.setClassName("box");
 
-            H1 hTitle = new H1("| Últimas noticias");
+            H1 hTitle = new H1(getTranslation("notice.main"));
             hTitle.setClassName("title");
 
             vlTitle.add(hTitle);
@@ -61,7 +62,7 @@ public class NoticiasView extends VerticalLayout {
 
             }else{
 
-                H2 hNotices = new H2("No hay noticias que mostrar");
+                H2 hNotices = new H2(getTranslation("notice.no"));
                 hNotices.setClassName("title");
                 add(hNotices);
 
@@ -76,7 +77,7 @@ public class NoticiasView extends VerticalLayout {
         VerticalLayout vlMain = new VerticalLayout();
         vlMain.setSpacing(false);
         vlMain.setPadding(true);
-        vlMain.setWidthFull();
+        vlMain.setWidth("80vw");
         vlMain.setClassName("box");
 
         H2 hTitle = new H2(n.getTitulo());
@@ -85,6 +86,7 @@ public class NoticiasView extends VerticalLayout {
 
         vlMain.add(
                 hTitle,
+                new Hr(),
                 pDescription);
 
         return vlMain;

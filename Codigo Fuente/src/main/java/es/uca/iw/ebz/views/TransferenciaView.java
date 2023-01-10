@@ -93,7 +93,7 @@ public class TransferenciaView extends VerticalLayout {
         vlTitle.setMargin(true);
         vlTitle.setClassName("box");
 
-        H1 hTitle = new H1("| Transferencia");
+        H1 hTitle = new H1(getTranslation("transfer.title"));
         hTitle.setClassName("title");
         vlTitle.add(hTitle);
 
@@ -134,39 +134,39 @@ public class TransferenciaView extends VerticalLayout {
             asAccounts.add(c.getNumeroCuenta());
         }
 
-        cbAccount1 = new ComboBox<String>("Cuenta origen");
+        cbAccount1 = new ComboBox<String>(getTranslation("transfer.from"));
         cbAccount1.setItems(asAccounts);
         cbAccount1.setRequired(true);
         cbAccount1.setRequiredIndicatorVisible(true);
-        cbAccount1.setErrorMessage("La cuenta origen es obligatoria");
+        cbAccount1.setErrorMessage(getTranslation("transfer.obfrom"));
 
-        cbAccount2 = new ComboBox<String>("Cuenta destino");
+        cbAccount2 = new ComboBox<String>(getTranslation("transfer.to"));
         cbAccount2.setItems(asAccounts);
         cbAccount2.setRequired(true);
         cbAccount2.setRequiredIndicatorVisible(true);
-        cbAccount2.setErrorMessage("La cuenta destino es obligatoria");
+        cbAccount2.setErrorMessage(getTranslation("transfer.obto"));
 
-        tfDestinyAccount = new TextField("Cuenta destino");
+        tfDestinyAccount = new TextField(getTranslation("transfer.to"));
         tfDestinyAccount.setRequired(true);
         tfDestinyAccount.setRequiredIndicatorVisible(true);
         tfDestinyAccount.setMinLength(20);
-        tfDestinyAccount.setErrorMessage("La cuenta destino es obligatoria");
+        tfDestinyAccount.setErrorMessage(getTranslation("transfer.obto"));
 
-        tfConcept = new TextField("Concepto (mínimo 10 caracteres)");
+        tfConcept = new TextField(getTranslation("transfer.concept"));
         tfConcept.setRequired(true);
         tfConcept.setRequiredIndicatorVisible(true);
         tfConcept.setMinLength(10);
-        tfConcept.setErrorMessage("El concepto no cumple con el mínimo de caracteres.");
+        tfConcept.setErrorMessage(getTranslation("transfer.obconcept"));
 
-        nfBalance = new NumberField("Cantidad a transferir");
+        nfBalance = new NumberField(getTranslation("transfer.amount"));
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
         nfBalance.setSuffixComponent(euroSuffix);
         nfBalance.setRequiredIndicatorVisible(true);
         nfBalance.setMin(0.01);
-        nfBalance.setErrorMessage("El importe es obligatorio");
+        nfBalance.setErrorMessage(getTranslation("transfer.noamount"));
 
-        btnTrans = new Button("Transferir");
+        btnTrans = new Button(getTranslation("transfer.button"));
 
         //End transference form fields section
 
