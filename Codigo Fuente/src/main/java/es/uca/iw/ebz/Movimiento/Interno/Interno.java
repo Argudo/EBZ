@@ -28,6 +28,9 @@ public class Interno {
     @OneToOne
     private Movimiento movimiento;
 
+    @Version
+    private Integer version;
+
     public Interno() {}
 
     public Interno(float fImporte, Cuenta cuentaDestino, Cuenta cuentaOrigen) {
@@ -49,6 +52,7 @@ public class Interno {
     public Cuenta getCuentaDestino() {return cuentaDestino;}
     public Cuenta getCuentaOrigen() {return cuentaOrigen;}
     public Movimiento getMovimiento() {return movimiento;}
+    public Integer getVersion() {return version;}
 
 
     //setters
@@ -57,4 +61,5 @@ public class Interno {
     public void setCuentaDestino(Cuenta cuentaDestino) {this.cuentaDestino = cuentaDestino;}
     public void setCuentaOrigen(Cuenta cuentaOrigen) {this.cuentaOrigen = cuentaOrigen;}
     public void setMovimiento(Movimiento movimiento) {this.movimiento = movimiento;}
+    public void setVersion(Integer version) {this.version = version;}
 }

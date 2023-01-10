@@ -4,6 +4,7 @@ import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
@@ -42,6 +43,12 @@ public class Usuario {
 
     public TipoUsuario getTipoUsuario (){ return this.tipoUsuario; }
     public void setTipoUsuario (TipoUsuario tipous){ this.tipoUsuario = tipous; }
+
+    @Version
+    private Integer version;
+
+    public Integer getVersion(){ return this.version; }
+    public void setVersion(Integer version){ this.version = version; }
 
     public Usuario(String DNI, String contraseña){
         this.sDNI = DNI;

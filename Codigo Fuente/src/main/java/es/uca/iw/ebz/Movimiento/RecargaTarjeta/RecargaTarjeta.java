@@ -28,6 +28,9 @@ public class RecargaTarjeta {
     @OneToOne
     private Movimiento movimiento;
 
+    @Version
+    private Integer version;
+
     public RecargaTarjeta() {}
 
     public RecargaTarjeta(Cuenta cuenta, Tarjeta tarjeta, float fImporte, Movimiento movimiento) {
@@ -43,6 +46,7 @@ public class RecargaTarjeta {
     public Tarjeta getTarjeta() {return tarjeta;}
     public float getImporte() {return fImporte.floatValue();}
     public Movimiento getMovimiento() {return movimiento;}
+    public Integer getVersion() {return version;}
 
     //setters
     public void setId(UUID id) {this.id = id;}
@@ -50,5 +54,6 @@ public class RecargaTarjeta {
     public void setTarjeta(Tarjeta tarjeta) {this.tarjeta = tarjeta;}
     public void setImporte(float fImporte) {this.fImporte = BigDecimal.valueOf(fImporte);}
     public void setMovimiento(Movimiento movimiento) {this.movimiento = movimiento;}
+    public void setVersion(Integer version) {this.version = version;}
 
 }

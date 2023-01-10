@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.usuario.cliente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,10 @@ public class ClienteService {
 	}
 
 	public List<Cliente> findAll() {
-		return repoCliente.findAll();
+		List<Cliente> noEli = new ArrayList<Cliente>();
+		for(Cliente cli: repoCliente.findAll())
+			if(cli.getUsuario().getFechaEliminacion() == null) noEli.add(cli);
+		return noEli;
 	}
 
 	public Cliente EliminarCuenta(Cliente cli){

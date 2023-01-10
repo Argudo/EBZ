@@ -26,6 +26,9 @@ public class Recibo {
     @OneToOne
     private Movimiento movimiento;
 
+    @Version
+    private Integer version;
+
     public Recibo() {}
 
     //getters
@@ -34,9 +37,12 @@ public class Recibo {
     public Cuenta getCuenta() {return cuenta;}
     public Movimiento getMovimiento() {return movimiento;}
 
+    public Integer getVersion() {return version;}
+
     //setters
     public void setId(UUID id) {this.id = id;}
     public void setImporte(float fImporte) {this.fImporte = BigDecimal.valueOf(fImporte);}
     public void setCuenta(Cuenta cuenta) {this.cuenta = cuenta;}
     public void setMovimiento(Movimiento movimiento) {this.movimiento = movimiento;}
+    public void setVersion(Integer version) {this.version = version;}
 }
