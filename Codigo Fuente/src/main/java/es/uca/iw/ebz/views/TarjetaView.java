@@ -81,28 +81,28 @@ public class TarjetaView extends VerticalLayout{
 		
 	private HorizontalLayout hlDetalleTarjetas = new HorizontalLayout();
 		private VerticalLayout vlAccionTarjetas = new VerticalLayout();
-			private Button btnRecarga = new Button("Recargar", VaadinIcon.MONEY_DEPOSIT.create());
+			private Button btnRecarga = new Button(getTranslation("tarjeta.reload"), VaadinIcon.MONEY_DEPOSIT.create());
 				private Dialog dlogRecarga = new Dialog();
 				private VerticalLayout vlRecarga = new VerticalLayout();
-				private ComboBox<String> cbCuentas = new ComboBox<String>("Seleccione una cuenta");
-				private NumberField txtCantidad = new NumberField("Cantidad");
-				private Button btnRecargaDlog = new Button("Depositar");
+				private ComboBox<String> cbCuentas = new ComboBox<String>(getTranslation("tarjeta.select_account"));
+				private NumberField txtCantidad = new NumberField(getTranslation("tarjeta.amount"));
+				private Button btnRecargaDlog = new Button(getTranslation("tarjeta.deposit"));
 				private Button btnCancelarDlog = new Button(LumoIcon.CROSS.create());
-			private Button btnCancelarTarjeta = new Button("Eliminar", LumoIcon.CROSS.create());
+			private Button btnCancelarTarjeta = new Button(getTranslation("tarjeta.delete"), LumoIcon.CROSS.create());
 				private ConfirmDialog dlogEliminarTarjeta = new ConfirmDialog();
-			private Button btnCambiarPin = new Button("Nuevo PIN", LumoIcon.RELOAD.create());
+			private Button btnCambiarPin = new Button(getTranslation("tarjeta.newpin"), LumoIcon.RELOAD.create());
 			private HorizontalLayout hlActivarTarjeta = new HorizontalLayout();
 				private ToggleButton tgbtnActivacionTarjeta = new ToggleButton();
 				private Span spanToggle = new Span();
 		private HorizontalLayout hlTarjetas = new HorizontalLayout();
 		
 	private VerticalLayout vlDetalleTarjetas = new VerticalLayout();	
-		private H3 hNumTarjeta = new H3("Número de tarjeta");
-		private H3 hTipoTarjeta = new H3("Tipo de tarjeta");
-		private H3 hSaldo = new H3("Saldo");
-		private H3 hCvc = new H3("CVC");
-		private H3 hPin = new H3("PIN");
-		private H3 hFechaCaducidad = new H3("Fecha de expiración");
+		private H3 hNumTarjeta = new H3(getTranslation("tarjeta.cardnumber"));
+		private H3 hTipoTarjeta = new H3(getTranslation("tarjeta.cardtype"));
+		private H3 hSaldo = new H3(getTranslation("tarjeta.saldo"));
+		private H3 hCvc = new H3(getTranslation("tarjeta.cvc"));
+		private H3 hPin = new H3(getTranslation("tarjeta.pin"));
+		private H3 hFechaCaducidad = new H3(getTranslation("tarjeta.fechaexp"));
 		private Paragraph pNumTarjeta = new Paragraph();
 		private Paragraph pTipoTarjeta = new Paragraph();
 		private Paragraph pSaldo = new Paragraph();
@@ -116,15 +116,15 @@ public class TarjetaView extends VerticalLayout{
 	
 	private NuevaTarjetaDialog dlogNT;
 	private Dialog dlogPin = new Dialog();
-		private PasswordField txtPinDlog = new PasswordField("Introduzca el nuevo PIN");
+		private PasswordField txtPinDlog = new PasswordField(getTranslation("tarjeta.newpin"));
 		private Button btnCerrarDlog = new Button(LumoIcon.CROSS.create());
-		private Button btnPinDlog = new Button("Guardar");
+		private Button btnPinDlog = new Button(getTranslation("tarjeta.save"));
 	
 	TarjetaView(AuthenticatedUser _authUser, ClienteService _cliService, TarjetaService _tarService, CuentaService _cuentaService, PrepagoService _prepagoService, TipoCrediticioRepository _tipoCredRepo, MovimientoService _movService){
 		_cliente = _cliService.findByUsuario(_authUser.get().get());
 		dlogNT = new NuevaTarjetaDialog(_cuentaService, _cliService, _tarService, _tipoCredRepo, _prepagoService);
 		
-		dlogPin.setHeaderTitle("Cambiar PIN");
+		dlogPin.setHeaderTitle(getTranslation("tarjeta.changepin"));
 		dlogPin.add(txtPinDlog);
 		btnCerrarDlog.addThemeVariants(ButtonVariant.LUMO_ICON);
 		btnCerrarDlog.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -141,7 +141,7 @@ public class TarjetaView extends VerticalLayout{
 					tarSelected.setiPin(txtPinDlog.getValue()); 
 					_tarService.Update(tarSelected); 
 					textPin.setValue(txtPinDlog.getValue()); 
-					Notification not = Notification.show("Se ha cambiado el PIN correctamente");
+					Notification not = Notification.show(getTranslation("tarjeta.changepinsuccess"));
 					not.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 					dlogPin.close(); 
 					}				
@@ -168,11 +168,11 @@ public class TarjetaView extends VerticalLayout{
 		vlRecarga.add(new Hr(), cbCuentas, txtCantidad);
 		dlogRecarga.add(vlRecarga);
 		btnRecargaDlog.addClickListener(ev -> {
-			Movimiento movRecarga = new Movimiento(new Date(), "Recarga tarjeta " + tarSelected.getNumTarjeta(), TipoMovimiento.RECARGATARJETA);
+			Movimiento movRecarga = new Movimiento(new Date(), getTranslation("tarjeta.recargatarjeta") + tarSelected.getNumTarjeta(), TipoMovimiento.RECARGATARJETA);
 			try {				
 				_movService.recargaTarjeta(movRecarga, _cuentaService.findByNumeroCuenta(cbCuentas.getValue()).get(), tarSelected, txtCantidad.getValue().floatValue());
 				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()) + "€");
-				Notification notification = Notification.show("El deposito de " + txtCantidad.getValue() + "€" + " desde " + cbCuentas.getValue() + " se ha realizado correctamente");
+				Notification notification = Notification.show(getTranslation("tarjeta.depositof") + txtCantidad.getValue() + "€" + getTranslation("tarjeta.from") + cbCuentas.getValue() + getTranslation("tarjeta.success"));
 				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 				dlogRecarga.close();
 			}
@@ -182,11 +182,11 @@ public class TarjetaView extends VerticalLayout{
 			}
 		});
 		
-		dlogEliminarTarjeta.setHeader("Eliminar tarjeta");
+		dlogEliminarTarjeta.setHeader(getTranslation("tarjeta.deletetarjeta"));
 		dlogEliminarTarjeta.setCancelable(true);
-		dlogEliminarTarjeta.setCancelText("Descartar");
+		dlogEliminarTarjeta.setCancelText(getTranslation("tarjeta.discard"));
 		dlogEliminarTarjeta.addCancelListener(event -> dlogEliminarTarjeta.close());
-		dlogEliminarTarjeta.setConfirmText("Eliminar");
+		dlogEliminarTarjeta.setConfirmText(getTranslation("tarjeta.remove"));
 		dlogEliminarTarjeta.setConfirmButtonTheme("error primary");
 		dlogEliminarTarjeta.addConfirmListener(event -> {
 			tarSelected.setFechaCancelacion(new Date());
@@ -206,11 +206,11 @@ public class TarjetaView extends VerticalLayout{
 		textPin.setReadOnly(true);
 		textPin.setClassName("padding40");
 		
-		H1 hTarjeta = new H1("| Tarjetas");
+		H1 hTarjeta = new H1(getTranslation("tarjeta.title"));
 		hTarjeta.setClassName("title");
-		H1 hDetalleTarjeta = new H1("| Detalles");
+		H1 hDetalleTarjeta = new H1(getTranslation("tarjeta.detalles"));
 		hDetalleTarjeta.setClassName("title");
-		H1 hTransacciones = new H1("| Transacciones");
+		H1 hTransacciones = new H1(getTranslation("tarjeta.transacciones"));
 		hTransacciones.setClassName("title");
 		
 		
@@ -327,7 +327,7 @@ public class TarjetaView extends VerticalLayout{
 		btnCambiarPin.addClickListener(e -> { dlogPin.open(); });
 		
 		tgbtnActivacionTarjeta.addValueChangeListener(ev -> {
-			spanToggle.setText(ev.getValue()? "Activada" : "Desactivada");
+			spanToggle.setText(ev.getValue()? getTranslation("tarjeta.activa") : getTranslation("tarjeta.desactivada"));
 			if(tcSelected.getSelected()) {				
 				tarSelected.setActiva(ev.getValue());
 				try {
@@ -337,7 +337,7 @@ public class TarjetaView extends VerticalLayout{
 		});
 		
 		btnCancelarTarjeta.addClickListener(e -> {
-			dlogEliminarTarjeta.setText("¿Estás seguro de que quieres eliminar tu tarjeta " + tarSelected.getNumTarjeta() + "? Este cambio es irreversible."); 
+			dlogEliminarTarjeta.setText(getTranslation("tarjeta.confirmdelete") + tarSelected.getNumTarjeta() + getTranslation("tarjeta.confirmdelete2")); 
 			dlogEliminarTarjeta.open();
 		});
 		
