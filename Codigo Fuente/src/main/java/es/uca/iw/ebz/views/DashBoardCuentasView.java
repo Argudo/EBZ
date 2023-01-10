@@ -10,6 +10,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.*;
@@ -94,21 +95,20 @@ public class DashBoardCuentasView extends HorizontalLayout {
         pDNI.getStyle().set("fontWeight", "600");
         btnBuscar.getElement().appendChild(new Icon("lumo", "search").getElement());
         /*Grid cliente*/
-        List<Cuenta> aCuenta = new ArrayList<Cuenta>();
-        /*Grid Tarjeta*/
-        aCuenta = _cuentaService.loadCuentas();
+
         gridCuenta.addColumn(Cuenta::getNumeroCuenta).setHeader("Número de tarjeta").setAutoWidth(true).setSortable(true);
         gridCuenta.addColumn(Cuenta::getFechaCreacion).setHeader("Fecha de creación").setAutoWidth(true).setSortable(true);
         gridCuenta.addColumn(Cuenta::getSaldo).setHeader("Saldo").setSortable(true);
         gridCuenta.addColumn(Cuenta::getDNICliente).setHeader("DNI Cliente").setAutoWidth(true).setSortable(true);
-        GridListDataView<Cuenta> dataView = gridCuenta.setItems(aCuenta);
-
+        //actualizamos el UI
+        updateUI();
         //comboBox
         List<String> aCuentas = new ArrayList<>();
         for (Cuenta cuenta : cuentaService.loadCuentas()) {
             aCuentas.add(cuenta.getNumeroCuenta());
         }
         cbUsuario.setItems(aCuentas);
+
 
         hlBuscador.add(pDNI,
                 cbUsuario);
@@ -123,51 +123,35 @@ public class DashBoardCuentasView extends HorizontalLayout {
                 vlInfo);
 
         btnAdd.addClickListener(e -> {
-
-
             List<String> DNIs = new ArrayList<>();
             for (Cliente cliente : clienteService.findAll()) {
                 DNIs.add(cliente.getUsuario().getDNI());
             }
             createAccountDialog = new CreateAccountDialog(DNIs, cuentaService, usuarioService, clienteService);
             createAccountDialog.open();
-
         });
 
         btnDelete.addClickListener(e -> {
-            if(cbUsuario.getValue() == null){
-                Notification notification = new Notification();
-                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                ConfirmDialog dialog = new ConfirmDialog();
+                dialog.setHeader(getTranslation("confirm.title"));
+                dialog.setText(getTranslation("confirm.body"));
 
-                Div text = new Div(new Text(getTranslation("account.accountError")));
+                dialog.setCancelable(true);
 
-                Button closeButton = new Button(new Icon("lumo", "cross"));
-                closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-                closeButton.getElement().setAttribute("aria-label", "Close");
-                closeButton.addClickListener(event -> {
-                    notification.close();
-                });
+                dialog.setCancelText(getTranslation("confirm.no"));
 
-                HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-                layout.setAlignItems(FlexComponent.Alignment.CENTER);
-
-                notification.add(layout);
-                notification.open();
-            }
-            else {
-                if(cuentaService.delete2(cbUsuario.getValue())){
-                    Notification notification = Notification.show(getTranslation("account.deleteSuccess"));
-                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                }else{
+                dialog.setConfirmText(getTranslation("confirm.yes"));
+                dialog.addConfirmListener(event ->  {
+                    if(cbUsuario.getValue() == null){
                     Notification notification = new Notification();
                     notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 
-                    Div text = new Div(new Text(getTranslation("account.deleteError")));
+                    Div text = new Div(new Text(getTranslation("account.accountError")));
 
                     Button closeButton = new Button(new Icon("lumo", "cross"));
                     closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
                     closeButton.getElement().setAttribute("aria-label", "Close");
-                    closeButton.addClickListener(event -> {
+                    closeButton.addClickListener(ee -> {
                         notification.close();
                     });
 
@@ -177,8 +161,45 @@ public class DashBoardCuentasView extends HorizontalLayout {
                     notification.add(layout);
                     notification.open();
                 }
-            }
-        });
+                else {
+                    if(cuentaService.delete2(cbUsuario.getValue())){
+                        Notification notification = Notification.show(getTranslation("account.deleteSuccess"));
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        updateUI();
+                    }else{
+                        Notification notification = new Notification();
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 
+                        Div text = new Div(new Text(getTranslation("account.deleteError")));
+
+                        Button closeButton = new Button(new Icon("lumo", "cross"));
+                        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+                        closeButton.getElement().setAttribute("aria-label", "Close");
+                        closeButton.addClickListener(not -> {
+                            notification.close();
+                        });
+
+                        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+                        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+                        notification.add(layout);
+
+                        notification.open();
+                    }
+                }
+                    ;});
+
+            dialog.open();
+            });
     }
+
+    private void updateUI(){
+        List<Cuenta> aCuenta = new ArrayList<Cuenta>();
+        aCuenta = _cuentaService.loadCuentas();
+        gridCuenta.setItems(aCuenta);
+
+        gridCuenta.getDataProvider().refreshAll();
+    }
+
+
 }

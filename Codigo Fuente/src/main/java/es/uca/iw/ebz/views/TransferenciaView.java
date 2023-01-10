@@ -6,6 +6,8 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -93,7 +95,7 @@ public class TransferenciaView extends VerticalLayout {
         vlTitle.setMargin(true);
         vlTitle.setClassName("box");
 
-        H1 hTitle = new H1("| Transferencia");
+        H1 hTitle = new H1(getTranslation("transfer.title"));
         hTitle.setClassName("title");
         vlTitle.add(hTitle);
 
@@ -134,49 +136,75 @@ public class TransferenciaView extends VerticalLayout {
             asAccounts.add(c.getNumeroCuenta());
         }
 
-        cbAccount1 = new ComboBox<String>("Cuenta origen");
+        cbAccount1 = new ComboBox<String>(getTranslation("transfer.from"));
         cbAccount1.setItems(asAccounts);
         cbAccount1.setRequired(true);
         cbAccount1.setRequiredIndicatorVisible(true);
-        cbAccount1.setErrorMessage("La cuenta origen es obligatoria");
+        cbAccount1.addValueChangeListener( e -> {
+            if(cbAccount1.getValue() == null){
+                cbAccount1.getElement().setAttribute("invalid","");
+            }
+        });
 
-        cbAccount2 = new ComboBox<String>("Cuenta destino");
+        cbAccount2 = new ComboBox<String>(getTranslation("transfer.to"));
         cbAccount2.setItems(asAccounts);
         cbAccount2.setRequired(true);
         cbAccount2.setRequiredIndicatorVisible(true);
-        cbAccount2.setErrorMessage("La cuenta destino es obligatoria");
+        cbAccount2.setErrorMessage(getTranslation("transfer.obto"));
+        cbAccount2.addValueChangeListener( e -> {
+            if(cbAccount2.getValue() == null){
+                cbAccount1.getElement().setAttribute("invalid","");
+            }
+        });
 
-        tfDestinyAccount = new TextField("Cuenta destino");
+        tfDestinyAccount = new TextField(getTranslation("transfer.to"));
         tfDestinyAccount.setRequired(true);
         tfDestinyAccount.setRequiredIndicatorVisible(true);
         tfDestinyAccount.setMinLength(20);
-        tfDestinyAccount.setErrorMessage("La cuenta destino es obligatoria");
+        tfDestinyAccount.setErrorMessage(getTranslation("transfer.obto"));
+        tfDestinyAccount.addValueChangeListener( e -> {
+            if(tfDestinyAccount.getValue() == null || tfDestinyAccount.getValue().length() < tfDestinyAccount.getMinLength()){
+                tfDestinyAccount.getElement().setAttribute("invalid","");
+            }
+        });
 
-        tfConcept = new TextField("Concepto (mínimo 10 caracteres)");
+
+        tfConcept = new TextField(getTranslation("transfer.concept"));
         tfConcept.setRequired(true);
         tfConcept.setRequiredIndicatorVisible(true);
         tfConcept.setMinLength(10);
-        tfConcept.setErrorMessage("El concepto no cumple con el mínimo de caracteres.");
+        tfConcept.setErrorMessage(getTranslation("transfer.obconcept"));
+        tfConcept.addValueChangeListener( e -> {
+            if(tfConcept.getValue() == null || tfConcept.getValue().length() < tfConcept.getMinLength()){
+                tfConcept.getElement().setAttribute("invalid","");
+            }
+        });
 
-        nfBalance = new NumberField("Cantidad a transferir");
+
+        nfBalance = new NumberField(getTranslation("transfer.amount"));
         Div euroSuffix = new Div();
         euroSuffix.setText("€");
         nfBalance.setSuffixComponent(euroSuffix);
         nfBalance.setRequiredIndicatorVisible(true);
         nfBalance.setMin(0.01);
-        nfBalance.setErrorMessage("El importe es obligatorio");
+        nfBalance.setErrorMessage(getTranslation("transfer.noamount"));
+        nfBalance.addValueChangeListener( e -> {
+            if(nfBalance.getValue() == null || nfBalance.getValue() < nfBalance.getMin()){
+                nfBalance.getElement().setAttribute("invalid","");
+            }
+        });
 
-        btnTrans = new Button("Transferir");
+        btnTrans = new Button(getTranslation("transfer.button"));
 
         //End transference form fields section
 
         rdGroup = new RadioButtonGroup<>();
-        rdGroup.setLabel("Tipo de transferencia");
-        rdGroup.setItems("Traspaso (entre cuentas propias)", "Transferencia (a una cuenta ajena)");
+        rdGroup.setLabel(getTranslation("transfer.type"));
+        rdGroup.setItems(getTranslation("transfer.t1"), getTranslation("transfer.t2"));
         rdGroup.addValueChangeListener(e -> {
 
             frmTransfer.removeAll();
-            if(rdGroup.getValue() == "Traspaso (entre cuentas propias)"){
+            if(rdGroup.getValue() == getTranslation("transfer.t1")){
 
                 frmTransfer.add(
                         rdGroup,
@@ -188,28 +216,39 @@ public class TransferenciaView extends VerticalLayout {
 
                 btnTrans.addClickListener( ev -> {
 
-                    /*if(cbAccount1.getValue() == cbAccount1.getEmptyValue()){
-                        CargarFormulario(true);
-                        frmTransfer.add(new Paragraph("La cuenta origen no está seleccionada."));
-                    }else if(cbAccount2.getValue() == cbAccount2.getEmptyValue()){
-                        CargarFormulario(true);
-                        frmTransfer.add(new Paragraph("La cuenta destino no está seleccionada."));
-                    }else if(tfConcept.getValue() == tfConcept.getEmptyValue()){
-                        CargarFormulario(true);
-                        frmTransfer.add(new Paragraph("El concepto no cumple con el mínimo de caracteres o no es obligatorio."));
-                    }else if(nfBalance.getValue() == nfBalance.getEmptyValue()){
-                        CargarFormulario(true);
-                        frmTransfer.add(new Paragraph("El importe es obligatorio."));
-                    }else{*/
+                    boolean fail = false;
+
+                    if(cbAccount1.getValue() == null){
+                        cbAccount1.getElement().setAttribute("invalid","");
+                        fail = true;
+                    }
+                    if(cbAccount2.getValue() == null || cbAccount2.getValue() == cbAccount1.getValue()){
+                        tfDestinyAccount.getElement().setAttribute("invalid","");
+                        fail = true;
+                    }
+                    if(tfConcept.getValue() == null || tfConcept.getValue().length() < tfConcept.getMinLength()){
+                        tfConcept.getElement().setAttribute("invalid","");
+                        fail = true;
+                    }
+                    if(nfBalance.getValue() == null || nfBalance.getValue() < nfBalance.getMin()){
+                        nfBalance.getElement().setAttribute("invalid","");
+                        fail = true;
+                    }
+                    if(!fail){
                         Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.INTERNO);
-                    try {
-                        _movimientoService.añadirMovimientoCuenta(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), cbAccount2.getValue(), nfBalance.getValue().floatValue());
-                    } catch (Exception ex) {
+                        System.out.println(mv.getsConcpeto() + " " + mv.getTipo());
+                        try {
+                            _movimientoService.nuevoMovimiento(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), cbAccount2.getValue(), nfBalance.getValue().floatValue());
+                        } catch (Exception ex) {
+                            Notification notification = Notification.show("Error: " + ex.getMessage());
+                            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        }
+
+                        CargarFormulario(true);
+                        Notification notification = Notification.show(getTranslation("transfer.correct2"));
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 
                     }
-                    CargarFormulario(true);
-                        frmTransfer.add(new Paragraph("El traspaso se ha realizado correctamente."));
-                    //}
 
                 });
 
@@ -227,28 +266,42 @@ public class TransferenciaView extends VerticalLayout {
 
                 btnTrans.addClickListener( ev -> {
 
-                    /*if(cbAccount1.getValue() == cbAccount1.getEmptyValue()){
-                        CargarFormulario(false);
-                        frmTransfer.add(new Paragraph("La cuenta origen no está seleccionada."));
-                    }else if(tfDestinyAccount.getValue() == tfDestinyAccount.getEmptyValue()){
-                        CargarFormulario(false);
-                        frmTransfer.add(new Paragraph("La cuenta destino no está seleccionada."));
-                    }else if(tfConcept.getValue() == tfConcept.getEmptyValue()){
-                        CargarFormulario(false);
-                        frmTransfer.add(new Paragraph("El concepto no cumple con el mínimo de caracteres."));
-                    }else if(nfBalance.getValue() == nfBalance.getEmptyValue()){
-                        CargarFormulario(false);
-                        frmTransfer.add(new Paragraph("El importe es obligatorio."));
-                    }else{*/
-                        Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.EXTERNO);
-                    try {
-                        _movimientoService.añadirMovimientoCuenta(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), tfDestinyAccount.getValue(), nfBalance.getValue().floatValue());
-                    } catch (Exception ex) {
+                    boolean fail = false;
 
+                    if(cbAccount1.getValue() == null){
+                        cbAccount1.getElement().setAttribute("invalid","");
+                        fail = true;
                     }
-                    CargarFormulario(false);
-                        frmTransfer.add(new Paragraph("La transferencia se ha realizado correctamente."));
-                   // }
+                    if(tfDestinyAccount.getValue() == null || tfDestinyAccount.getValue().length() < tfDestinyAccount.getMinLength()){
+                        tfDestinyAccount.getElement().setAttribute("invalid","");
+                        fail = true;
+                    }
+                    if(tfConcept.getValue() == null || tfConcept.getValue().length() < tfConcept.getMinLength()){
+                        tfConcept.getElement().setAttribute("invalid","");
+                        fail = true;
+                    }
+                    if(nfBalance.getValue() == null || nfBalance.getValue() < nfBalance.getMin()){
+                        nfBalance.getElement().setAttribute("invalid","");
+                        fail = true;
+                    }
+                    if(!fail){
+                        Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.EXTERNO);
+                        try {
+                            _movimientoService.nuevoMovimiento(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), tfDestinyAccount.getValue(), nfBalance.getValue().floatValue());
+                        } catch (Exception ex) {
+                            Notification notification = Notification.show("Error: " + ex.getMessage());
+                            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        }
+                        CargarFormulario(false);
+
+                        btnTrans.getUI().ifPresent(ui ->
+                                ui.navigate(""));
+
+                        Notification notification = Notification.show(getTranslation("transfer.correct2"));
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    }
+
+
 
                 });
 
@@ -264,20 +317,18 @@ public class TransferenciaView extends VerticalLayout {
 
     private void CargarFormulario(boolean b){
         if(b){ //Si es traspaso
-            frmTransfer.removeAll();
-            cbAccount1.clear();
             cbAccount2.clear();
-            tfConcept.clear();
-            nfBalance.clear();
-            frmTransfer.add(rdGroup, cbAccount1, cbAccount2, tfConcept, nfBalance, btnTrans);
+            cbAccount2.getElement().removeAttribute("invalid");
         }else{ //Si es transferencia
-            frmTransfer.removeAll();
-            cbAccount1.clear();
             tfDestinyAccount.clear();
-            tfConcept.clear();
-            nfBalance.clear();
-            frmTransfer.add(rdGroup, cbAccount1, tfDestinyAccount, tfConcept, nfBalance, btnTrans);
+            tfDestinyAccount.getElement().removeAttribute("invalid");
         }
+        cbAccount1.clear();
+        cbAccount1.getElement().removeAttribute("invalid");
+        tfConcept.clear();
+        tfConcept.getElement().removeAttribute("invalid");
+        nfBalance.clear();
+        nfBalance.getElement().removeAttribute("invalid");
     }
 
 

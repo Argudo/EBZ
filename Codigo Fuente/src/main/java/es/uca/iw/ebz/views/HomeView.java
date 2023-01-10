@@ -158,10 +158,10 @@ H3 _acBalance = new H3();
 			flAccountButtons.setFlexWrap(FlexWrap.WRAP);
 			flAccountButtons.setJustifyContentMode(JustifyContentMode.EVENLY);
 
-			Component cTarjeta = CreateButton("Tarjetas", VaadinIcon.CREDIT_CARD);
-			Component cEstadisticas = CreateButton("Información de la cuenta", VaadinIcon.INFO);
-			Component cMovimientos = CreateButton("Movimientos", VaadinIcon.EXCHANGE);
-			Component cTransferencias = CreateButton("Transferencias", VaadinIcon.MONEY_EXCHANGE);
+			Component cTarjeta = CreateButton(getTranslation("mainLayout.cards"), VaadinIcon.CREDIT_CARD);
+			Component cEstadisticas = CreateButton(getTranslation("home.info"), VaadinIcon.INFO);
+			Component cMovimientos = CreateButton(getTranslation("mainLayout.movement"), VaadinIcon.EXCHANGE);
+			Component cTransferencias = CreateButton(getTranslation("mainLayout.transfer"), VaadinIcon.MONEY_EXCHANGE);
 			flAccountButtons.add(
 					cTarjeta,
 					cEstadisticas,
@@ -220,7 +220,7 @@ H3 _acBalance = new H3();
 			vlNoAccounts.setMargin(false);
 			vlNoAccounts.setAlignItems(Alignment.CENTER);
 
-			H1 sNoAccounts = new H1("No tienes cuentas asociadas actualmente.");
+			H1 sNoAccounts = new H1(getTranslation("home.noaccount"));
 
 
 			vlNoAccounts.add(
@@ -262,12 +262,12 @@ H3 _acBalance = new H3();
 		List<Movimiento> mvList = _movimientoService.findByClienteByFechaASC(_cliente);
 
 		if(mvList.size() < 1){
-			H2 mvMessage = new H2("No tienes movimientos actualmente.");
+			H2 mvMessage = new H2(getTranslation("movement.nomov"));
 			flAccountMovements.setAlignItems(Alignment.CENTER);
 			flAccountMovements.add(mvMessage);
 
 		}else{
-			H2 mvTitle = new H2("Últimos movimientos");
+			H2 mvTitle = new H2(getTranslation("home.lastmove"));
 			mvTitle.setClassName("subtitle");
 			flAccountMovements.add(mvTitle);
 			int cont = 0;
@@ -287,12 +287,12 @@ H3 _acBalance = new H3();
 		List<Consulta> cnList = _consultaService.findByCliente(_authenticatedUser.get().get());
 
 		if(cnList.size() < 1){
-			H2 cnMessage = new H2("No tienes consultas actualmente.");
+			H2 cnMessage = new H2(getTranslation("home.noquery"));
 			flAccountNotifications.setAlignItems(Alignment.CENTER);
 			flAccountNotifications.add(cnMessage);
 
 		}else{
-			H2 ntTitle = new H2("Últimas consultas");
+			H2 ntTitle = new H2(getTranslation("home.lastquery"));
 			ntTitle.setClassName("subtitle");
 			flAccountNotifications.add(ntTitle);
 			int cont = 0;
@@ -325,7 +325,7 @@ H3 _acBalance = new H3();
 		vlTarjeta.setMargin(true);
 		vlTarjeta.setClassName("box");
 
-		H2 tarjetaTitle = new H2("Tarjetas");
+		H2 tarjetaTitle = new H2(getTranslation("mainLayout.cards"));
 		tarjetaTitle.setClassName("subtitle");
 
 		if(aTarjetas.size() > 0){
@@ -355,7 +355,7 @@ H3 _acBalance = new H3();
 			vlTarjeta.add(tarjetaTitle, scrollTarjeta);
 
 		}else{
-			H2 tarMessage = new H2("No hay tarjetas asociadas.");
+			H2 tarMessage = new H2(getTranslation("home.nocards"));
 			vlTarjeta.add(tarjetaTitle, tarMessage);
 		}
 		//End credit cards section
@@ -400,7 +400,7 @@ H3 _acBalance = new H3();
 		vlMain.setPadding(true);
 		vlMain.setWidthFull();
 
-		H1 _userName = new H1("Bienvenido, " + userName);
+		H1 _userName = new H1(getTranslation("home.welcome") + userName);
 
 		vlMain.add(_userName);
 
@@ -452,44 +452,32 @@ H3 _acBalance = new H3();
 		vlMain.getStyle().set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
 		vlMain.setAlignItems(Alignment.START);
 		vlMain.setSpacing(false);
-		vlMain.setWidth("100%");
+		vlMain.setWidth("200px");
 		vlMain.setHeightFull();
 
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 		String sBalance = new String(formatImport.format(ac.getSaldo()));
 
-		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t| " + sBalance);
+		String sAux = "ES*" + ac.getNumeroCuenta().substring(ac.getNumeroCuenta().length()-4, ac.getNumeroCuenta().length());
 
-		_ae1.addClickListener(e -> {
+		H3 _ae1 = new H3(sAux);
+		_ae1.getStyle().set("margin-left", "10px");
+		H4 _ae2 = new H4("| " + sBalance);
+		_ae2.getStyle().set("margin-top", "0px");
+		_ae2.getStyle().set("margin-left", "10px");
+
+
+		addClickListener(e -> {
 			acSelected = ac;
 			updateAccountInfo();
 		});
 
 		vlMain.add(
-				_ae1);
+				_ae1, _ae2);
 
 		return vlMain;
 
 	}
-
-
-	/*private Component AccountHorizontal(Cuenta account){
-
-		VerticalLayout vlMain = new VerticalLayout();
-		vlMain.setAlignItems(Alignment.CENTER);
-		vlMain.setSpacing(false);
-		vlMain.setWidth("min-width");
-
-		Paragraph _ac = new Paragraph(account.getNumeroCuenta());
-
-		//_ac.addClickListener();
-
-		vlMain.add(_ac);
-
-		return vlMain;
-
-
-	}*/
 
 	//Función para actualizar la info de la cuenta que mostramos en el primer layout
 	private void updateAccountInfo() {
@@ -501,13 +489,6 @@ H3 _acBalance = new H3();
 		_acBalance.setText(formatImport.format(acSelected.getSaldo()));
 
 	}
-
-	/*@Override
-	public void beforeEnter(BeforeEnterEvent event) {
-		if(_authenticatedUser.get().isPresent()) _cliente = _clienteService.findByUsuario(_authenticatedUser.get().get());
-		else event.rerouteTo(LoginView.class);
-
-	}*/
 
 	@Override
 	public void beforeEnter(BeforeEnterEvent event) {
