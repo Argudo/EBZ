@@ -3,7 +3,9 @@ package es.uca.iw.ebz.views;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
@@ -27,13 +29,13 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
@@ -68,10 +70,10 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
 	Notification notCambios = new Notification("Tiene aún cambios pendientes, presione 'Guardar'");
 	
-	
 	private Cliente _cliente;
 	private List<Cuenta> aCuentas;
     private List<Tarjeta> aTarjeta = new ArrayList<Tarjeta>();
+    private Map<Tarjeta, Boolean> mapTarjeta = new HashMap<Tarjeta, Boolean>();
 		
 	@Autowired 
 	private ClienteService _clienteService;
@@ -97,10 +99,6 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		
 		vlSeparator.getStyle().set("background-color", "var(--lumo-contrast-10pct)");
 		vlSeparator.getStyle().set("padding", "0");
-		
-		vlGrid.add(hGrid,
-				   new Hr(),
-				   gridTarjeta);
 		
 		vlInfo.setAlignItems(FlexComponent.Alignment.CENTER);
 		hlBuscador.setAlignItems(FlexComponent.Alignment.END);
@@ -132,7 +130,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
             pinField.setWidth("100px");
             pinField.addValueChangeListener(event -> {  
             	if(!notCambios.isOpened()) notCambios.open();
-            	tarjeta.setiPin(event.getValue());
+            	tarjeta.setiPin(event.getValue());    
+            	mapTarjeta.put(tarjeta, true);
+                gridTarjeta.getGenericDataView().refreshAll();
             });
             
             return pinField;
@@ -150,31 +150,56 @@ public class DashBoardTarjetasView extends HorizontalLayout{
         	        String newCvc = tarjeta.GenerarCVC();
         	        tarjeta.setCVC(newCvc);
         	        cvcField.setValue(newCvc);
+                	mapTarjeta.put(tarjeta, true);
+                    gridTarjeta.getGenericDataView().refreshAll();
         	    });
         	    layout.add(cvcField, refreshButton);
         	    return layout;
         })).setHeader("CVC").setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
         gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
-            Button saveButton = new Button("Guardar");
-            saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-            saveButton.addClickListener(event -> {
-                try {
-                	notCambios.close();
-					_tarService.Update(tarjeta);
-					Notification not = Notification.show("Se realizaron los cambios correctamente");
-	    	    	not.setPosition(Position.MIDDLE);
-	    	    	not.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                	aTarjeta.removeAll(aTarjeta);
-                	aTarjeta.addAll((Collection<Tarjeta>) _tarService.findByCliente(_cliente));
-                	gridTarjeta.setItems(aTarjeta);
-				} catch (Exception e1) {
-					Notification not = Notification.show("Se ha encontrado el siguiente error: " + e1.getMessage());
-	    	    	not.setPosition(Position.TOP_STRETCH);
-	    	    	not.addThemeVariants(NotificationVariant.LUMO_ERROR);
-				}
-            });
-            return saveButton;
+        	Icon iconCheck = LumoIcon.CHECKMARK.create();
+        	Icon iconWarning = VaadinIcon.WARNING.create();
+    		iconCheck.setSize("40px"); iconCheck.setColor("var(--lumo-success-color-50pct)");
+    		iconWarning.setSize("30px"); iconWarning.setColor("#eed202");
+            return mapTarjeta.get(tarjeta)? iconWarning : iconCheck;
         })).setHeader("Cambios").setTextAlign(ColumnTextAlign.CENTER);
+        
+        Button saveButton = new Button("Guardar cambios");
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        saveButton.addClickListener(event -> {
+            	notCambios.close();
+            	mapTarjeta.forEach((tarjeta, estado) -> {
+            		if(estado) {
+            			try {
+							_tarService.Update(tarjeta);
+							estado = true;
+						} catch (Exception e1) {
+							Notification not = Notification.show("Se ha encontrado el siguiente error: " + e1.getMessage());
+			    	    	not.setPosition(Position.TOP_STRETCH);
+			    	    	not.addThemeVariants(NotificationVariant.LUMO_ERROR);
+						}            			
+            		}
+            	});
+				Notification not = Notification.show("Se realizaron los cambios correctamente");
+    	    	not.setPosition(Position.MIDDLE);
+    	    	not.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            	aTarjeta.removeAll(aTarjeta);
+            	aTarjeta.addAll((Collection<Tarjeta>) _tarService.findByCliente(_cliente));
+            	mapTarjeta.clear();
+            	aTarjeta.forEach(T -> {
+            		mapTarjeta.put(T, false);
+            	});
+            	gridTarjeta.setItems(aTarjeta);
+        });
+        saveButton.setWidthFull();
+        HorizontalLayout hlGuardar = new HorizontalLayout();
+        hlGuardar.setWidthFull();
+        hlGuardar.setJustifyContentMode(JustifyContentMode.END);
+        hlGuardar.add(saveButton);
+		vlGrid.add(hGrid,
+				   new Hr(),
+				   gridTarjeta,
+				   hlGuardar);
         
 		hlBuscador.add(pDNI,
 					   txtDNI,
@@ -230,6 +255,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	                    	_cliente = cliente;
 	                    	aTarjetas.removeAll(aTarjetas);
 	                    	aTarjetas.addAll((Collection<Tarjeta>) _tarService.findByCliente(cliente));
+	                    	aTarjetas.forEach(T -> {
+	                    		mapTarjeta.put(T, false);
+	                    	});
 	                    	gridTarjeta.setItems(aTarjetas);
 	                    	hGrid.setText("| Tarjetas de " + cliente.getNombre());
 	                    });

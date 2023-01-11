@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -36,7 +37,7 @@ import es.uca.iw.ebz.views.layout.MainLayout;
 public class MovimientoView extends VerticalLayout {
     private VerticalLayout vlDetalleMovimiento = new VerticalLayout();
     private H1 hHeader = new H1(getTranslation("movement.home"));
-
+    private VerticalLayout vlMain = new VerticalLayout();
 
     @Autowired
     private AuthenticatedUser authenticatedUser;
@@ -49,7 +50,11 @@ public class MovimientoView extends VerticalLayout {
         authenticatedUser = user;
         this.movimientoService = movimientoService;
         this.clienteService = clienteService;
-        add(hHeader);
+        
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        this.setAlignItems(FlexComponent.Alignment.CENTER);
+        setWidthFull();
+        hHeader.setClassName("title");
         gridMovimientos.addColumn(DatosMovimiento::getTipo).setHeader(getTranslation("movement.type")).setAutoWidth(true).setSortable(true);
         gridMovimientos.addColumn(DatosMovimiento::getOrigen).setHeader(getTranslation("movement.origin")).setAutoWidth(true);
         gridMovimientos.addColumn(DatosMovimiento::getDestino).setHeader(getTranslation("movement.destination")).setAutoWidth(true);
@@ -75,18 +80,14 @@ public class MovimientoView extends VerticalLayout {
         searchField.setPlaceholder(getTranslation("movement.search"));
         searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
         searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        searchField.addValueChangeListener(e -> dataView.refreshAll());
-        add(searchField);
-        add(new MovimientosComponent(TipoGrid.Completo, movimientoService, cliente));
-        if(movimientos != null){
-            add(gridMovimientos);
-        }else{
-            add(new H2(getTranslation("movement.nomov")));
-        }
-
-        dataView.addFilter(mov -> {
+        MovimientosComponent compMovGrid = new MovimientosComponent(TipoGrid.Completo, movimientoService, cliente);
+        vlMain.add(hHeader, new Hr(), searchField);
+        vlMain.add(compMovGrid);
+        add(vlMain);
+        
+        searchField.addValueChangeListener(e -> compMovGrid.getDataView().refreshAll());
+        compMovGrid.getDataView().addFilter(mov -> {
             String searchTerm = searchField.getValue().trim();
-
             if (searchTerm.isEmpty()) return true;
 
             boolean matchesFullName = mov.getOrigen().contains(searchTerm);

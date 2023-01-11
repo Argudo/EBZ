@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
@@ -27,6 +28,7 @@ public class MovimientosComponent extends Grid<DatosMovimiento> {
 	Tarjeta _tarjeta;
 	List<Movimiento> _aMovimientos = new ArrayList<Movimiento>();
 	List<DatosMovimiento> _aDatosMovimiento = new ArrayList<DatosMovimiento>();
+	GridListDataView<DatosMovimiento> _dataView;
 	
 	public MovimientosComponent(TipoGrid tipoGrid, MovimientoService movService, Object objCondition){
 		_tipoGrid = tipoGrid;
@@ -37,24 +39,28 @@ public class MovimientosComponent extends Grid<DatosMovimiento> {
 		else if(objCondition.getClass() == Tarjeta.class) { _tarjeta = (Tarjeta) objCondition; _aMovimientos = _movService.findByTarjetaOrderByASC(_tarjeta); }
 		
 		_aMovimientos.forEach(m -> _aDatosMovimiento.add(_movService.datosMovimientoClass(m)));
-		setItems(_aDatosMovimiento);
+		_dataView = setItems(_aDatosMovimiento);
+		System.out.println("Tamaño: " + _aMovimientos.size());
 		
 		if(_tipoGrid == TipoGrid.Completo) {
-			addColumn(DatosMovimiento::getTipo).setHeader(getTranslation("movement.type")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
-			addColumn(DatosMovimiento::getOrigen).setHeader(getTranslation("movement.origin")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
-			addColumn(DatosMovimiento::getDestino).setHeader(getTranslation("movement.destination")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
-			addColumn(DatosMovimiento::getFecha).setHeader(getTranslation("movement.date")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
+			addColumn(DatosMovimiento::getTipo).setHeader(getTranslation("movement.type")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
+			addColumn(DatosMovimiento::getOrigen).setHeader(getTranslation("movement.origin")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
+			addColumn(DatosMovimiento::getDestino).setHeader(getTranslation("movement.destination")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
 		}
 		
 		//Grid parcial
-		addColumn(DatosMovimiento::getConcepto).setHeader(getTranslation("movement.concept"));
-		addColumn(DatosMovimiento::getImporte).setHeader(getTranslation("movement.amount")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
-		this.addColumn(new ComponentRenderer<>(mov -> {
-			Button btnDetalles = new Button(VaadinIcon.EYE.create());
-			btnDetalles.addThemeVariants(ButtonVariant.LUMO_ICON);
-			return btnDetalles;
-		}));
-		
-		
+		addColumn(DatosMovimiento::getConcepto).setHeader(getTranslation("movement.concept")).setAutoWidth(true);
+		addColumn(DatosMovimiento::getImporte).setHeader(getTranslation("movement.amount")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
+		if(_tipoGrid == TipoGrid.Parcial) {
+			addColumn(new ComponentRenderer<>(mov -> {
+				Button btnDetalles = new Button(VaadinIcon.EYE.create());
+				btnDetalles.addThemeVariants(ButtonVariant.LUMO_ICON);
+				return btnDetalles;
+			})).setHeader(getTranslation("movement.detalles")).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);			
+		}
+		if(_tipoGrid == TipoGrid.Completo) 
+			addColumn(DatosMovimiento::getFecha).setHeader(getTranslation("movement.date")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
 	}
+	
+	public GridListDataView<DatosMovimiento> getDataView() { return _dataView; }
 }
