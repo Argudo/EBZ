@@ -33,10 +33,13 @@ public class MovimientosComponent extends Grid<DatosMovimiento> {
 	public MovimientosComponent(TipoGrid tipoGrid, MovimientoService movService, Object objCondition){
 		_tipoGrid = tipoGrid;
 		_movService = movService;
-
-		if(objCondition.getClass() == Cuenta.class) { _cuenta = (Cuenta) objCondition; _aMovimientos = _movService.findByCuentaOrderByFechaASC(_cuenta); }
-		else if(objCondition.getClass() == Cliente.class) { _cliente = (Cliente) objCondition; _aMovimientos = _movService.findByClienteByFechaASC(_cliente); }
-		else if(objCondition.getClass() == Tarjeta.class) { _tarjeta = (Tarjeta) objCondition; _aMovimientos = _movService.findByTarjetaOrderByASC(_tarjeta); }
+		
+		if(objCondition != null) {			
+			if(objCondition.getClass() == Cuenta.class) { _cuenta = (Cuenta) objCondition; _aMovimientos = _movService.findByCuentaOrderByFechaASC(_cuenta); }
+			else if(objCondition.getClass() == Cliente.class) { _cliente = (Cliente) objCondition; _aMovimientos = _movService.findByClienteByFechaASC(_cliente); }
+			else if(objCondition.getClass() == Tarjeta.class) { _tarjeta = (Tarjeta) objCondition; _aMovimientos = _movService.findByTarjetaOrderByASC(_tarjeta); }
+			
+		}
 		
 		_aMovimientos.forEach(m -> _aDatosMovimiento.add(_movService.datosMovimientoClass(m)));
 		_dataView = setItems(_aDatosMovimiento);

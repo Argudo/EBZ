@@ -1,10 +1,10 @@
-package es.uca.iw.ebz.views;
+package es.uca.iw.ebz.views.cliente;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.PermitAll;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,6 +42,7 @@ import es.uca.iw.ebz.usuario.admin.AdminService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.admin.DashBoardView;
 import es.uca.iw.ebz.views.component.ConsultaChiquita;
 import es.uca.iw.ebz.views.component.DetallesCuentaDialog;
 import es.uca.iw.ebz.views.component.MovimientosComponent;
@@ -54,7 +55,7 @@ import es.uca.iw.ebz.views.layout.MainLayout;
 @PageTitle("Inicio | EBZ")
 @Route(value = "", layout = MainLayout.class)
 @RouteAlias(value = "home", layout = MainLayout.class)
-@RolesAllowed({ "Cliente" })
+@PermitAll
 public class HomeView extends VerticalLayout implements BeforeEnterObserver {
 @Autowired
 private MovimientoService _movimientoService;
@@ -143,7 +144,8 @@ private H3 hDate = new H3();
 		_acNumber.getStyle().set("margin","0");
 
 		//Account information and buttons section
-		Component userName =  CreateUserNameBanner(_cliente.getNombre());
+		Component userName = new H3();
+		if(_cliente != null) userName =  CreateUserNameBanner(_cliente.getNombre());
 		//End username section
 
 		//Account gallery section
@@ -314,7 +316,7 @@ private H3 hDate = new H3();
 			vlTarjeta.add(tarjetaTitle, tarMessage);
 		}
 		//End credit cards section
-
+		
 		add(userName, hlMain);
 		add(hlAccountMove);
 		add(vlTarjeta);

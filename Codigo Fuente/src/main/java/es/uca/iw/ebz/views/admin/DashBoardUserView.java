@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.views;
+package es.uca.iw.ebz.views.admin;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

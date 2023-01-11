@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.views;
+package es.uca.iw.ebz.views.admin;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;

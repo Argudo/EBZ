@@ -52,7 +52,7 @@ public class ConsultaChiquita extends Grid<Consulta> {
             return btnQuery;
         }).setHeader("Chat").setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
 
-        setItems(_consultaService.findByClienteOrderByFechaDESC(_cliente.getUsuario()));
+        if(_cliente != null) setItems(_consultaService.findByClienteOrderByFechaDESC(_cliente.getUsuario()));
 
 
 

@@ -9,7 +9,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+
+import es.uca.iw.ebz.usuario.TipoUsuario;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.cliente.MovimientoView;
 
 @AnonymousAllowed
 @PageTitle("Inicio sesión | EBZ")
@@ -45,9 +48,9 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (authenticatedUser.get().isPresent()) {
-            if(authenticatedUser.get().get().getTipoUsuario().equals("Empleado")) {
+            if(authenticatedUser.get().get().getTipoUsuario().equals(TipoUsuario.Empleado)) {
                 setOpened(false);
-                event.forwardTo(DashBoardView.class);
+                event.forwardTo(MovimientoView.class);
             } else {
                 setOpened(false);
                 event.forwardTo("");

@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.views;
+package es.uca.iw.ebz.views.admin;
 
 import com.mysql.cj.xdevapi.Client;
 import com.vaadin.flow.component.ComponentEventListener;

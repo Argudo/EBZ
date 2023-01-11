@@ -27,13 +27,13 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinSession;
 
-import es.uca.iw.ebz.views.DashBoardConsultasView;
-import es.uca.iw.ebz.views.DashBoardCuentasView;
-import es.uca.iw.ebz.views.DashBoardNoticasView;
-import es.uca.iw.ebz.views.DashBoardTarjetasView;
-import es.uca.iw.ebz.views.DashBoardUserView;
-import es.uca.iw.ebz.views.DashBoardView;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.admin.DashBoardConsultasView;
+import es.uca.iw.ebz.views.admin.DashBoardCuentasView;
+import es.uca.iw.ebz.views.admin.DashBoardNoticasView;
+import es.uca.iw.ebz.views.admin.DashBoardTarjetasView;
+import es.uca.iw.ebz.views.admin.DashBoardUserView;
+import es.uca.iw.ebz.views.admin.DashBoardView;
 
 
 public class AdminLayout  extends AppLayout{

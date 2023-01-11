@@ -1,4 +1,4 @@
-	package es.uca.iw.ebz.views;
+	package es.uca.iw.ebz.views.admin;
 
 import java.util.ArrayList;
 import java.util.Collection;

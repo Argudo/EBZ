@@ -5,6 +5,13 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.server.VaadinSession;
 import es.uca.iw.ebz.views.*;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.cliente.ConsultaView;
+import es.uca.iw.ebz.views.cliente.HomeView;
+import es.uca.iw.ebz.views.cliente.MovimientoView;
+import es.uca.iw.ebz.views.cliente.NoticiasView;
+import es.uca.iw.ebz.views.cliente.TarjetaView;
+import es.uca.iw.ebz.views.cliente.TransferenciaView;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
