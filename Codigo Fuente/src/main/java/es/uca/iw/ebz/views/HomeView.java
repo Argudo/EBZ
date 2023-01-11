@@ -452,21 +452,28 @@ H3 _acBalance = new H3();
 		vlMain.getStyle().set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
 		vlMain.setAlignItems(Alignment.START);
 		vlMain.setSpacing(false);
-		vlMain.setWidth("100%");
+		vlMain.setWidth("200px");
 		vlMain.setHeightFull();
 
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 		String sBalance = new String(formatImport.format(ac.getSaldo()));
 
-		H3 _ae1 = new H3(ac.getNumeroCuenta() + "\t| " + sBalance);
+		String sAux = "ES*" + ac.getNumeroCuenta().substring(ac.getNumeroCuenta().length()-4, ac.getNumeroCuenta().length());
 
-		_ae1.addClickListener(e -> {
+		H3 _ae1 = new H3(sAux);
+		_ae1.getStyle().set("margin-left", "10px");
+		H4 _ae2 = new H4("| " + sBalance);
+		_ae2.getStyle().set("margin-top", "0px");
+		_ae2.getStyle().set("margin-left", "10px");
+
+
+		addClickListener(e -> {
 			acSelected = ac;
 			updateAccountInfo();
 		});
 
 		vlMain.add(
-				_ae1);
+				_ae1, _ae2);
 
 		return vlMain;
 
