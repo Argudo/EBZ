@@ -120,41 +120,15 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 		}
 		
 		if(usuario.count() < 2){
-			Usuario empleado = new Usuario("1234", "1234");
+			Usuario empleado = new Usuario("12345678A", "pruebauca");
 			empleado.setTipoUsuario(TipoUsuario.Empleado);
 			usuario.save(empleado);
 			Admin admin = new Admin();
 			admin.setUsuario(empleado);
-			admin.setNombre("Pedro");
+			admin.setNombre("Iván");
 			adminService.save(admin);
-			Usuario cli = new Usuario("32093905B", "1234");
-			Usuario cli2 = new Usuario("12267004T", "1234");
-			cli.setTipoUsuario(TipoUsuario.Cliente);
-			cli2.setTipoUsuario(TipoUsuario.Cliente);
-			usuario.save(cli);
-			usuario.save(cli2);
-			Cliente cliente = new Cliente("Juan del Marqués", new Date(), new Date(), TipoCliente.Persona, cli);
-			clienteRepo.save(cliente);
-			clienteRepo.save(new Cliente("Natalia Reina", new Date(), new Date(), TipoCliente.Persona, cli2));
-			Cuenta cuenta = new Cuenta();
-			cuenta.setCliente(cliente);
-			cuenta.setFechaEliminacion(new Date());
-			cuentaService.añadirCuenta(cuenta);
 		}
-		
-		if(credService.Count() < 1) {
-			Tarjeta tarCredito = new Tarjeta("3982", new TipoTarjeta(EnumTarjeta.Credito), cuentaService.findByCliente(clienteRepo.findByusuario(usuario.findBysDNI("32093905B"))).get(0), clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
-			tarService.Save(tarCredito);
-			Credito cred = new Credito(tarCredito, tipoCredRepo.findById(1).get());
-			credService.Save(cred);
-		}
-	
-		if(prepagoService.Count() < 1) {
-			Tarjeta tarPrepago = new Tarjeta("8201", clienteRepo.findByusuario(usuario.findBysDNI("32093905B")));
-			tarService.Save(tarPrepago);
-			Prepago prepago = new Prepago(tarPrepago);
-			prepagoService.Save(prepago);
-		}
+
 	}
 
 }
