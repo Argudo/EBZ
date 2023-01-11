@@ -7,6 +7,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -69,8 +70,10 @@ public class AdminLayout  extends AppLayout{
             VaadinSession.getCurrent().setLocale(Locale.forLanguageTag((language.getValue())));
             UI.getCurrent().getPage().reload();
         });
-
+        Div dMain= new Div();
+        dMain.setWidth("75%");
         hlContent.add(logo,
+                dMain,
                 language,
                 btnUser,
                 btnSignOut);
