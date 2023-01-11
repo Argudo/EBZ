@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.views;
+package es.uca.iw.ebz.views.admin;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -18,7 +18,7 @@ import es.uca.iw.ebz.views.layout.AdminLayout;
 
 import javax.annotation.security.RolesAllowed;
 
-@PageTitle("Dashboard/noticias")
+@PageTitle("Gestión de noticias | EBZ")
 @RolesAllowed({ "Empleado"})
 @Route(value = "Dashboard/noticias", layout = AdminLayout.class)
 public class DashBoardNoticasView extends VerticalLayout {
@@ -30,6 +30,8 @@ public class DashBoardNoticasView extends VerticalLayout {
     public DashBoardNoticasView(AuthenticatedUser authenticatedUser, NoticiaService noticiaService) {
         this.authenticatedUser = authenticatedUser;
         this.noticiaService = noticiaService;
+
+        hHeader.setClassName("title");
 
         gridConsultas.addColumn(Noticia::getTitulo).setHeader(getTranslation("notice.title")).setAutoWidth(true).setSortable(true);
         gridConsultas.addColumn(Noticia::getDescripcion).setHeader(getTranslation("notice.description"));

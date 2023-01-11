@@ -1,6 +1,11 @@
 package es.uca.iw.ebz.views.layout;
 
 
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
@@ -19,13 +24,16 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinSession;
-import es.uca.iw.ebz.views.*;
-import es.uca.iw.ebz.views.Security.AuthenticatedUser;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Locale;
+import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.admin.DashBoardConsultasView;
+import es.uca.iw.ebz.views.admin.DashBoardCuentasView;
+import es.uca.iw.ebz.views.admin.DashBoardNoticasView;
+import es.uca.iw.ebz.views.admin.DashBoardTarjetasView;
+import es.uca.iw.ebz.views.admin.DashBoardUserView;
+import es.uca.iw.ebz.views.admin.DashBoardView;
 
 
 public class AdminLayout  extends AppLayout{
@@ -58,6 +66,9 @@ public class AdminLayout  extends AppLayout{
         });
         H1 logo = new H1("EBZ");
         logo.addClassNames("text-l", "m-m");
+        logo.addClickListener( e -> {
+           logo.getUI().ifPresent((ui -> ui.navigate("Dashboard")));
+        });
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();

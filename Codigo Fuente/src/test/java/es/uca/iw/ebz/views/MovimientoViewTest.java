@@ -1,6 +1,7 @@
 package es.uca.iw.ebz.views;
 
 import es.uca.iw.ebz.Movimiento.Interno.Interno;
+import es.uca.iw.ebz.views.cliente.MovimientoView;
 import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
 import es.uca.iw.ebz.ObjectMother;
