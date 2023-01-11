@@ -31,6 +31,8 @@ public class DashBoardNoticasView extends VerticalLayout {
         this.authenticatedUser = authenticatedUser;
         this.noticiaService = noticiaService;
 
+        hHeader.setClassName("title");
+
         gridConsultas.addColumn(Noticia::getTitulo).setHeader(getTranslation("notice.title")).setAutoWidth(true).setSortable(true);
         gridConsultas.addColumn(Noticia::getDescripcion).setHeader(getTranslation("notice.description"));
         gridConsultas.addColumn(Noticia::getFecha).setHeader(getTranslation("notice.date")).setAutoWidth(true).setSortable(true);

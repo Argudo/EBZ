@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.views.component;
 
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.messages.MessageList;
 import com.vaadin.flow.component.messages.MessageListItem;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.shared.Registration;
 import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.ConsultaService;
 import es.uca.iw.ebz.consulta.EnumEstado;
@@ -39,8 +41,6 @@ public class AdminConsultaDialog extends Dialog {
     private ConsultaService _consultaService;
 
     private ClienteService _clienteService;
-
-    private RadioButtonGroup<String> rdGroup;
 
 
     public AdminConsultaDialog(Consulta consulta,Admin admin, AdminService adminService,
@@ -77,16 +77,20 @@ public class AdminConsultaDialog extends Dialog {
         //Chat elements section
         MessageList msgList = new MessageList();
         MessageInput msgInput = new MessageInput();
+        msgInput.setSizeFull();
         msgInput.addSubmitListener( submitEvent -> {
+            _consulta.set_tipoEstado(new TipoEstado(EnumEstado.Abierto));
             Mensaje lastMsg = new Mensaje(new Date(), submitEvent.getValue(), _admin.getUsuario(), _consulta);
             _consultaService.Save(_consulta);
-            _consulta.setMensajes(lastMsg);
             _mensajeService.Save(lastMsg);
+            _consulta.setMensajes(lastMsg);
             List<MessageListItem> items = new ArrayList<>(msgList.getItems());
             MessageListItem msgAux = new MessageListItem(lastMsg.getTexto(), lastMsg.getFecha().toInstant(), _admin.getNombre());
             msgAux.setUserColorIndex(1);
             items.add(msgAux);
             msgList.setItems(items);
+
+            fireEvent(new UpdateQueryEvent(this, false));
         });
 
         //Radio button group for query state
@@ -113,30 +117,8 @@ public class AdminConsultaDialog extends Dialog {
             }
         }
 
-        rdGroup = new RadioButtonGroup<>();
-        rdGroup.setLabel("Estado de la consulta");
-        rdGroup.setItems("Pendiente", "Abierto", "Cerrado");
-        rdGroup.setValue(_consulta.getTipoEstado().toString());
-        rdGroup.addValueChangeListener( e-> {
-            switch(rdGroup.getValue()){
-                case "Pendiente":
-                    _consulta.set_tipoEstado(new TipoEstado(EnumEstado.Pendiente));
-                    break;
-
-                case "Abierto":
-                    _consulta.set_tipoEstado(new TipoEstado(EnumEstado.Abierto));
-                    break;
-
-                case "Cerrado":
-                    _consulta.set_tipoEstado(new TipoEstado(EnumEstado.Cerrado));
-                    break;
-            }
-        });
-
-
         vlChat.add(
                 msgList,
-                rdGroup,
                 msgInput);
 
         add(vlChat);
@@ -145,5 +127,10 @@ public class AdminConsultaDialog extends Dialog {
         //End chat elements section
 
 
+
+    }
+
+    public Registration addUpdateListener(ComponentEventListener<UpdateQueryEvent> listener) {
+        return addListener(UpdateQueryEvent.class, listener);
     }
 }

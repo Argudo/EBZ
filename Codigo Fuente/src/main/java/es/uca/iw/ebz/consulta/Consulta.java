@@ -70,6 +70,8 @@ public class Consulta {
 
     public TipoEstado getTipoEstado() { return _tipoEstado; }
 
+    public String getTipoEstadoString() { return _tipoEstado.getTipo().toString(); }
+
     public Usuario getCliente() { return _cliente; }
 
     public List<Mensaje> getMensajes() { return _mensajes; }

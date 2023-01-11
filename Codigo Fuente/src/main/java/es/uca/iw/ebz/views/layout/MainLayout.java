@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.views.layout;
 
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.server.VaadinSession;
 import es.uca.iw.ebz.views.*;
@@ -75,6 +76,7 @@ public class MainLayout extends AppLayout{
 			VaadinSession.getCurrent().setLocale(Locale.forLanguageTag((language.getValue())));
 			UI.getCurrent().getPage().reload();
 		});
+
         hlContent.add(logo,
 				language,
 				btnUser,
