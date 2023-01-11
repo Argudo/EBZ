@@ -69,6 +69,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Grid<Cliente> gridCliente = new Grid<>(Cliente.class, false);
 	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
 	Notification notCambios = new Notification("Tiene aún cambios pendientes, presione 'Guardar'");
+	private Button saveButton = new Button("Guardar cambios");
 	
 	private Cliente _cliente;
 	private List<Cuenta> aCuentas;
@@ -101,9 +102,10 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 		vlSeparator.getStyle().set("padding", "0");
 		
 		vlInfo.setAlignItems(FlexComponent.Alignment.CENTER);
-		hlBuscador.setAlignItems(FlexComponent.Alignment.END);
+		hlBuscador.setAlignItems(FlexComponent.Alignment.START);
 		pDNI.getStyle().set("fontWeight", "600");
 		btnBuscar.getElement().appendChild(new Icon("lumo", "search").getElement());
+		txtDNI.setHelperText("El DNI debe ser exacto");
 		hlAviso.setAlignItems(FlexComponent.Alignment.CENTER);
 		hlAviso.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 		hlAviso.setWidth("100%");
@@ -164,7 +166,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
             return mapTarjeta.get(tarjeta)? iconWarning : iconCheck;
         })).setHeader("Cambios").setTextAlign(ColumnTextAlign.CENTER);
         
-        Button saveButton = new Button("Guardar cambios");
+        saveButton.setEnabled(false);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveButton.addClickListener(event -> {
             	notCambios.close();
@@ -259,6 +261,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	                    		mapTarjeta.put(T, false);
 	                    	});
 	                    	gridTarjeta.setItems(aTarjetas);
+	                    	saveButton.setEnabled(true);
 	                    	hGrid.setText("| Tarjetas de " + cliente.getNombre());
 	                    });
 	}
