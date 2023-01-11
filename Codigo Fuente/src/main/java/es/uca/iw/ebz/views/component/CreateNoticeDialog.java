@@ -32,7 +32,7 @@ public class CreateNoticeDialog extends Dialog {
         btnCancelar.addThemeVariants(ButtonVariant.LUMO_ICON);
         btnCancelar.getElement().addEventListener("click", e -> close());
         getHeader().add(btnCancelar);
-        setHeaderTitle(getTranslation("account.create"));
+        setHeaderTitle(getTranslation("notice.create"));
 
         add(pTitulo, txtTitulo, pDescripcion, txtDescripcion, _btnCreateAccount);
 

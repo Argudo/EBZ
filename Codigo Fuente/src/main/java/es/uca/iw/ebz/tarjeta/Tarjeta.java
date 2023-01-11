@@ -115,16 +115,16 @@ public class Tarjeta {
 		switch(_tipoTarjeta.getTipo()) {
 			case Debito:
 				sNumTarjeta += "00";
-				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,5).toUpperCase();
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,4).toUpperCase();
 				break;
 			case Credito:
 				sNumTarjeta += "10";
-				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,5).toUpperCase();
+				sNumTarjeta += StringToHexadecimal(Hashing.sha256().hashString(_cuenta.getNumeroCuenta(), StandardCharsets.UTF_8).toString()).substring(0,4).toUpperCase();
 				break;
 			case Prepago:
 				sNumTarjeta += "20";
 				String cliente_sha256 = StringToHexadecimal(Hashing.sha256().hashString(_clienteTitular.getUsuario().getDNI(), StandardCharsets.UTF_8).toString());
-				sNumTarjeta += cliente_sha256.substring(0,5).toUpperCase();
+				sNumTarjeta += cliente_sha256.substring(0,4).toUpperCase();
 				break;
 		}
 		sNumTarjeta += GenerarCVC();

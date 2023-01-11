@@ -413,7 +413,7 @@ public class TarjetaView extends VerticalLayout{
 			}
 			else {
 				btnRecarga.setEnabled(false);
-				hSaldo.setText(getTranslation("card.number"));
+				hSaldo.setText(getTranslation("account.number"));
 				pSaldo.setText(tarSelected.getCuenta().getNumeroCuenta());
 			}			
 		}
