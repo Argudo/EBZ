@@ -26,7 +26,7 @@ public class CompraTarjetaService {
     }
 
     public List<CompraTarjeta> findByTarjeta(Tarjeta tarjeta) {
-        return _compraTarjetaRepository.findByTarjeta(tarjeta);
+        return _compraTarjetaRepository.findBytarjeta(tarjeta);
     }
 
     public CompraTarjeta findByMovimiento(Movimiento movimiento) {

@@ -33,5 +33,11 @@ public class ConsultaService {
         return _consultaRepository.findAll();
     }
 
+    public List<Consulta> findByClienteOrderByFechaDESC(Usuario usuario) {
+        List<Consulta> consultas = findByCliente(usuario);
+        Consulta.sortByFechaDESC(consultas);
+        return consultas;
+    }
+
 
 }

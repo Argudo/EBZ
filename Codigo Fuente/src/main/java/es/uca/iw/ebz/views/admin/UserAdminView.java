@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.views;
+package es.uca.iw.ebz.views.admin;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -14,14 +14,15 @@ import com.vaadin.flow.router.Route;
 import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
-import es.uca.iw.ebz.views.layout.MainLayout;
+import es.uca.iw.ebz.views.layout.AdminLayout;
 
 import javax.annotation.security.RolesAllowed;
 
-@RolesAllowed({ "Cliente"})
-@PageTitle("perfil")
-@Route(value = "perfil", layout = MainLayout.class)
-public class UserView extends VerticalLayout {
+@RolesAllowed({ "Empleado"})
+@PageTitle("Perfil | EBZ")
+@Route(value = "Perfil", layout = AdminLayout.class)
+public class UserAdminView extends VerticalLayout {
+
     private H1 hPerfil = new H1(getTranslation("user.home"));
 
     private H2 hPass = new H2(getTranslation("user.changePassword"));
@@ -45,7 +46,7 @@ public class UserView extends VerticalLayout {
 
     private AuthenticatedUser authenticatedUser;
 
-    public UserView(UsuarioService usuarioService, AuthenticatedUser authenticatedUser) {
+    public UserAdminView(UsuarioService usuarioService, AuthenticatedUser authenticatedUser) {
         this.usuarioService = usuarioService;
         this.authenticatedUser = authenticatedUser;
         hlPass.add(pPass, tfPass);
@@ -71,3 +72,4 @@ public class UserView extends VerticalLayout {
         });
     }
 }
+

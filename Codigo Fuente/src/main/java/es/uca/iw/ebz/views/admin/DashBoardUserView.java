@@ -1,4 +1,4 @@
-package es.uca.iw.ebz.views;
+package es.uca.iw.ebz.views.admin;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -45,16 +45,16 @@ import es.uca.iw.ebz.views.layout.AdminLayout;
 
 
 @RolesAllowed({ "Empleado"})
-@PageTitle("Dashboard/usuario")
+@PageTitle("Gestión de usuario | EBZ")
 @Route(value = "Dashboard/usuario", layout = AdminLayout.class)
 public class DashBoardUserView extends VerticalLayout {
 	private Tabs tabs = new Tabs();
-	private Tab tabNuevo = new Tab("Nuevo usuario");
-	private Tab tabModificar = new Tab("Modificar usuario");
+	private Tab tabNuevo = new Tab(getTranslation("dashboardUser.user"));
+	private Tab tabModificar = new Tab(getTranslation("dashboardUser.modify"));
 	
-	private H1 hNuevoUsuario = new H1("Nuevo usuario");
+	private H1 hNuevoUsuario = new H1(getTranslation("dashboardUser.new"));
     HorizontalLayout hlAccionesNuevoUsuario = new HorizontalLayout();
-	private H1 hEliminarUsuario = new H1("Modificar usuario");
+	private H1 hEliminarUsuario = new H1(getTranslation("dashboardUser.modify"));
 	HorizontalLayout hlAccionesModificarUsuario = new HorizontalLayout();
 	private FormLayout formNuevoUsuario = new FormLayout();
 	private FormLayout formEliminarUsuario = new FormLayout();
@@ -62,21 +62,21 @@ public class DashBoardUserView extends VerticalLayout {
 	private VerticalLayout vlModificarUsuario = new VerticalLayout();
 	
     private VerticalLayout vlDashboard = new VerticalLayout();
-    private TextField tfName = new TextField("Nombre");
-    private TextField tfUsername = new TextField("DNI");
-    private PasswordField tfPassword = new PasswordField("Contraseña");
-    private DatePicker dpBirthDate = new DatePicker("Fecha de nacimiento");   
+    private TextField tfName = new TextField(getTranslation("dashboardUser.name"));
+    private TextField tfUsername = new TextField(getTranslation("dashboardUser.DNI"));
+    private PasswordField tfPassword = new PasswordField(getTranslation("dashboardUser.password"));
+    private DatePicker dpBirthDate = new DatePicker(getTranslation("dashboardUser.birth"));
     
-    private TextField tfNameMod = new TextField("Nombre");
-    private PasswordField tfPasswordMod = new PasswordField("Contraseña");
-    private DatePicker dpBirthDateMod = new DatePicker("Fecha de nacimiento");    
-    private ComboBox<TipoCliente> cbTipoClienteMod = new ComboBox<>("Tipo de cliente");
+    private TextField tfNameMod = new TextField(getTranslation("dashboardUser.name"));
+    private PasswordField tfPasswordMod = new PasswordField(getTranslation("dashboardUser.password"));
+    private DatePicker dpBirthDateMod = new DatePicker(getTranslation("dashboardUser.birth"));
+    private ComboBox<TipoCliente> cbTipoClienteMod = new ComboBox<>(getTranslation("dashboardUser.type"));
     
 
-    private Button btnSave = new Button("Guardar");
-    private Button btnVaciar = new Button("Vaciar");
+    private Button btnSave = new Button(getTranslation("dashboardUser.save"));
+    private Button btnVaciar = new Button(getTranslation("dashboardUser.clear"));
 
-    private ComboBox<TipoCliente> cbTipoCliente = new ComboBox<>("Tipo de cliente");
+    private ComboBox<TipoCliente> cbTipoCliente = new ComboBox<>(getTranslation("dashboardUser.type"));
     private HorizontalLayout hlAviso = new HorizontalLayout();
     
     private ConfirmDialog cdlogNuevoUsuario = new ConfirmDialog();
@@ -86,7 +86,7 @@ public class DashBoardUserView extends VerticalLayout {
     private UsuarioService usuarioService;
     private ClienteService clienteService;
 
-    private ComboBox<String> cbUsuario = new ComboBox<>("DNI");
+    private ComboBox<String> cbUsuario = new ComboBox<>(getTranslation("dashboardUser.DNI"));
     public DashBoardUserView(UsuarioService usuarioService, ClienteService clienteService) {
         this.usuarioService = usuarioService;
         this.clienteService = clienteService;
@@ -102,8 +102,8 @@ public class DashBoardUserView extends VerticalLayout {
         vlDashboard.setPadding(false);
         vlDashboard.setMargin(false);
         
-        cbTipoCliente.setPlaceholder("Tipo");
-        tfName.setPlaceholder("Nombre Apellido Apellido");
+        cbTipoCliente.setPlaceholder(getTranslation("dashboardUser.typeText"));
+        tfName.setPlaceholder(getTranslation("dashboardUser.namePlaceHolder"));
         tfUsername.setPlaceholder("00000000A");
         tfPassword.setPlaceholder("***********");
         
@@ -148,11 +148,11 @@ public class DashBoardUserView extends VerticalLayout {
         hlAviso.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         hlAviso.setWidth("100%");
 
-        Button btnUsuario = new Button("Añadir Usuario");
-        Button btnDelete = new Button("Elimnar Usuario");
+        Button btnUsuario = new Button(getTranslation("dashboardUser.addUser"));
+        Button btnDelete = new Button("dashboardUser.deleteUser");
         
-        Button btnDeleteUser = new Button("Eliminar");
-        Button btnModificar = new Button("Modificar");
+        Button btnDeleteUser = new Button(getTranslation("card.delete"));
+        Button btnModificar = new Button(getTranslation("dashboardUser.modifyUser"));
         btnDeleteUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         btnDeleteUser.addThemeVariants(ButtonVariant.LUMO_ERROR);
         btnModificar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

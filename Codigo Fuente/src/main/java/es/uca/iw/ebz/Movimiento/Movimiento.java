@@ -2,6 +2,7 @@ package es.uca.iw.ebz.Movimiento;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -40,12 +41,18 @@ public class Movimiento {
         movimientos.sort((m1, m2) -> m1.getFecha().compareTo(m2.getFecha()));
         return movimientos;
     }
+    public static List<Movimiento> sortByFechaDESC(List<Movimiento> movimientos) {
+        movimientos = sortByFechaASC(movimientos);
+        Collections.reverse(movimientos);
+        return movimientos;
+    }
+
 
     //getters
     public UUID getId() {return id;}
     public Date getFecha() {return Fecha;}
     public TipoMovimiento getTipo() {return tipo;}
-    public String getsConcpeto() {return sConcpeto;}
+    public String getConcepto() {return sConcpeto;}
 
     public Integer getVersion() {return version;}
 
