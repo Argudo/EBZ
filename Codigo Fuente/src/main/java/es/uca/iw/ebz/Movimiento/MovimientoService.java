@@ -304,6 +304,27 @@ public class MovimientoService {
         return Movimiento.sortByFechaASC(movimientos);
     }
 
+    public List<Movimiento> findByClienteByFechaDESC(Cliente cliente){
+        List<Movimiento> movimientos = new ArrayList<Movimiento>();
+        List<Cuenta> cuentas = _cuentaService.findByCliente(cliente);
+        List<Tarjeta> tarjetas = _tarjetaService.findByCliente(cliente);
+        //List<Tarjeta> tarjetas = cliente.getTarjetas();
+
+        for(Tarjeta tarjeta : tarjetas) {
+            movimientos.addAll(findByTarjetaOrderByASC(tarjeta));
+        }
+
+        for(Cuenta cuenta : cuentas) {
+            List<Movimiento> movimientosCuenta = findByCuentaOrderByFechaASC(cuenta);
+            for(Movimiento movimiento : movimientosCuenta) {
+                if(!contains(movimientos, movimiento)) {
+                    movimientos.add(movimiento);
+                }
+            }
+        }
+        return Movimiento.sortByFechaDESC(movimientos);
+    }
+
     private boolean contains(List<Movimiento> movimientos, Movimiento movimiento) {
         for(Movimiento mov : movimientos) {
             if(mov.getId().toString().equals(movimiento.getId().toString())) {
