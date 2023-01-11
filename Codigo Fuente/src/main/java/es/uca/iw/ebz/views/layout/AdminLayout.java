@@ -7,6 +7,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -57,6 +58,9 @@ public class AdminLayout  extends AppLayout{
         });
         H1 logo = new H1("EBZ");
         logo.addClassNames("text-l", "m-m");
+        logo.addClickListener( e -> {
+           logo.getUI().ifPresent((ui -> ui.navigate("Dashboard")));
+        });
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();
@@ -69,8 +73,10 @@ public class AdminLayout  extends AppLayout{
             VaadinSession.getCurrent().setLocale(Locale.forLanguageTag((language.getValue())));
             UI.getCurrent().getPage().reload();
         });
-
+        Div dMain= new Div();
+        dMain.setWidth("75%");
         hlContent.add(logo,
+                dMain,
                 language,
                 btnUser,
                 btnSignOut);
@@ -123,7 +129,7 @@ public class AdminLayout  extends AppLayout{
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { 
+        return new Tab[] {createTab(getTranslation("mainLayout.home"), DashBoardView.class, new Icon(VaadinIcon.HOME)),
     		createTab(getTranslation("dashboard.user"), DashBoardUserView.class, new Icon(VaadinIcon.USER_CARD)),
             createTab(getTranslation("dashboard.account"), DashBoardCuentasView.class, new Icon(VaadinIcon.MONEY_EXCHANGE)),
             createTab(getTranslation("dashboard.news"), DashBoardNoticasView.class, new Icon(VaadinIcon.NEWSPAPER)),

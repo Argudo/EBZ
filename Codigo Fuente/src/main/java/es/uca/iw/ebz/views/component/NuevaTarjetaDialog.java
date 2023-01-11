@@ -189,5 +189,5 @@ public class NuevaTarjetaDialog extends Dialog {
 
 	public Registration addUpdateListener(ComponentEventListener<UpdateEvent> listener) {
 	        return addListener(UpdateEvent.class, listener);
-	    }
+    }
 }

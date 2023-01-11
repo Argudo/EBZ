@@ -6,16 +6,13 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -26,8 +23,6 @@ import com.vaadin.flow.router.Route;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
-import es.uca.iw.ebz.Movimiento.DatosMovimiento;
-import es.uca.iw.ebz.usuario.Usuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
@@ -49,8 +44,7 @@ public class DashBoardCuentasView extends HorizontalLayout {
     private HorizontalLayout hlBuscador = new HorizontalLayout();
 
     private ComboBox<String> cbUsuario = new ComboBox<>(getTranslation("account.home"));
-    private Button btnBuscar = new Button();
-    private Paragraph pDNI = new Paragraph(getTranslation("account.number"));
+    private Paragraph pNumeroCuenta = new Paragraph(getTranslation("account.number"));
     private Grid<Cuenta> gridCuenta = new Grid<>(Cuenta.class, false);
 
     private Button btnAdd = new Button(getTranslation("account.add"));
@@ -92,13 +86,12 @@ public class DashBoardCuentasView extends HorizontalLayout {
 
         vlInfo.setAlignItems(FlexComponent.Alignment.CENTER);
         hlBuscador.setAlignItems(FlexComponent.Alignment.END);
-        pDNI.getStyle().set("fontWeight", "600");
-        btnBuscar.getElement().appendChild(new Icon("lumo", "search").getElement());
+        pNumeroCuenta.getStyle().set("fontWeight", "600");
         /*Grid cliente*/
 
         gridCuenta.addColumn(Cuenta::getNumeroCuenta).setHeader("Número de tarjeta").setAutoWidth(true).setSortable(true);
         gridCuenta.addColumn(Cuenta::getFechaCreacion).setHeader("Fecha de creación").setAutoWidth(true).setSortable(true);
-        gridCuenta.addColumn(Cuenta::getSaldo).setHeader("Saldo").setSortable(true);
+        gridCuenta.addColumn(Cuenta::getSaldoFormat).setHeader("Saldo").setSortable(true);
         gridCuenta.addColumn(Cuenta::getDNICliente).setHeader("DNI Cliente").setAutoWidth(true).setSortable(true);
         //actualizamos el UI
         updateUI();
@@ -110,7 +103,7 @@ public class DashBoardCuentasView extends HorizontalLayout {
         cbUsuario.setItems(aCuentas);
 
 
-        hlBuscador.add(pDNI,
+        hlBuscador.add(pNumeroCuenta,
                 cbUsuario);
         vlInfo.add(hInfo,
                 new Hr(),

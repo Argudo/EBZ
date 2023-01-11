@@ -1,18 +1,27 @@
 package es.uca.iw.ebz.views;
 
+import java.util.Date;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.ConsultaService;
 import es.uca.iw.ebz.consulta.EnumEstado;
@@ -25,11 +34,6 @@ import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.component.ClienteConsultaDialog;
 import es.uca.iw.ebz.views.layout.MainLayout;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.security.RolesAllowed;
-import java.awt.*;
-import java.util.Date;
 
 @PageTitle("Consultas")
 @Route(value = "consultas", layout = MainLayout.class)
@@ -61,7 +65,7 @@ public class ConsultaView extends VerticalLayout {
 
     private TextField tfTitulo;
 
-    private TextField tfDescripcion;
+    private TextArea tfDescripcion;
 
     private Button btnQuery;
 
@@ -82,7 +86,7 @@ public class ConsultaView extends VerticalLayout {
         //End services initialization section
 
         setMargin(false);
-        setPadding(false);
+        setPadding(true);
         setSpacing(true);
         setWidthFull();
         setAlignItems(FlexComponent.Alignment.CENTER);
@@ -92,22 +96,20 @@ public class ConsultaView extends VerticalLayout {
 
         //Title section
         VerticalLayout vlTitleNew = new VerticalLayout();
-        vlTitleNew.setWidth("70%");
+        vlTitleNew.setWidthFull();
         vlTitleNew.setSpacing(true);
         vlTitleNew.setPadding(true);
-        vlTitleNew.setMargin(true);
-        vlTitleNew.setClassName("box");
+        vlTitleNew.setMargin(false);
 
         H1 hTitleNew = new H1(getTranslation("query.newquery"));
         hTitleNew.setClassName("title");
         vlTitleNew.add(hTitleNew);
 
         VerticalLayout vlTitleHistorial = new VerticalLayout();
-        vlTitleHistorial.setWidth("70%");
+        vlTitleHistorial.setWidthFull();
         vlTitleHistorial.setSpacing(true);
         vlTitleHistorial.setPadding(true);
         vlTitleHistorial.setMargin(true);
-        vlTitleHistorial.setClassName("box");
 
         H1 hTitleHistorial = new H1(getTranslation("query.history"));
         hTitleHistorial.setClassName("title");
@@ -115,13 +117,18 @@ public class ConsultaView extends VerticalLayout {
         //End title section
 
         //New query layout section
+        HorizontalLayout vlQuery = new HorizontalLayout();
+        vlQuery.setWidthFull();
+        vlQuery.setAlignItems(FlexComponent.Alignment.CENTER);
+        vlQuery.setJustifyContentMode(JustifyContentMode.CENTER);
         FormLayout frmNewQuery = new FormLayout();
-        frmNewQuery.setWidthFull();
+        frmNewQuery.setWidth("70%");
         frmNewQuery.setResponsiveSteps(
 
                 new FormLayout.ResponsiveStep("0",1)
 
         );
+        vlQuery.add(frmNewQuery);
 
         tfTitulo = new TextField(getTranslation("query.title"));
         tfTitulo.setRequired(true);
@@ -129,12 +136,12 @@ public class ConsultaView extends VerticalLayout {
         tfTitulo.setMinLength(10);
         tfTitulo.setErrorMessage(getTranslation("query.titleob"));
 
-        tfDescripcion = new TextField(getTranslation("notice.description"));
+        tfDescripcion = new TextArea(getTranslation("notice.description"));
         tfDescripcion.setRequired(true);
         tfDescripcion.setRequiredIndicatorVisible(true);
         tfDescripcion.setMinLength(20);
         tfDescripcion.setErrorMessage(getTranslation("query.descob"));
-
+        
         btnQuery = new Button(getTranslation("query.create"));
 
         btnQuery.addClickListener( ev -> {
@@ -154,7 +161,7 @@ public class ConsultaView extends VerticalLayout {
                 tfDescripcion,
                 btnQuery);
 
-        vlTitleNew.add(new Hr(), frmNewQuery);
+        vlTitleNew.add(new Hr(), vlQuery);
         //End new query layout section
 
         //Query record section

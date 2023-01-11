@@ -9,6 +9,8 @@ import javax.annotation.security.RolesAllowed;
 import com.vaadin.componentfactory.ToggleButton;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.component.TarjetaComponent;
+import es.uca.iw.ebz.views.component.MovimientosComponent.TipoGrid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
@@ -49,6 +51,7 @@ import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.views.component.MovimientosComponent;
 import es.uca.iw.ebz.views.component.NuevaTarjetaDialog;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
@@ -113,6 +116,7 @@ public class TarjetaView extends VerticalLayout{
 		private Paragraph pFechaCaducidad = new Paragraph();
 			
 	VerticalLayout vlTransacciones = new VerticalLayout();
+		H1 hTransacciones = new H1(getTranslation("tarjeta.transacciones"));
 	
 	private NuevaTarjetaDialog dlogNT;
 	private Dialog dlogPin = new Dialog();
@@ -168,11 +172,11 @@ public class TarjetaView extends VerticalLayout{
 		vlRecarga.add(new Hr(), cbCuentas, txtCantidad);
 		dlogRecarga.add(vlRecarga);
 		btnRecargaDlog.addClickListener(ev -> {
-			Movimiento movRecarga = new Movimiento(new Date(), "Recarga tarjeta " + tarSelected.getNumTarjeta(), TipoMovimiento.RECARGATARJETA);
+			Movimiento movRecarga = new Movimiento(new Date(), getTranslation("tarjeta.recargatarjeta") + tarSelected.getNumTarjeta(), TipoMovimiento.RECARGATARJETA);
 			try {				
 				_movService.recargaTarjeta(movRecarga, _cuentaService.findByNumeroCuenta(cbCuentas.getValue()).get(), tarSelected, txtCantidad.getValue().floatValue());
 				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()) + "€");
-				Notification notification = Notification.show("El deposito de " + txtCantidad.getValue() + "€" + " desde " + cbCuentas.getValue() + " se ha realizado correctamente");
+				Notification notification = Notification.show(getTranslation("tarjeta.depositof") + txtCantidad.getValue() + "€" + getTranslation("tarjeta.from") + cbCuentas.getValue() + getTranslation("tarjeta.success"));
 				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 				dlogRecarga.close();
 			}
@@ -372,6 +376,9 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
+			hTransacciones.setClassName("title");
+			vlTransacciones.removeAll(); vlTransacciones.add(hTransacciones);
+			if(_movService != null) vlTransacciones.add(new MovimientosComponent(TipoGrid.Parcial, _movService, tarSelected));
 			btnCancelarTarjeta.setEnabled(true);
 			btnCambiarPin.setEnabled(true);
 			hlActivarTarjeta.setEnabled(true);
@@ -408,6 +415,7 @@ public class TarjetaView extends VerticalLayout{
 			}			
 		}
 		else {
+			vlTransacciones.removeAll(); vlTransacciones.add(hTransacciones);
 			btnRecarga.setEnabled(false);
 			btnCancelarTarjeta.setEnabled(false);
 			btnCambiarPin.setEnabled(false);

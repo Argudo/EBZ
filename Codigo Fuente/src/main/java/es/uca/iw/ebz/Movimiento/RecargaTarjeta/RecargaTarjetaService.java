@@ -32,7 +32,8 @@ public class RecargaTarjetaService {
     }
 
     public List<RecargaTarjeta> findByTarjeta(Tarjeta tarjeta) {
-        return _recargaTarjetaRepository.findByTarjeta(tarjeta);
+    	System.out.println("Recarga: " + _recargaTarjetaRepository.findBytarjeta(tarjeta).size());
+        return _recargaTarjetaRepository.findBytarjeta(tarjeta);
     }
     
 }
