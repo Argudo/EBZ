@@ -199,7 +199,22 @@ public class DashBoardUserView extends VerticalLayout {
                 cbTipoClienteMod.setVisible(false);
         	}
         });
-        
+        btnModificar.addClickListener(e -> {
+            Usuario usuario = usuarioService.findBysDNI(cbUsuario.getValue());
+            if(usuario != null){
+                usuarioService.CambiarContraseña(usuario, tfPassword.getValue());
+                hlAviso.getStyle().set("font-size", "14px");
+                hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Usuario modificado con éxito"));
+            }else{
+                hlAviso.getStyle().set("font-size", "14px");
+                hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
+                hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+                hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("No se ha podido modificar el usuario(usuario no encontrado)"));
+            }
+
+        });
         btnDeleteUser.addClickListener(event -> {
             Usuario usuario = usuarioService.findBysDNI(cbUsuario.getValue());
             if(eliminarUsuario(usuario)) {

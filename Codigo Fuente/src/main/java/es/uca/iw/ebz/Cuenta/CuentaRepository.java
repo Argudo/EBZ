@@ -15,5 +15,7 @@ public interface CuentaRepository extends JpaRepository<Cuenta, UUID> {
 
     List<Cuenta> findByCliente(Cliente cliente);
 
+    List<Cuenta> findByClienteAnAndFechaEliminacionIsNull(Cliente cliente);
+
 }
 

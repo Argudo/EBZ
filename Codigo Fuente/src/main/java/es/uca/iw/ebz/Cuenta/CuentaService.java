@@ -73,7 +73,7 @@ public class CuentaService {
     }
 
     public List<Cuenta> findByCliente(Cliente cliente) {
-        return _cuentaRepository.findByCliente(cliente);
+        return _cuentaRepository.findByClienteAnAndFechaEliminacionIsNull(cliente);
     }
 
     private String generarNumeroCuenta() {

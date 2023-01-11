@@ -144,7 +144,7 @@ public class Tarjeta {
 	
 	private static Date GenerarFechaExpiracion() {
 		Date dFecha = new Date();
-		dFecha.setYear(dFecha.getYear()+4);
+		dFecha.setYear(dFecha.getYear()+2);
 		return dFecha;
 	}
 	

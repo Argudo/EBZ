@@ -33,7 +33,7 @@ public class NoticiasView extends VerticalLayout {
 
         //Services initialization section
         _noticiaService = noticiaService;
-        _noticias = _noticiaService.findAll();
+        _noticias = _noticiaService.findByFechaEliminacionIsNull();
         //End services initialization section
 
         setMargin(false);
