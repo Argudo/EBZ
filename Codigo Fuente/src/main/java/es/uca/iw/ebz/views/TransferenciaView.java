@@ -1,11 +1,19 @@
 package es.uca.iw.ebz.views;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -16,6 +24,7 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.Movimiento.Movimiento;
@@ -25,12 +34,6 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.layout.MainLayout;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.security.RolesAllowed;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 @PageTitle("Transferencias")
@@ -89,11 +92,10 @@ public class TransferenciaView extends VerticalLayout {
 
         //Title section
         VerticalLayout vlTitle = new VerticalLayout();
-        vlTitle.setWidth("70%");
         vlTitle.setSpacing(true);
         vlTitle.setPadding(true);
         vlTitle.setMargin(true);
-        vlTitle.setClassName("box");
+        vlTitle.setWidthFull();
 
         H1 hTitle = new H1(getTranslation("transfer.title"));
         hTitle.setClassName("title");
@@ -120,13 +122,15 @@ public class TransferenciaView extends VerticalLayout {
         vlForm.setMargin(true);
         vlForm.setClassName("box");
 
+        HorizontalLayout vlFormTransfer = new HorizontalLayout();
+        vlFormTransfer.setWidthFull();
+        vlFormTransfer.setJustifyContentMode(JustifyContentMode.CENTER);
+        vlFormTransfer.setAlignItems(Alignment.CENTER);
+        
         frmTransfer = new FormLayout();
-        frmTransfer.setWidthFull();
-        frmTransfer.setResponsiveSteps(
-
-                new FormLayout.ResponsiveStep("0",1)
-
-        );
+        frmTransfer.setWidth("70vw");
+        frmTransfer.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1));
+        vlFormTransfer.add(frmTransfer);
 
         //Transference form fields section
         List<String>  asAccounts = new ArrayList<>();
@@ -310,7 +314,7 @@ public class TransferenciaView extends VerticalLayout {
 
         });
         frmTransfer.add(rdGroup);
-        vlTitle.add(hlSeparator, frmTransfer);
+        vlTitle.add(new Hr(), vlFormTransfer);
         add(vlTitle);
 
     }

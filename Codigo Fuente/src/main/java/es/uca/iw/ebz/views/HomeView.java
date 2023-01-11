@@ -279,7 +279,7 @@ H2 _acBalance = new H2();
 		vlAccountNotifications.add(consultaChiquita);
 
 		hlAccountMove.add(
-				flAccountMovements,
+				vlAccountMovements,
 				vlAccountNotifications);
 
 		//End movements and notifications section

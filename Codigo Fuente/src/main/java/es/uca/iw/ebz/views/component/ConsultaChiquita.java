@@ -42,7 +42,9 @@ public class ConsultaChiquita extends Component {
         //End services initialization section
 
         VerticalLayout vlMain = new VerticalLayout();
-
+        vlMain.setSpacing(false);
+        vlMain.setPadding(false);
+        
         gridQuery.setWidthFull();
         gridQuery.addColumn(Consulta::getTitulo).setHeader(getTranslation("query.title")).setAutoWidth(true);
         gridQuery.addColumn(Consulta::getTipoEstadoString).setHeader(getTranslation("query.state")).setAutoWidth(true);
