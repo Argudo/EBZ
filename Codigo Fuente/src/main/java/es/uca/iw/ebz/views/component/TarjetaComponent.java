@@ -29,6 +29,10 @@ public class TarjetaComponent extends Component {
 		_selected = true;
 	}
 	
+	public void opacity() {
+		_vlTarjeta.getStyle().set("opacity", "1");
+	}
+	
 	public void deseleccionarTarjeta() {
 		_vlTarjeta.getStyle().set("animation", "outOp 1s 1 forwards");
 		//_vlTarjeta.getStyle().set("opacity", "0.5");
