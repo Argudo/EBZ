@@ -119,7 +119,7 @@ public class Application implements AppShellConfigurator, CommandLineRunner {
 			
 		}
 		
-		if(usuario.count() < 2){
+		if(usuario.count() == 0) {
 			Usuario empleado = new Usuario("12345678A", "pruebauca");
 			empleado.setTipoUsuario(TipoUsuario.Empleado);
 			usuario.save(empleado);
