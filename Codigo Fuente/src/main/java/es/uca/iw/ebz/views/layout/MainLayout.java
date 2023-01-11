@@ -79,6 +79,7 @@ public class MainLayout extends AppLayout{
 
 		Div dMain= new Div();
 		dMain.setWidth("75%");
+		
         hlContent.add(logo,
 				dMain,
 				language,

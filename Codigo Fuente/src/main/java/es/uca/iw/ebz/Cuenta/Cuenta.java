@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -68,6 +69,12 @@ public class Cuenta {
     public Cliente getCliente() {return cliente;}
     public String getDNICliente() {return cliente.getUsuario().getDNI();}
     public Integer getVersion() {return version;}
+
+    public String getSaldoFormat() {
+        NumberFormat formatImport = NumberFormat.getCurrencyInstance();
+        String sBalance = new String(formatImport.format(fSaldo));
+        return sBalance;
+    }
 
     //setters
     public void setNumeroCuenta(String sNumeroCuenta) {this.sNumeroCuenta = sNumeroCuenta;}
