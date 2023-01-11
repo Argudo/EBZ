@@ -1,5 +1,11 @@
 package es.uca.iw.ebz.views;
 
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
@@ -8,13 +14,10 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import es.uca.iw.ebz.noticia.Noticia;
 import es.uca.iw.ebz.noticia.NoticiaService;
 import es.uca.iw.ebz.views.layout.MainLayout;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.security.RolesAllowed;
-import java.util.List;
 
 @PageTitle("Noticias")
 @Route(value = "noticias", layout = MainLayout.class)
@@ -34,23 +37,22 @@ public class NoticiasView extends VerticalLayout {
         //End services initialization section
 
         setMargin(false);
-        setPadding(false);
+        setPadding(true);
         setSpacing(true);
         setWidthFull();
         setAlignItems(Alignment.CENTER);
             //Title layout section
             VerticalLayout vlTitle = new VerticalLayout();
 
-            vlTitle.setWidth("80vw");
+            vlTitle.setWidthFull();
             vlTitle.setPadding(true);
             vlTitle.setMargin(true);
-            vlTitle.setClassName("box");
 
             H1 hTitle = new H1(getTranslation("notice.main"));
             hTitle.setClassName("title");
 
             vlTitle.add(hTitle);
-            add(vlTitle);
+            add(vlTitle, new Hr());
             //End title layout section
 
             //Notices layout section
