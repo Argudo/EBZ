@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.views.component;
 
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -17,6 +18,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.shared.Registration;
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.usuario.Usuario;
@@ -70,6 +72,7 @@ public class CreateAccountDialog extends Dialog {
                 if(cuentaService.añadirCuenta(cuenta) != null) {
                     Notification notification = Notification.show(getTranslation("account.success"));
                     notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    fireEvent(new UpdateAccountEvent(this, false));
                     close();
                 }
                 else {
@@ -97,6 +100,10 @@ public class CreateAccountDialog extends Dialog {
             dialog.open();
 
         });
+    }
+
+    public Registration addUpdateListener(ComponentEventListener<UpdateAccountEvent> listener) {
+        return addListener(UpdateAccountEvent.class, listener);
     }
 
 }

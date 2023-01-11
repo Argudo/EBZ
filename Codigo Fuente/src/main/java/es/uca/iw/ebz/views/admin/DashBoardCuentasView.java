@@ -122,6 +122,7 @@ public class DashBoardCuentasView extends HorizontalLayout {
             }
             createAccountDialog = new CreateAccountDialog(DNIs, cuentaService, usuarioService, clienteService);
             createAccountDialog.open();
+            createAccountDialog.addUpdateListener(e1 -> updateUI());
         });
 
         btnDelete.addClickListener(e -> {

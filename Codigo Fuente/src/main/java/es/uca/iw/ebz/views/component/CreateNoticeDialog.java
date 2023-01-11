@@ -1,6 +1,7 @@
 package es.uca.iw.ebz.views.component;
 
 
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.shared.Registration;
 import es.uca.iw.ebz.noticia.Noticia;
 import es.uca.iw.ebz.noticia.NoticiaService;
 
@@ -48,6 +50,7 @@ public class CreateNoticeDialog extends Dialog {
                 if(txtTitulo.getValue() != null && txtDescripcion.getValue() != null && noticiaService.Save(new Noticia(txtTitulo.getValue(), txtDescripcion.getValue(), new Date())) != null) {
                 Notification notification = Notification.show(getTranslation("notice.success"));
                 notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                fireEvent(new UpdateNoticeEvent(this, false));
                 close();
             }
             else {
@@ -59,5 +62,9 @@ public class CreateNoticeDialog extends Dialog {
             dialog.open();
 
         });
+    }
+
+    public Registration addUpdateListener(ComponentEventListener<UpdateNoticeEvent> listener) {
+        return addListener(UpdateNoticeEvent.class, listener);
     }
 }

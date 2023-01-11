@@ -44,7 +44,10 @@ public class DashBoardNoticasView extends VerticalLayout {
         btnAdd.addClickListener(e -> {
             CreateNoticeDialog createNoticeDialog = new CreateNoticeDialog(noticiaService);
             createNoticeDialog.open();
-            UpdateGrid();
+            createNoticeDialog.addUpdateListener(event -> {
+                UpdateGrid();
+            });
+
         });
     }
 
