@@ -376,8 +376,9 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
+			hTransacciones.setClassName("title");
 			vlTransacciones.removeAll(); vlTransacciones.add(hTransacciones);
-			vlTransacciones.add(new MovimientosComponent(TipoGrid.Parcial, _movService, tcSelected));
+			if(_movService != null) vlTransacciones.add(new MovimientosComponent(TipoGrid.Parcial, _movService, tarSelected));
 			btnCancelarTarjeta.setEnabled(true);
 			btnCambiarPin.setEnabled(true);
 			hlActivarTarjeta.setEnabled(true);
