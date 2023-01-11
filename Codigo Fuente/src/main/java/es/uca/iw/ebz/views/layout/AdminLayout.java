@@ -123,7 +123,7 @@ public class AdminLayout  extends AppLayout{
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { 
+        return new Tab[] {createTab(getTranslation("mainLayout.home"), DashBoardView.class, new Icon(VaadinIcon.HOME)),
     		createTab(getTranslation("dashboard.user"), DashBoardUserView.class, new Icon(VaadinIcon.USER_CARD)),
             createTab(getTranslation("dashboard.account"), DashBoardCuentasView.class, new Icon(VaadinIcon.MONEY_EXCHANGE)),
             createTab(getTranslation("dashboard.news"), DashBoardNoticasView.class, new Icon(VaadinIcon.NEWSPAPER)),

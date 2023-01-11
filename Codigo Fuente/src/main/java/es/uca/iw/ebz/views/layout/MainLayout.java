@@ -128,19 +128,21 @@ public class MainLayout extends AppLayout{
 	}
 
 	private Component[] createMenuItems() {
-	    return new Tab[] { createTab(getTranslation("mainLayout.home"), HomeView.class),
-	            createTab(getTranslation("mainLayout.transfer"), TransferenciaView.class),
-	            createTab(getTranslation("mainLayout.cards"), TarjetaView.class),
-				createTab(getTranslation("mainLayout.movement"), MovimientoView.class),
-				createTab(getTranslation("mainLayout.notices"), NoticiasView.class),
-				createTab(getTranslation("mainLayout.query"), ConsultaView.class)};
+	    return new Tab[] { createTab(getTranslation("mainLayout.home"), HomeView.class, new Icon(VaadinIcon.HOME)),
+	            createTab(getTranslation("mainLayout.transfer"), TransferenciaView.class, new Icon(VaadinIcon.MONEY_EXCHANGE)),
+	            createTab(getTranslation("mainLayout.cards"), TarjetaView.class, new Icon(VaadinIcon.CREDIT_CARD)),
+				createTab(getTranslation("mainLayout.movement"), MovimientoView.class, new Icon(VaadinIcon.MONEY)),
+				createTab(getTranslation("mainLayout.notices"), NoticiasView.class, new Icon(VaadinIcon.NEWSPAPER)),
+				createTab(getTranslation("mainLayout.query"), ConsultaView.class, new Icon(VaadinIcon.ENVELOPE_O))};
 	}
 
 	private static Tab createTab(String text,
-	        Class<? extends Component> navigationTarget) {
-	    final Tab tab = new Tab();
-	    tab.add(new RouterLink(text, navigationTarget));
-	    ComponentUtil.setData(tab, Class.class, navigationTarget);
-	    return tab;
+	        Class<? extends Component> navigationTarget, Icon icono) {
+		final Tab tab = new Tab();
+		HorizontalLayout hlTab = new HorizontalLayout();
+		hlTab.add(icono, new RouterLink(text, navigationTarget));
+		tab.add(hlTab);
+		ComponentUtil.setData(tab, Class.class, navigationTarget);
+		return tab;
 	}
 }
