@@ -171,7 +171,7 @@ public class MovimientoService {
         }
 
         for(Interno movInterno : movInternos) {
-            movimientos.add(movInterno.getMovimiento());
+           movimientos.add(movInterno.getMovimiento());
         }
 
         for(RecargaTarjeta movRecarga : movRecargaTarjeta) {
@@ -288,12 +288,28 @@ public class MovimientoService {
         List<Cuenta> cuentas = _cuentaService.findByCliente(cliente);
         List<Tarjeta> tarjetas = _tarjetaService.findByCliente(cliente);
         //List<Tarjeta> tarjetas = cliente.getTarjetas();
-        for(Cuenta cuenta : cuentas) {
-            movimientos.addAll(findByCuentaOrderByFechaASC(cuenta));
-        }
+
         for(Tarjeta tarjeta : tarjetas) {
             movimientos.addAll(findByTarjetaOrderByASC(tarjeta));
         }
+
+        for(Cuenta cuenta : cuentas) {
+            List<Movimiento> movimientosCuenta = findByCuentaOrderByFechaASC(cuenta);
+            for(Movimiento movimiento : movimientosCuenta) {
+                if(!contains(movimientos, movimiento)) {
+                    movimientos.add(movimiento);
+                }
+            }
+        }
         return Movimiento.sortByFechaASC(movimientos);
+    }
+
+    private boolean contains(List<Movimiento> movimientos, Movimiento movimiento) {
+        for(Movimiento mov : movimientos) {
+            if(mov.getId().toString().equals(movimiento.getId().toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
