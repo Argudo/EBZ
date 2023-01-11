@@ -45,7 +45,7 @@ public class Movimiento {
     public UUID getId() {return id;}
     public Date getFecha() {return Fecha;}
     public TipoMovimiento getTipo() {return tipo;}
-    public String getsConcpeto() {return sConcpeto;}
+    public String getConcepto() {return sConcpeto;}
 
     public Integer getVersion() {return version;}
 

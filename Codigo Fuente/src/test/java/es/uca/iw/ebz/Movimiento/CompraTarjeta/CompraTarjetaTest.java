@@ -42,11 +42,11 @@ public class CompraTarjetaTest {
 
     @Test
     public void shouldProvideMovimiento() {
-        assertThat(compraTarjetaTest.getMovimiento().getsConcpeto().equals("Pago hipoteca")).isTrue();
+        assertThat(compraTarjetaTest.getMovimiento().getConcepto().equals("Pago hipoteca")).isTrue();
         Movimiento movimiento = ObjectMother.createTestMovimiento();
         movimiento.setsConcpeto("Pago de la luz");
         compraTarjetaTest.setMovimiento(movimiento);
-        assertThat(compraTarjetaTest.getMovimiento().getsConcpeto().equals("Pago de la luz")).isTrue();
+        assertThat(compraTarjetaTest.getMovimiento().getConcepto().equals("Pago de la luz")).isTrue();
     }
 
 }

@@ -417,7 +417,7 @@ H3 _acBalance = new H3();
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 		String sBalance = new String(formatImport.format(_movimientoService.datosMovimiento(mv).get("Importe")));
 
-		Paragraph _mv1 = new Paragraph(mv.getsConcpeto() + " - " + sBalance);
+		Paragraph _mv1 = new Paragraph(mv.getConcepto() + " - " + sBalance);
 
 		//_mv1.addClickListener();
 

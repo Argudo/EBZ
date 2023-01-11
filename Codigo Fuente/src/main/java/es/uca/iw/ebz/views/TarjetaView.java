@@ -9,6 +9,8 @@ import javax.annotation.security.RolesAllowed;
 import com.vaadin.componentfactory.ToggleButton;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.component.TarjetaComponent;
+import es.uca.iw.ebz.views.component.MovimientosComponent.TipoGrid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
@@ -49,6 +51,7 @@ import es.uca.iw.ebz.tarjeta.credito.TipoCrediticioRepository;
 import es.uca.iw.ebz.tarjeta.prepago.PrepagoService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
+import es.uca.iw.ebz.views.component.MovimientosComponent;
 import es.uca.iw.ebz.views.component.NuevaTarjetaDialog;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
@@ -113,6 +116,7 @@ public class TarjetaView extends VerticalLayout{
 		private Paragraph pFechaCaducidad = new Paragraph();
 			
 	VerticalLayout vlTransacciones = new VerticalLayout();
+		H1 hTransacciones = new H1(getTranslation("tarjeta.transacciones"));
 	
 	private NuevaTarjetaDialog dlogNT;
 	private Dialog dlogPin = new Dialog();
@@ -210,7 +214,6 @@ public class TarjetaView extends VerticalLayout{
 		hTarjeta.setClassName("title");
 		H1 hDetalleTarjeta = new H1(getTranslation("tarjeta.detalles"));
 		hDetalleTarjeta.setClassName("title");
-		H1 hTransacciones = new H1(getTranslation("tarjeta.transacciones"));
 		hTransacciones.setClassName("title");
 		
 		
@@ -372,6 +375,8 @@ public class TarjetaView extends VerticalLayout{
 	
 	private void CargarDetalles() {
 		if(tcSelected.getSelected()) {
+			vlTransacciones.removeAll(); vlTransacciones.add(hTransacciones);
+			vlTransacciones.add(new MovimientosComponent(TipoGrid.Parcial, _movService, tcSelected));
 			btnCancelarTarjeta.setEnabled(true);
 			btnCambiarPin.setEnabled(true);
 			hlActivarTarjeta.setEnabled(true);
@@ -408,6 +413,7 @@ public class TarjetaView extends VerticalLayout{
 			}			
 		}
 		else {
+			vlTransacciones.removeAll(); vlTransacciones.add(hTransacciones);
 			btnRecarga.setEnabled(false);
 			btnCancelarTarjeta.setEnabled(false);
 			btnCambiarPin.setEnabled(false);

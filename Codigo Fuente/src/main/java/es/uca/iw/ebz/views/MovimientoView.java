@@ -1,9 +1,16 @@
 package es.uca.iw.ebz.views;
 
-import com.vaadin.flow.component.UI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -11,6 +18,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+
 import es.uca.iw.ebz.Movimiento.DatosMovimiento;
 import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
@@ -18,12 +26,9 @@ import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.component.DetalleMovimientoDialog;
+import es.uca.iw.ebz.views.component.MovimientosComponent;
+import es.uca.iw.ebz.views.component.MovimientosComponent.TipoGrid;
 import es.uca.iw.ebz.views.layout.MainLayout;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.security.RolesAllowed;
-import java.util.ArrayList;
-import java.util.List;
 
 @PageTitle("Movimientos")
 @Route(value = "movimiento", layout = MainLayout.class)
@@ -72,6 +77,7 @@ public class MovimientoView extends VerticalLayout {
         searchField.setValueChangeMode(ValueChangeMode.EAGER);
         searchField.addValueChangeListener(e -> dataView.refreshAll());
         add(searchField);
+        add(new MovimientosComponent(TipoGrid.Completo, movimientoService, cliente));
         if(movimientos != null){
             add(gridMovimientos);
         }else{
