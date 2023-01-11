@@ -6,16 +6,16 @@ import java.util.List;
 
 import javax.annotation.security.PermitAll;
 
-import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.router.*;
-import es.uca.iw.ebz.consulta.Consulta;
-import es.uca.iw.ebz.consulta.ConsultaService;
-import es.uca.iw.ebz.usuario.TipoUsuario;
-import es.uca.iw.ebz.views.component.DetallesCuentaDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -25,17 +25,28 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 
 import es.uca.iw.ebz.Cuenta.Cuenta;
 import es.uca.iw.ebz.Cuenta.CuentaService;
 import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
+import es.uca.iw.ebz.consulta.Consulta;
+import es.uca.iw.ebz.consulta.ConsultaService;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
+import es.uca.iw.ebz.usuario.TipoUsuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.component.DetallesCuentaDialog;
+import es.uca.iw.ebz.views.component.MovimientosComponent;
+import es.uca.iw.ebz.views.component.MovimientosComponent.TipoGrid;
 import es.uca.iw.ebz.views.component.TarjetaComponent;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
@@ -76,8 +87,8 @@ private Cliente _cliente;
 private DetallesCuentaDialog dlogDC;
 
 //Atributos del layout de la cuenta.
-H2 _acNumber = new H2();
-H3 _acBalance = new H3();
+H1 _acNumber = new H1();
+H2 _acBalance = new H2();
 
 	public HomeView(MovimientoService movimientoService, CuentaService cuentaService,
 					TarjetaService tarjetaService, ClienteService clienteService,
@@ -140,7 +151,7 @@ H3 _acBalance = new H3();
 			acSelected = accountList.get(0);
 			updateAccountInfo();
 			VerticalLayout vlShowAccount = new VerticalLayout();
-			vlShowAccount.setAlignItems(Alignment.CENTER);
+			vlShowAccount.setJustifyContentMode(JustifyContentMode.START);
 			vlShowAccount.setSpacing(false);
 			vlShowAccount.setWidth("100%");
 
@@ -150,28 +161,6 @@ H3 _acBalance = new H3();
 
 			vlAccount.add(userName);
 			vlAccount.add(vlShowAccount);
-
-			//Button section
-			FlexLayout flAccountButtons = new FlexLayout();
-			flAccountButtons.setWidthFull();
-			flAccountButtons.setFlexDirection(FlexDirection.ROW);
-			flAccountButtons.setFlexWrap(FlexWrap.WRAP);
-			flAccountButtons.setJustifyContentMode(JustifyContentMode.EVENLY);
-
-			Component cTarjeta = CreateButton(getTranslation("mainLayout.cards"), VaadinIcon.CREDIT_CARD);
-			Component cEstadisticas = CreateButton(getTranslation("home.info"), VaadinIcon.INFO);
-			Component cMovimientos = CreateButton(getTranslation("mainLayout.movement"), VaadinIcon.EXCHANGE);
-			Component cTransferencias = CreateButton(getTranslation("mainLayout.transfer"), VaadinIcon.MONEY_EXCHANGE);
-			flAccountButtons.add(
-					cTarjeta,
-					cEstadisticas,
-					cMovimientos,
-					cTransferencias
-			);
-			//End button section
-
-			//Including name, account information and buttons to the first layout
-			vlAccount.add(flAccountButtons);
 			//End of including...
 
 			//Account list layout section
@@ -224,7 +213,6 @@ H3 _acBalance = new H3();
 
 
 			vlNoAccounts.add(
-					userName,
 					sNoAccounts);
 
 			hlMain.add(vlNoAccounts);
@@ -245,12 +233,10 @@ H3 _acBalance = new H3();
 		hlAccountMove.setMargin(true);
 		hlAccountMove.setWidth("80vw");
 
-		FlexLayout flAccountMovements = new FlexLayout();
-		flAccountMovements.setWidthFull();
-		flAccountMovements.setFlexDirection(FlexDirection.COLUMN);
-		flAccountMovements.setFlexWrap(FlexWrap.WRAP);
-		flAccountMovements.setJustifyContentMode(JustifyContentMode.EVENLY);
-		flAccountMovements.setClassName("box");
+		VerticalLayout vlAccountMovements = new VerticalLayout();
+		vlAccountMovements.setWidthFull();
+		vlAccountMovements.setClassName("box");
+		vlAccountMovements.setPadding(false);
 
 		FlexLayout flAccountNotifications = new FlexLayout();
 		flAccountNotifications.setWidthFull();
@@ -260,29 +246,10 @@ H3 _acBalance = new H3();
 		flAccountNotifications.setClassName("box");
 
 		List<Movimiento> mvList = _movimientoService.findByClienteByFechaASC(_cliente);
-
-		if(mvList.size() < 1){
-			H2 mvMessage = new H2(getTranslation("movement.nomov"));
-			flAccountMovements.setAlignItems(Alignment.CENTER);
-			flAccountMovements.add(mvMessage);
-
-		}else{
-			H2 mvTitle = new H2(getTranslation("home.lastmove"));
-			mvTitle.setClassName("subtitle");
-			flAccountMovements.add(mvTitle);
-			int cont = 0;
-			List<Component> mvComponentList = new ArrayList<>();
-			for(Movimiento m: mvList){
-				if(cont < 3){
-					mvComponentList.add(CreateMovement(m));
-					cont++;
-				}else break;
-			}
-
-			for(Component c: mvComponentList){
-				flAccountMovements.add(c);
-			}
-		}
+		
+		H1 hMovimientos = new H1(getTranslation("movement.home"));
+		hMovimientos.setClassName("subtitle");
+		vlAccountMovements.add(hMovimientos, new MovimientosComponent(TipoGrid.Parcial, movimientoService, acSelected));
 
 		List<Consulta> cnList = _consultaService.findByCliente(_authenticatedUser.get().get());
 
@@ -311,7 +278,7 @@ H3 _acBalance = new H3();
 		}
 
 		hlAccountMove.add(
-				flAccountMovements,
+				vlAccountMovements,
 				flAccountNotifications);
 
 		//End movements and notifications section
@@ -348,6 +315,7 @@ H3 _acBalance = new H3();
 
 			//Falta clickListener para las tarjetas con su vista detallada ¿?
 			for(TarjetaComponent tc: aTarjetasComponent) {
+				tc.opacity();
 				hlTarjeta.add(tc);
 			}
 
@@ -360,7 +328,7 @@ H3 _acBalance = new H3();
 		}
 		//End credit cards section
 
-		add(hlMain);
+		add(userName, hlMain);
 		add(hlAccountMove);
 		add(vlTarjeta);
 
@@ -395,11 +363,11 @@ H3 _acBalance = new H3();
 	//Falta arreglar la situación del nombre
 	private Component CreateUserNameBanner(String userName){
 		VerticalLayout vlMain = new VerticalLayout();
-		vlMain.setAlignItems(Alignment.CENTER);
+		vlMain.setClassName("padding40");
 		vlMain.setSpacing(false);
-		vlMain.setPadding(true);
+		//vlMain.setPadding(true);
+		vlMain.setMargin(true);
 		vlMain.setWidthFull();
-
 		H1 _userName = new H1(getTranslation("home.welcome") + userName);
 
 		vlMain.add(_userName);
@@ -481,7 +449,7 @@ H3 _acBalance = new H3();
 
 	//Función para actualizar la info de la cuenta que mostramos en el primer layout
 	private void updateAccountInfo() {
-		_acNumber.setText(acSelected.getNumeroCuenta());
+		_acNumber.setText("Cuenta " + acSelected.getNumeroCuenta());
 
 		dlogDC = new DetallesCuentaDialog(_cliente, acSelected);
 

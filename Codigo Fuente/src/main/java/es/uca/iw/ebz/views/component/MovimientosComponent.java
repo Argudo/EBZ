@@ -55,6 +55,9 @@ public class MovimientosComponent extends Grid<DatosMovimiento> {
 			addColumn(new ComponentRenderer<>(mov -> {
 				Button btnDetalles = new Button(VaadinIcon.EYE.create());
 				btnDetalles.addThemeVariants(ButtonVariant.LUMO_ICON);
+				btnDetalles.addClickListener(e -> {
+					new MovimientoComponent(mov).open();
+				});
 				return btnDetalles;
 			})).setHeader(getTranslation("movement.detalles")).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);			
 		}
