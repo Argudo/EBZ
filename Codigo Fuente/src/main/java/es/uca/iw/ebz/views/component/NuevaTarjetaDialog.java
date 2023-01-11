@@ -40,7 +40,7 @@ public class NuevaTarjetaDialog extends Dialog {
 	private PasswordField txtPin = new PasswordField(getTranslation("card.newCard.createPin"));
 	private TextField txtFechaExp = new TextField(getTranslation("card.dateExpiration"));
 	private ComboBox<String> cmbCuentas = new ComboBox<>(getTranslation("card.selectAccount"));
-	private ComboBox<String> cmbTipoCredito = new ComboBox<>(getTranslation("card.selectCreditType"));
+	private ComboBox<String> cmbTipoCredito = new ComboBox<>(getTranslation("card.selectType"));
 	private TextField txtTitular = new TextField(getTranslation("card.titular"));
 	
 	private List<Cuenta> aCuentas;
