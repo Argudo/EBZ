@@ -10,7 +10,10 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
 import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.ConsultaService;
+import es.uca.iw.ebz.mensaje.MensajeService;
 import es.uca.iw.ebz.usuario.TipoUsuario;
+import es.uca.iw.ebz.usuario.admin.AdminService;
+import es.uca.iw.ebz.views.component.ConsultaChiquita;
 import es.uca.iw.ebz.views.component.DetallesCuentaDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -68,12 +71,20 @@ private ConsultaService _consultaService;
 @Autowired
 private AuthenticatedUser _authenticatedUser;
 
+@Autowired
+private MensajeService _mensajeService;
+
+@Autowired
+private AdminService _adminService;
+
 //La cuenta que usaremos para ir actualizando el primer layout.
 static Cuenta acSelected = null;
 
 private Cliente _cliente;
 
 private DetallesCuentaDialog dlogDC;
+
+private ConsultaChiquita consultaChiquita;
 
 //Atributos del layout de la cuenta.
 H2 _acNumber = new H2();
@@ -82,6 +93,7 @@ H3 _acBalance = new H3();
 	public HomeView(MovimientoService movimientoService, CuentaService cuentaService,
 					TarjetaService tarjetaService, ClienteService clienteService,
 					UsuarioService usuarioService, ConsultaService consultaService,
+					MensajeService mensajeService, AdminService adminService,
 					AuthenticatedUser authenticatedUser) {
 
 		//Services initialization section
@@ -92,6 +104,8 @@ H3 _acBalance = new H3();
 		_usuarioService = usuarioService;
 		_consultaService = consultaService;
 		_authenticatedUser = authenticatedUser;
+		_mensajeService = mensajeService;
+		_adminService = adminService;
 		//End services initialization section
 
 
@@ -252,12 +266,11 @@ H3 _acBalance = new H3();
 		flAccountMovements.setJustifyContentMode(JustifyContentMode.EVENLY);
 		flAccountMovements.setClassName("box");
 
-		FlexLayout flAccountNotifications = new FlexLayout();
-		flAccountNotifications.setWidthFull();
-		flAccountNotifications.setFlexDirection(FlexDirection.COLUMN);
-		flAccountNotifications.setFlexWrap(FlexWrap.WRAP);
-		flAccountNotifications.setJustifyContentMode(JustifyContentMode.EVENLY);
-		flAccountNotifications.setClassName("box");
+		VerticalLayout vlAccountNotifications = new VerticalLayout();
+		vlAccountNotifications.setWidthFull();
+		vlAccountNotifications.setClassName("box");
+		vlAccountNotifications.setPadding(false);
+
 
 		List<Movimiento> mvList = _movimientoService.findByClienteByFechaASC(_cliente);
 
@@ -282,37 +295,20 @@ H3 _acBalance = new H3();
 			for(Component c: mvComponentList){
 				flAccountMovements.add(c);
 			}
+
 		}
 
 		List<Consulta> cnList = _consultaService.findByCliente(_authenticatedUser.get().get());
+		H2 ntTitle = new H2(getTranslation("home.lastquery"));
+		ntTitle.setClassName("subtitle");
+		vlAccountNotifications.add(ntTitle);
 
-		if(cnList.size() < 1){
-			H2 cnMessage = new H2(getTranslation("home.noquery"));
-			flAccountNotifications.setAlignItems(Alignment.CENTER);
-			flAccountNotifications.add(cnMessage);
-
-		}else{
-			H2 ntTitle = new H2(getTranslation("home.lastquery"));
-			ntTitle.setClassName("subtitle");
-			flAccountNotifications.add(ntTitle);
-			int cont = 0;
-			List<Component> cnComponentList = new ArrayList<>();
-			for(Consulta c: cnList){
-				if(cont < 3){
-					cnComponentList.add(CreateNotification(c));
-					cont++;
-				}
-				if(cont >= 3) break;
-			}
-
-			for(Component c: cnComponentList){
-				flAccountNotifications.add(c);
-			}
-		}
+		consultaChiquita = new ConsultaChiquita(consultaService, mensajeService, clienteService, adminService, _cliente);
+		vlAccountNotifications.add(consultaChiquita);
 
 		hlAccountMove.add(
 				flAccountMovements,
-				flAccountNotifications);
+				vlAccountNotifications);
 
 		//End movements and notifications section
 

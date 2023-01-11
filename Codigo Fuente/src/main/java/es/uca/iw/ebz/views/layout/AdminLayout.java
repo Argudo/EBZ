@@ -58,6 +58,9 @@ public class AdminLayout  extends AppLayout{
         });
         H1 logo = new H1("EBZ");
         logo.addClassNames("text-l", "m-m");
+        logo.addClickListener( e -> {
+           logo.getUI().ifPresent((ui -> ui.navigate("Dashboard")));
+        });
         hlContent.setAlignItems(FlexComponent.Alignment.CENTER);
         hlContent.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         hlContent.setWidthFull();

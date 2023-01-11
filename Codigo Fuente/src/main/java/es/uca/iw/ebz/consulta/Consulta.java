@@ -1,15 +1,13 @@
 package es.uca.iw.ebz.consulta;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 //¿Faltan añadir los mensajes? Sí
 
+import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.mensaje.Mensaje;
 import es.uca.iw.ebz.usuario.Usuario;
 
@@ -57,6 +55,17 @@ public class Consulta {
         _cliente = cliente;
         _mensajes = new ArrayList<>();
 
+    }
+
+    public static List<Consulta> sortByFechaASC(List<Consulta> consultas) {
+        consultas.sort((c1, c2) -> c1.getFechaCreacion().compareTo(c2.getFechaCreacion()));
+        return consultas;
+    }
+
+    public static List<Consulta> sortByFechaDESC(List<Consulta> consultas) {
+        consultas = sortByFechaASC(consultas);
+        Collections.reverse(consultas);
+        return consultas;
     }
 
     //Getters
