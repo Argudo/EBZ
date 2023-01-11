@@ -80,7 +80,7 @@ public class NuevaTarjetaDialog extends Dialog {
 		txtPin.setMaxLength(4);
 		txtPin.setMinLength(4);
 		txtPin.setPattern("[0-9]{4}");
-		txtFechaExp.setValue(String.valueOf(new Date().getMonth()+1) + "/" + Integer.toString(new Date().getYear()+4).substring(1,3));
+		txtFechaExp.setValue(String.valueOf(new Date().getMonth()+1) + "/" + Integer.toString(new Date().getYear()+2).substring(1,3));
 		txtFechaExp.setReadOnly(true);
 		hlInfo.add(txtPin, txtFechaExp);
 	

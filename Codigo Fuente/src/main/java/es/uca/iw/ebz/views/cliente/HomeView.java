@@ -104,6 +104,8 @@ private H3 hTitular = new H3();
 
 private H3 hDate = new H3();
 
+private MovimientosComponent movCompCuenta = new MovimientosComponent(TipoGrid.Parcial, _movimientoService, acSelected);
+
 	public HomeView(MovimientoService movimientoService, CuentaService cuentaService,
 					TarjetaService tarjetaService, ClienteService clienteService,
 					UsuarioService usuarioService, ConsultaService consultaService,
@@ -257,7 +259,8 @@ private H3 hDate = new H3();
 		
 		H1 hMovimientos = new H1(getTranslation("home.lastmove"));
 		hMovimientos.setClassName("subtitle");
-		vlAccountMovements.add(hMovimientos, new MovimientosComponent(TipoGrid.Parcial, movimientoService, acSelected));
+		movCompCuenta = new MovimientosComponent(TipoGrid.Parcial, movimientoService, acSelected);
+		vlAccountMovements.add(hMovimientos, movCompCuenta);
 
 		H1 ntTitle = new H1(getTranslation("home.lastquery"));
 		ntTitle.setClassName("subtitle");
@@ -426,8 +429,9 @@ private H3 hDate = new H3();
 		_ae2.getStyle().set("margin-left", "10px");
 
 
-		addClickListener(e -> {
+		vlMain.addClickListener(e -> {
 			acSelected = ac;
+			movCompCuenta.setCondition(acSelected);
 			updateAccountInfo();
 		});
 
@@ -447,10 +451,9 @@ private H3 hDate = new H3();
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
 		_acBalance = formatImport.format(acSelected.getSaldo());
 
-		hBalance = new H3(getTranslation("account.balance") + ": " + _acBalance);
-		hTitular = new H3(getTranslation("account.holder") + ": " + acSelected.getCliente().getNombre());
-		hDate = new H3(getTranslation("account.date") + ": " + acSelected.getFechaCreacion().getDate() + "/" + (acSelected.getFechaCreacion().getMonth() + 1) + "/" + (acSelected.getFechaCreacion().getYear()+1900));
-
+		hBalance.setText(getTranslation("account.balance") + ": " + _acBalance);
+		hTitular.setText(getTranslation("account.holder") + ": " + acSelected.getCliente().getNombre());
+		hDate.setText(getTranslation("account.date") + ": " + acSelected.getFechaCreacion().getDate() + "/" + (acSelected.getFechaCreacion().getMonth() + 1) + "/" + (acSelected.getFechaCreacion().getYear()+1900));
 	}
 
 	@Override

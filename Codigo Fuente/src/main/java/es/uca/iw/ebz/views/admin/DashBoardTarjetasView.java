@@ -30,6 +30,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.data.renderer.Renderer;
@@ -123,9 +124,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
         notCambios.setDuration(0);
     	notCambios.setPosition(Position.TOP_STRETCH);
     	notCambios.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-        gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader(getTranslation("dashboardCard.type")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
-        gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader(getTranslation("dashboardCard.dateExpiration")).setSortable(true).setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
-        gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader(getTranslation("dashboardCard.number")).setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader(getTranslation("dashboardCard.type")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
+        gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader(getTranslation("dashboardCard.dateExpiration")).setSortable(true).setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader(getTranslation("dashboardCard.number")).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
         gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
             TextField pinField = new TextField();
             pinField.setValue(tarjeta.getiPin());
@@ -140,24 +141,27 @@ public class DashBoardTarjetasView extends HorizontalLayout{
             return pinField;
         })).setHeader("PIN").setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
         gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
-        	 HorizontalLayout layout = new HorizontalLayout();
-        	    TextField cvcField = new TextField();
-        	    cvcField.setWidth("100px");
-        	    cvcField.setValue(tarjeta.getCVC());
-        	    cvcField.setReadOnly(true);
-        	    Button refreshButton = new Button(new Icon(VaadinIcon.REFRESH));
-        	    refreshButton.addClickListener(event -> {
-        	        // generate a new CVC and set it in the tarjeta object
-        	    	if(!notCambios.isOpened()) notCambios.open();
-        	        String newCvc = tarjeta.GenerarCVC();
-        	        tarjeta.setCVC(newCvc);
-        	        cvcField.setValue(newCvc);
-                	mapTarjeta.put(tarjeta, true);
-                    gridTarjeta.getGenericDataView().refreshAll();
-        	    });
-        	    layout.add(cvcField, refreshButton);
-        	    return layout;
-        })).setHeader("CVC").setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
+        	HorizontalLayout layout = new HorizontalLayout();
+    	 	layout.setWidthFull();
+    	 	layout.setJustifyContentMode(JustifyContentMode.CENTER);
+    	    TextField cvcField = new TextField();
+    	    cvcField.setWidth("55px");
+    	    cvcField.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
+    	    cvcField.setValue(tarjeta.getCVC());
+    	    cvcField.setReadOnly(true);
+    	    Button refreshButton = new Button(new Icon(VaadinIcon.REFRESH));
+    	    refreshButton.addClickListener(event -> {
+    	        // generate a new CVC and set it in the tarjeta object
+    	    	if(!notCambios.isOpened()) notCambios.open();
+    	        String newCvc = tarjeta.GenerarCVC();
+    	        tarjeta.setCVC(newCvc);
+    	        cvcField.setValue(newCvc);
+            	mapTarjeta.put(tarjeta, true);
+                gridTarjeta.getGenericDataView().refreshAll();
+    	    });
+    	    layout.add(cvcField, refreshButton);
+    	    return layout;
+        })).setHeader("CVC").setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
         gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
         	Icon iconCheck = LumoIcon.CHECKMARK.create();
         	Icon iconWarning = VaadinIcon.WARNING.create();
@@ -165,7 +169,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
     		iconWarning.setSize("30px"); iconWarning.setColor("#eed202");
     		if(mapTarjeta.get(tarjeta) == null) return iconCheck;
             return mapTarjeta.get(tarjeta)? iconWarning : iconCheck;
-        })).setHeader("Cambios").setTextAlign(ColumnTextAlign.CENTER);
+        })).setHeader("Cambios").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
         
         saveButton.setEnabled(false);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
