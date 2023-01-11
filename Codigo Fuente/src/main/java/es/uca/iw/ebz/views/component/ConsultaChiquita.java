@@ -3,7 +3,9 @@ package es.uca.iw.ebz.views.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.ConsultaService;
@@ -13,8 +15,7 @@ import es.uca.iw.ebz.usuario.admin.AdminService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 
-@Tag("ConsultaChiquita")
-public class ConsultaChiquita extends Component {
+public class ConsultaChiquita extends Grid<Consulta> {
 
     private ConsultaService _consultaService;
 
@@ -25,8 +26,6 @@ public class ConsultaChiquita extends Component {
     private AdminService _adminService;
 
     private Cliente _cliente;
-
-    private Grid<Consulta> gridQuery = new Grid<>(Consulta.class, false);
 
     public ConsultaChiquita(ConsultaService consultaService, MensajeService mensajeService,
                             ClienteService clienteService, AdminService adminService, Cliente cliente) {
@@ -41,24 +40,20 @@ public class ConsultaChiquita extends Component {
 
         //End services initialization section
 
-        VerticalLayout vlMain = new VerticalLayout();
-
-        gridQuery.setWidthFull();
-        gridQuery.addColumn(Consulta::getTitulo).setHeader(getTranslation("query.title")).setAutoWidth(true);
-        gridQuery.addColumn(Consulta::getTipoEstadoString).setHeader(getTranslation("query.state")).setAutoWidth(true);
-        gridQuery.addComponentColumn(consulta -> {
-            Button btnQuery = new Button("Chat");
+        setWidthFull();
+        addColumn(Consulta::getTitulo).setHeader(getTranslation("query.title")).setAutoWidth(true);
+        addColumn(Consulta::getTipoEstadoString).setHeader(getTranslation("query.state")).setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
+        addComponentColumn(consulta -> {
+            Button btnQuery = new Button(VaadinIcon.ENVELOPE_O.create());
             ClienteConsultaDialog ccLog = new ClienteConsultaDialog(consulta, _cliente, _adminService, _clienteService, _mensajeService, _consultaService);
             btnQuery.addClickListener( e-> {
                 ccLog.open();
             });
             return btnQuery;
-        }).setHeader("Chat").setAutoWidth(true);
+        }).setHeader("Chat").setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
 
-        gridQuery.setItems(_consultaService.findByClienteOrderByFechaDESC(_cliente.getUsuario()));
+        setItems(_consultaService.findByClienteOrderByFechaDESC(_cliente.getUsuario()));
 
-        vlMain.add(gridQuery);
-        getElement().appendChild(vlMain.getElement());
 
 
     }

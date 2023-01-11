@@ -104,8 +104,15 @@ private DetallesCuentaDialog dlogDC;
 private ConsultaChiquita consultaChiquita;
 
 //Atributos del layout de la cuenta.
-H1 _acNumber = new H1();
-H2 _acBalance = new H2();
+private H1 _acNumber = new H1();
+
+private String _acBalance;
+
+private H3 hBalance = new H3();
+
+private H3 hTitular = new H3();
+
+private H3 hDate = new H3();
 
 	public HomeView(MovimientoService movimientoService, CuentaService cuentaService,
 					TarjetaService tarjetaService, ClienteService clienteService,
@@ -125,13 +132,8 @@ H2 _acBalance = new H2();
 		_adminService = adminService;
 		//End services initialization section
 
-
-			//UI.getCurrent().navigate(DashBoardView.class);
-
 		//Client asignation
-		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get()); // es un optional, por eso el get()
-
-		//Account
+		_cliente = _clienteService.findByUsuario(_authenticatedUser.get().get());
 
 		setMargin(false);
 		setPadding(false);
@@ -141,21 +143,18 @@ H2 _acBalance = new H2();
 
 		//First layout section
 		HorizontalLayout hlMain = new HorizontalLayout();
-		hlMain.setAlignItems(Alignment.CENTER);
 		hlMain.setWidth("80vw");
-		hlMain.setHeight("450px");
+		hlMain.setHeight("300px");
 		hlMain.setPadding(false);
 		hlMain.setSpacing(false);
 		hlMain.setMargin(true);
 		hlMain.setClassName("box");
 		//End first layout section
 
+		_acNumber.getStyle().set("margin","0");
 
 		//Account information and buttons section
-		Component userName = new H1("Bienvenido de nuevo");
-		//Username section
-		if(_cliente != null) userName = CreateUserNameBanner(_cliente.getNombre());
-		//Component userName = CreateUserNameBanner(_authenticatedUser.get().get().getUsuario());
+		Component userName =  CreateUserNameBanner(_cliente.getNombre());
 		//End username section
 
 		//Account gallery section
@@ -175,11 +174,15 @@ H2 _acBalance = new H2();
 			vlShowAccount.setSpacing(false);
 			vlShowAccount.setWidth("100%");
 
-			vlShowAccount.add(
-					_acNumber,
-					_acBalance);
+			VerticalLayout vlAccountDetails = new VerticalLayout();
+			vlAccountDetails.setPadding(true);
+			vlAccountDetails.setMargin(true);
 
-			vlAccount.add(userName);
+			vlShowAccount.add(_acNumber,
+					hBalance,
+					hTitular,
+					hDate);
+
 			vlAccount.add(vlShowAccount);
 			//End of including...
 
@@ -197,8 +200,6 @@ H2 _acBalance = new H2();
 			vlAccountList.setMargin(false);
 			vlAccountList.setSpacing(false);
 			vlAccountList.setAlignItems(Alignment.CENTER);
-
-			//Pendiente de arreglar
 
 			List<Component> accountListComponent = new ArrayList<Component>();
 			for(Cuenta c: accountList) {
@@ -262,16 +263,12 @@ H2 _acBalance = new H2();
 		vlAccountNotifications.setWidthFull();
 		vlAccountNotifications.setClassName("box");
 		vlAccountNotifications.setPadding(false);
-
-
-		List<Movimiento> mvList = _movimientoService.findByClienteByFechaASC(_cliente);
 		
-		H1 hMovimientos = new H1(getTranslation("movement.home"));
+		H1 hMovimientos = new H1(getTranslation("home.lastmove"));
 		hMovimientos.setClassName("subtitle");
 		vlAccountMovements.add(hMovimientos, new MovimientosComponent(TipoGrid.Parcial, movimientoService, acSelected));
 
-		List<Consulta> cnList = _consultaService.findByCliente(_authenticatedUser.get().get());
-		H2 ntTitle = new H2(getTranslation("home.lastquery"));
+		H1 ntTitle = new H1(getTranslation("home.lastquery"));
 		ntTitle.setClassName("subtitle");
 		vlAccountNotifications.add(ntTitle);
 
@@ -279,7 +276,7 @@ H2 _acBalance = new H2();
 		vlAccountNotifications.add(consultaChiquita);
 
 		hlAccountMove.add(
-				flAccountMovements,
+				vlAccountMovements,
 				vlAccountNotifications);
 
 		//End movements and notifications section
@@ -293,7 +290,7 @@ H2 _acBalance = new H2();
 		vlTarjeta.setMargin(true);
 		vlTarjeta.setClassName("box");
 
-		H2 tarjetaTitle = new H2(getTranslation("mainLayout.cards"));
+		H2 tarjetaTitle = new H2(getTranslation("home.cards"));
 		tarjetaTitle.setClassName("subtitle");
 
 		if(aTarjetas.size() > 0){
@@ -364,12 +361,14 @@ H2 _acBalance = new H2();
 	//Falta arreglar la situación del nombre
 	private Component CreateUserNameBanner(String userName){
 		VerticalLayout vlMain = new VerticalLayout();
+		vlMain.setWidth("80vw");
 		vlMain.setClassName("padding40");
 		vlMain.setSpacing(false);
 		//vlMain.setPadding(true);
 		vlMain.setMargin(true);
 		vlMain.setWidthFull();
 		H1 _userName = new H1(getTranslation("home.welcome") + userName);
+		_userName.setClassName("title");
 
 		vlMain.add(_userName);
 
@@ -455,7 +454,11 @@ H2 _acBalance = new H2();
 		dlogDC = new DetallesCuentaDialog(_cliente, acSelected);
 
 		NumberFormat formatImport = NumberFormat.getCurrencyInstance();
-		_acBalance.setText(formatImport.format(acSelected.getSaldo()));
+		_acBalance = formatImport.format(acSelected.getSaldo());
+
+		hBalance = new H3(getTranslation("account.balance") + ": " + _acBalance);
+		hTitular = new H3(getTranslation("account.holder") + ": " + acSelected.getCliente().getNombre());
+		hDate = new H3(getTranslation("account.date") + ": " + acSelected.getFechaCreacion().getDate() + "/" + (acSelected.getFechaCreacion().getMonth() + 1) + "/" + (acSelected.getFechaCreacion().getYear()+1900));
 
 	}
 

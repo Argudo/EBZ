@@ -3,6 +3,7 @@ package es.uca.iw.ebz.views;
 import com.mysql.cj.xdevapi.Client;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -136,7 +138,7 @@ public class DashBoardConsultasView extends HorizontalLayout {
         gridConsulta.addColumn(Consulta::getFechaCreacion).setHeader(getTranslation("query.date")).setSortable(true).setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
         gridConsulta.addColumn(Consulta::getTipoEstadoString).setHeader(getTranslation("query.state")).setAutoWidth(true).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
         gridConsulta.addComponentColumn(consulta -> {
-            Button btnQuery = new Button("Chat");
+            Button btnQuery = new Button(VaadinIcon.ENVELOPE_O.create());
             acLog = new AdminConsultaDialog(consulta, _admin, _adminService, _clienteService, _mensajeService, _consultaService);
             acLog.addUpdateListener( e-> {
                 updateUI();
@@ -150,6 +152,7 @@ public class DashBoardConsultasView extends HorizontalLayout {
 
         gridConsulta.addComponentColumn(consulta -> {
            Button btnClose = new Button(getTranslation("button.closequery"));
+           btnClose.addThemeVariants(ButtonVariant.LUMO_ERROR);
            btnClose.addClickListener( e-> {
               consulta.set_tipoEstado(new TipoEstado(EnumEstado.Cerrado));
               _consultaService.Save(consulta);

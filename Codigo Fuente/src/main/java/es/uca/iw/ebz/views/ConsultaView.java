@@ -4,6 +4,10 @@ import java.util.Date;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.flow.component.grid.ColumnTextAlign;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
@@ -154,6 +158,8 @@ public class ConsultaView extends VerticalLayout {
             removeAll();
             tabs.setSelectedTab(tabConsultas);
             add(tabs, vlTitleHistorial);
+            Notification notification = Notification.show(getTranslation("query.correct"));
+            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         });
 
         frmNewQuery.add(
@@ -167,17 +173,17 @@ public class ConsultaView extends VerticalLayout {
         //Query record section
         //Grid initialization section
         gridQuery.setWidthFull();
-        gridQuery.addColumn(Consulta::getTitulo).setHeader(getTranslation("query.title")).setAutoWidth(true);
-        gridQuery.addColumn(Consulta::getFechaCreacion).setHeader(getTranslation("query.date")).setSortable(true).setAutoWidth(true);
+        gridQuery.addColumn(Consulta::getTitulo).setHeader(getTranslation("query.title")).setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
+        gridQuery.addColumn(Consulta::getFechaCreacion).setHeader(getTranslation("query.date")).setSortable(true).setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
         gridQuery.addComponentColumn(consulta -> {
-            Button btnQuery = new Button("Chat");
+            Button btnQuery = new Button(VaadinIcon.ENVELOPE_O.create());
             ClienteConsultaDialog ccLog = new ClienteConsultaDialog(consulta, _cliente, _adminService, _clienteService, _mensajeService, _consultaService);
             btnQuery.addClickListener( e -> {
                 ccLog.open();
             });
 
             return btnQuery;
-        }).setHeader("Chat").setAutoWidth(true);
+        }).setHeader("Chat").setAutoWidth(true).setTextAlign(ColumnTextAlign.CENTER);
 
         gridQuery.setItems(_consultaService.findByCliente(_cliente.getUsuario()));
 

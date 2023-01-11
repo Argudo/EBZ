@@ -40,7 +40,6 @@ public class MovimientosComponent extends Grid<DatosMovimiento> {
 		
 		_aMovimientos.forEach(m -> _aDatosMovimiento.add(_movService.datosMovimientoClass(m)));
 		_dataView = setItems(_aDatosMovimiento);
-		System.out.println("Tamaño: " + _aMovimientos.size());
 		
 		if(_tipoGrid == TipoGrid.Completo) {
 			addColumn(DatosMovimiento::getTipo).setHeader(getTranslation("movement.type")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
