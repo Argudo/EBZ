@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.Movimiento;
 
+import java.text.NumberFormat;
 import java.util.Date;
 
 public class DatosMovimiento {
@@ -44,6 +45,11 @@ public class DatosMovimiento {
     }
     public String getConcepto() {
         return concepto;
+    }
+    public String getImporteFormat() {
+        NumberFormat formatImport = NumberFormat.getCurrencyInstance();
+        String sBalance = new String(formatImport.format(Float.parseFloat(importe)));
+        return sBalance;
     }
 
     //setters

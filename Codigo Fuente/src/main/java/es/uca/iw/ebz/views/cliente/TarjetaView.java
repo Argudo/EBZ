@@ -1,5 +1,6 @@
 package es.uca.iw.ebz.views.cliente;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -175,7 +176,9 @@ public class TarjetaView extends VerticalLayout{
 			Movimiento movRecarga = new Movimiento(new Date(), getTranslation("tarjeta.recargatarjeta") + tarSelected.getNumTarjeta(), TipoMovimiento.RECARGATARJETA);
 			try {				
 				_movService.recargaTarjeta(movRecarga, _cuentaService.findByNumeroCuenta(cbCuentas.getValue()).get(), tarSelected, txtCantidad.getValue().floatValue());
-				pSaldo.setText(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()) + "€");
+		        NumberFormat formatImport = NumberFormat.getCurrencyInstance();
+		        String sBalance = new String(String.valueOf(_prepagoService.findByTarjeta(tarSelected).getSaldo()));
+				pSaldo.setText(sBalance);
 				Notification notification = Notification.show(getTranslation("tarjeta.depositof") + txtCantidad.getValue() + "€" + getTranslation("tarjeta.from") + cbCuentas.getValue() + getTranslation("tarjeta.success"));
 				notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 				dlogRecarga.close();

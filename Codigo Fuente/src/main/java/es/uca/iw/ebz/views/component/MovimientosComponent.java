@@ -52,7 +52,7 @@ public class MovimientosComponent extends Grid<DatosMovimiento> {
 		
 		//Grid parcial
 		addColumn(DatosMovimiento::getConcepto).setHeader(getTranslation("movement.concept")).setAutoWidth(true);
-		addColumn(DatosMovimiento::getImporte).setHeader(getTranslation("movement.amount")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
+		addColumn(DatosMovimiento::getImporteFormat).setHeader(getTranslation("movement.amount")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
 		if(_tipoGrid == TipoGrid.Parcial) {
 			addColumn(new ComponentRenderer<>(mov -> {
 				Button btnDetalles = new Button(VaadinIcon.EYE.create());
