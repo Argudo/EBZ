@@ -12,5 +12,5 @@ import java.util.UUID;
 @Repository
 public interface CompraTarjetaRepository extends JpaRepository<CompraTarjeta, UUID> {
     CompraTarjeta findByMovimiento(Movimiento movimiento);
-    List<CompraTarjeta> findByTarjeta(Tarjeta tarjeta);
+    List<CompraTarjeta> findBytarjeta(Tarjeta tarjeta);
 }

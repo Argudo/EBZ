@@ -30,9 +30,9 @@ public class MovimientoTest {
 
     @Test
     public void shouldProvideDescripcion() {
-        assertThat(movimientoTest.getsConcpeto().equals("Pago hipoteca")).isTrue();
+        assertThat(movimientoTest.getConcepto().equals("Pago hipoteca")).isTrue();
         movimientoTest.setsConcpeto("Pago de la luz");
-        assertThat(movimientoTest.getsConcpeto().equals("Pago de la luz")).isTrue();
+        assertThat(movimientoTest.getConcepto().equals("Pago de la luz")).isTrue();
     }
 
     @Test

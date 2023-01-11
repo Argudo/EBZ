@@ -14,6 +14,5 @@ public interface RecargaTarjetaRepository extends JpaRepository<RecargaTarjeta, 
 
     RecargaTarjeta findByMovimiento(Movimiento movimiento);
     List<RecargaTarjeta> findByCuenta(Cuenta cuenta);
-    List<RecargaTarjeta> findByTarjeta(Tarjeta tarjeta);
-
+    List<RecargaTarjeta> findBytarjeta(Tarjeta tarjeta);
 }

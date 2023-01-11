@@ -236,7 +236,7 @@ public class TransferenciaView extends VerticalLayout {
                     }
                     if(!fail){
                         Movimiento mv = new Movimiento(new Date(),tfConcept.getValue(), TipoMovimiento.INTERNO);
-                        System.out.println(mv.getsConcpeto() + " " + mv.getTipo());
+                        System.out.println(mv.getConcepto() + " " + mv.getTipo());
                         try {
                             _movimientoService.nuevoMovimiento(mv, _cuentaService.findByNumeroCuenta(cbAccount1.getValue()).get(), cbAccount2.getValue(), nfBalance.getValue().floatValue());
                         } catch (Exception ex) {

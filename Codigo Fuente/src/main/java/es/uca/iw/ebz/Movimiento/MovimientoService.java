@@ -246,7 +246,7 @@ public class MovimientoService {
         datos.setId(movimiento.getId().toString());
         datos.setFecha(movimiento.getFecha());
         datos.setTipo(movimiento.getTipo().toString());
-        datos.setConcepto(movimiento.getsConcpeto());
+        datos.setConcepto(movimiento.getConcepto());
 
         switch (movimiento.getTipo()) {
             case INTERNO:

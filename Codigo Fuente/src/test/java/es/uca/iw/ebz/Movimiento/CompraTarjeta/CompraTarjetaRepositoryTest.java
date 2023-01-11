@@ -35,13 +35,13 @@ public class CompraTarjetaRepositoryTest {
     @Test
     public void shouldFindByTarjeta() {
         Tarjeta tarjetaTest = ObjectMother.createTestTarjeta();
-        List<CompraTarjeta> compraTarjetasTest = compraTarjetaRepository.findByTarjeta(tarjetaTest);
+        List<CompraTarjeta> compraTarjetasTest = compraTarjetaRepository.findBytarjeta(tarjetaTest);
         assertThat(compraTarjetasTest.size() == 0).isTrue();
 
         CompraTarjeta compraTarjetaTest = ObjectMother.createTestCompraTarjeta();
         compraTarjetaTest.setTarjeta(tarjetaTest);
         compraTarjetaRepository.save(compraTarjetaTest);
-        compraTarjetasTest =  compraTarjetaRepository.findByTarjeta(tarjetaTest);
+        compraTarjetasTest =  compraTarjetaRepository.findBytarjeta(tarjetaTest);
         assertThat(compraTarjetasTest.size() == 1).isTrue();
     }
 }
