@@ -55,7 +55,7 @@ import es.uca.iw.ebz.views.component.MovimientosComponent;
 import es.uca.iw.ebz.views.component.NuevaTarjetaDialog;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
-@PageTitle("Tarjetas")
+@PageTitle("Tarjetas | EBZ")
 @Route(value = "tarjetas", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class TarjetaView extends VerticalLayout{

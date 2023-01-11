@@ -45,7 +45,7 @@ import es.uca.iw.ebz.views.layout.AdminLayout;
 
 
 @RolesAllowed({ "Empleado"})
-@PageTitle("Dashboard/usuario")
+@PageTitle("Gestión de usuario | EBZ")
 @Route(value = "Dashboard/usuario", layout = AdminLayout.class)
 public class DashBoardUserView extends VerticalLayout {
 	private Tabs tabs = new Tabs();

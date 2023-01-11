@@ -31,7 +31,7 @@ import es.uca.iw.ebz.views.component.MovimientosComponent;
 import es.uca.iw.ebz.views.component.MovimientosComponent.TipoGrid;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
-@PageTitle("Movimientos")
+@PageTitle("Movimientos | EBZ")
 @Route(value = "movimiento", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class MovimientoView extends VerticalLayout {

@@ -30,7 +30,7 @@ import es.uca.iw.ebz.views.component.CreateAccountDialog;
 import es.uca.iw.ebz.views.layout.AdminLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@PageTitle("Dashboard/cuentas")
+@PageTitle("Gestión de cuentas | EBZ")
 @RolesAllowed({ "Empleado"})
 @Route(value = "Dashboard/cuentas", layout = AdminLayout.class)
 public class DashBoardCuentasView extends HorizontalLayout {

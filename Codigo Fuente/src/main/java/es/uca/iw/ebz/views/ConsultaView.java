@@ -39,7 +39,7 @@ import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.component.ClienteConsultaDialog;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
-@PageTitle("Consultas")
+@PageTitle("Consultas | EBZ")
 @Route(value = "consultas", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class ConsultaView extends VerticalLayout {

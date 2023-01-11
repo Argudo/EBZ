@@ -19,7 +19,7 @@ import es.uca.iw.ebz.views.layout.AdminLayout;
 import javax.annotation.security.RolesAllowed;
 
 @RolesAllowed({ "Empleado"})
-@PageTitle("Perfil")
+@PageTitle("Perfil | EBZ")
 @Route(value = "Perfil", layout = AdminLayout.class)
 public class UserAdminView extends VerticalLayout {
 

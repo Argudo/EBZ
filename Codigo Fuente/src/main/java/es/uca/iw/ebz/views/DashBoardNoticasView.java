@@ -18,7 +18,7 @@ import es.uca.iw.ebz.views.layout.AdminLayout;
 
 import javax.annotation.security.RolesAllowed;
 
-@PageTitle("Dashboard/noticias")
+@PageTitle("Gestión de noticias | EBZ")
 @RolesAllowed({ "Empleado"})
 @Route(value = "Dashboard/noticias", layout = AdminLayout.class)
 public class DashBoardNoticasView extends VerticalLayout {

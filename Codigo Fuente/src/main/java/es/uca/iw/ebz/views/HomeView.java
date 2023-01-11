@@ -51,7 +51,7 @@ import es.uca.iw.ebz.views.layout.MainLayout;
 
 
 
-@PageTitle("EBZ")
+@PageTitle("Inicio | EBZ")
 @Route(value = "", layout = MainLayout.class)
 @RouteAlias(value = "home", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })

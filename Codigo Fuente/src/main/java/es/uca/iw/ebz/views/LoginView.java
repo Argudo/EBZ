@@ -12,7 +12,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 
 @AnonymousAllowed
-@PageTitle("Login")
+@PageTitle("Inicio sesión | EBZ")
 @Route(value = "login")
 public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 

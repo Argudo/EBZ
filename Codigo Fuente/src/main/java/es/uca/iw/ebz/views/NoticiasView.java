@@ -19,7 +19,7 @@ import es.uca.iw.ebz.noticia.Noticia;
 import es.uca.iw.ebz.noticia.NoticiaService;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
-@PageTitle("Noticias")
+@PageTitle("Noticias | EBZ")
 @Route(value = "noticias", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class NoticiasView extends VerticalLayout {

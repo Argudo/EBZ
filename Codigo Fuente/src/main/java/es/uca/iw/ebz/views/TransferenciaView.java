@@ -36,7 +36,7 @@ import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 import es.uca.iw.ebz.views.layout.MainLayout;
 
 
-@PageTitle("Transferencias")
+@PageTitle("Transferencias | EBZ")
 @Route(value = "transferencia", layout = MainLayout.class)
 @RolesAllowed({ "Cliente" })
 public class TransferenciaView extends VerticalLayout {

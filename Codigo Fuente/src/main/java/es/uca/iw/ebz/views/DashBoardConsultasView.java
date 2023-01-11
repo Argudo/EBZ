@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RolesAllowed({ "Empleado"})
-@PageTitle("Dashboard/consultas")
+@PageTitle("Gestión de consultas | EBZ")
 @Route(value = "Dashboard/consultas", layout = AdminLayout.class)
 public class DashBoardConsultasView extends HorizontalLayout {
 

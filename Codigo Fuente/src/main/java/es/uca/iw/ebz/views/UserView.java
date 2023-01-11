@@ -19,7 +19,7 @@ import es.uca.iw.ebz.views.layout.MainLayout;
 import javax.annotation.security.RolesAllowed;
 
 @RolesAllowed({ "Cliente"})
-@PageTitle("perfil")
+@PageTitle("Perfil | EBZ")
 @Route(value = "perfil", layout = MainLayout.class)
 public class UserView extends VerticalLayout {
     private H1 hPerfil = new H1(getTranslation("user.home"));

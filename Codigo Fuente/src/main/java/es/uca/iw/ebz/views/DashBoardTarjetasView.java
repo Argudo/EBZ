@@ -49,7 +49,7 @@ import es.uca.iw.ebz.views.component.NuevaTarjetaDialog;
 import es.uca.iw.ebz.views.layout.AdminLayout;
 
 
-@PageTitle("Gestión de tarjetas")
+@PageTitle("Gestión de tarjetas | EBZ")
 @Route(value = "Dashboard/tarjetas", layout = AdminLayout.class)
 @RolesAllowed({ "Empleado" })
 public class DashBoardTarjetasView extends HorizontalLayout{

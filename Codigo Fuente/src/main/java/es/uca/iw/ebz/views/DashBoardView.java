@@ -15,7 +15,7 @@ import java.util.*;
 
 
 @RolesAllowed({ "Empleado" })
-@PageTitle("Dashboard")
+@PageTitle("Inicio | EBZ")
 @Route(value = "Dashboard", layout = AdminLayout.class)
 public class DashBoardView extends VerticalLayout {
     private VerticalLayout vlDashboard = new VerticalLayout();
