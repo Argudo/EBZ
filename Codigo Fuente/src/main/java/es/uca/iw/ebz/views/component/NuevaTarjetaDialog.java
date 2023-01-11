@@ -37,11 +37,11 @@ import es.uca.iw.ebz.usuario.cliente.ClienteService;
 
 public class NuevaTarjetaDialog extends Dialog {
 	private RadioButtonGroup<String> rdGroup = new RadioButtonGroup<String>();
-	private PasswordField txtPin = new PasswordField("Crear PIN");
-	private TextField txtFechaExp = new TextField("Fecha de expiración");
-	private ComboBox<String> cmbCuentas = new ComboBox<>("Seleccione la cuenta");
-	private ComboBox<String> cmbTipoCredito = new ComboBox<>("Seleccione el tipo de tarjeta crediticia");
-	private TextField txtTitular = new TextField("Nombre del titular");
+	private PasswordField txtPin = new PasswordField(getTranslation("card.newCard.createPin"));
+	private TextField txtFechaExp = new TextField(getTranslation("card.dateExpiration"));
+	private ComboBox<String> cmbCuentas = new ComboBox<>(getTranslation("card.selectAccount"));
+	private ComboBox<String> cmbTipoCredito = new ComboBox<>(getTranslation("card.selectCreditType"));
+	private TextField txtTitular = new TextField(getTranslation("card.titular"));
 	
 	private List<Cuenta> aCuentas;
 	private Cliente _cliente;
@@ -61,8 +61,8 @@ public class NuevaTarjetaDialog extends Dialog {
 		_prepagoService = prepagoService;
 
 		setWidth("30vw");
-		setHeaderTitle("Solicitar nueva tarjeta");
-		Button btnGenerar = new Button("Solicitar");
+		setHeaderTitle(getTranslation("card.request"));
+		Button btnGenerar = new Button(getTranslation("card.requests"));
 		Button btnCancelar = new Button(new Icon(VaadinIcon.CLOSE));
 		btnCancelar.addThemeVariants(ButtonVariant.LUMO_ICON);
 		btnCancelar.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -86,12 +86,12 @@ public class NuevaTarjetaDialog extends Dialog {
 	
 		txtTitular.setReadOnly(true);
 		txtTitular.setWidthFull();
-		rdGroup.setLabel("Tipo de tarjeta");
-		rdGroup.setItems("Débito", "Crédito", "Prepago");
+		rdGroup.setLabel(getTranslation("card.type"));
+		rdGroup.setItems(getTranslation("card.debit"), getTranslation("card.credit"), getTranslation("card.prepaid"));
 		rdGroup.addValueChangeListener(e -> {			
 			vlogMain.removeAll();
 			vlogMain.add(rdGroup, txtTitular);
-			if(rdGroup.getValue() == "Débito") {
+			if(rdGroup.getValue() == getTranslation("card.debit")) {
 				cmbCuentas.setWidthFull();
 				aCuentas = _cuentaService.findByCliente(_cliente);
 				List<String> aNumCuentas = new ArrayList();
@@ -101,7 +101,7 @@ public class NuevaTarjetaDialog extends Dialog {
 				cmbCuentas.setItems(aNumCuentas);
 				vlogMain.add(cmbCuentas);
 			}
-			else if(rdGroup.getValue() == "Crédito") {
+			else if(rdGroup.getValue() == getTranslation("card.credit")) {
 				cmbCuentas.setWidthFull();
 				aCuentas = _cuentaService.findByCliente(_cliente);
 				
@@ -140,18 +140,18 @@ public class NuevaTarjetaDialog extends Dialog {
 		Boolean fallo = false;
 
 		//Precondiciones
-		if(rdGroup.getValue() == null) { rdGroup.getElement().setAttribute("invalid", ""); rdGroup.setErrorMessage("Debe elegir uno de los tipos de tarjeta disponible"); fallo = true; }
+		if(rdGroup.getValue() == null) { rdGroup.getElement().setAttribute("invalid", ""); rdGroup.setErrorMessage(getTranslation("card.errorType")); fallo = true; }
 		tp = new TipoTarjeta(EnumTarjeta.toTipo(rdGroup.getValue()));
 		
 		if(tp.getTipo() != EnumTarjeta.Prepago) {
-			if(cmbCuentas.getValue() == null && tp.getTipo() != EnumTarjeta.Prepago) {	cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("Debe seleccionar una cuenta"); fallo = true; }
+			if(cmbCuentas.getValue() == null && tp.getTipo() != EnumTarjeta.Prepago) {	cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage(getTranslation("card.errorAccount")); fallo = true; }
 			optCuenta = _cuentaService.findByNumeroCuenta(cmbCuentas.getValue());
-			if(optCuenta.isEmpty() || aCuentas.indexOf(optCuenta.get()) != -1) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("No se encuentra la cuenta seleccionada"); fallo = true; }
-			if(EnumTarjeta.toTipo(rdGroup.getValue()) == EnumTarjeta.Debito && !_tarService.findByCuenta(optCuenta.get()).isEmpty()) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage("Ya existe una tarjeta de débito para la cuenta seleccionada"); fallo = true; } 			
+			if(optCuenta.isEmpty() || aCuentas.indexOf(optCuenta.get()) != -1) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage(getTranslation("card.errorFindAccount")); fallo = true; }
+			if(EnumTarjeta.toTipo(rdGroup.getValue()) == EnumTarjeta.Debito && !_tarService.findByCuenta(optCuenta.get()).isEmpty()) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage(getTranslation("card.errorExist")); fallo = true; }
 		}
 		
-		if(txtPin.getValue().length() != 4) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage("El pin debe tener 4 caracteres"); fallo = true; }
-		if(!txtPin.getValue().matches("\\d{4}")) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage("El pin debe ser númerico"); fallo = true; }
+		if(txtPin.getValue().length() != 4) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage(getTranslation("card.errorPin")); fallo = true; }
+		if(!txtPin.getValue().matches("\\d{4}")) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage(getTranslation("card.errorPinNumeric")); fallo = true; }
 		if(fallo) return false;
 		
 		sPin = txtPin.getValue();
@@ -172,13 +172,13 @@ public class NuevaTarjetaDialog extends Dialog {
 			fireEvent(new UpdateEvent(this, false, T));
 		}
 		catch(Exception e) {
-			Notification notification = Notification.show("Se ha encontrado un error en la solicitud de tu nueva tarjeta");
+			Notification notification = Notification.show(getTranslation("card.errorNewCard"));
 			notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 			System.out.println(e.getMessage()); 
 			return false;
 		}
 		
-		Notification notification = Notification.show("Tu nueva tarjeta " + T.getNumTarjeta() + " ha sido creada correctamente");
+		Notification notification = Notification.show(getTranslation("card.createSuccess") + T.getNumTarjeta() + getTranslation("card.createSuccess2"));
 		notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
 		
 		close();

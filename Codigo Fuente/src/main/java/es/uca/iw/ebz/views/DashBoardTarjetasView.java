@@ -55,9 +55,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private VerticalLayout vlInfo = new VerticalLayout();
 	private VerticalLayout vlSeparator = new VerticalLayout();
 	
-	private H1 hGrid = new H1("| Tarjetas");
+	private H1 hGrid = new H1(getTranslation("card.home"));
 	
-	private H1 hInfo = new H1("Buscador");
+	private H1 hInfo = new H1(getTranslation("dashboardCard.search"));
 	private HorizontalLayout hlBuscador = new HorizontalLayout();
 	private TextField txtDNI = new TextField();
 	private Button btnBuscar = new Button();
@@ -66,7 +66,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	private Boolean estadoBusqueda = false;
 	private Grid<Cliente> gridCliente = new Grid<>(Cliente.class, false);
 	private Grid<Tarjeta> gridTarjeta = new Grid<>(Tarjeta.class, false);
-	Notification notCambios = new Notification("Tiene aún cambios pendientes, presione 'Guardar'");
+	Notification notCambios = new Notification(getTranslation("dashboardCard.notification"));
 	
 	
 	private Cliente _cliente;
@@ -123,9 +123,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
         notCambios.setDuration(0);
     	notCambios.setPosition(Position.TOP_STRETCH);
     	notCambios.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-        gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader("Tipo de tarjeta").setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
-        gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader("Fecha Exp.").setSortable(true).setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
-        gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader("Número de tarjeta").setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(Tarjeta::getStringTipoTarjeta).setHeader(getTranslation("dashboardCard.type")).setSortable(true).setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(Tarjeta::getFechaExpiracion).setHeader(getTranslation("dashboardCard.dateExpiration")).setSortable(true).setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
+        gridTarjeta.addColumn(Tarjeta::getNumTarjeta).setHeader(getTranslation("dashboardCard.number")).setTextAlign(ColumnTextAlign.CENTER);
         gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
             TextField pinField = new TextField();
             pinField.setValue(tarjeta.getiPin());
@@ -155,20 +155,20 @@ public class DashBoardTarjetasView extends HorizontalLayout{
         	    return layout;
         })).setHeader("CVC").setWidth("100px").setTextAlign(ColumnTextAlign.CENTER);
         gridTarjeta.addColumn(new ComponentRenderer<>(tarjeta -> {
-            Button saveButton = new Button("Guardar");
+            Button saveButton = new Button(getTranslation("dashboardCard.save"));
             saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             saveButton.addClickListener(event -> {
                 try {
                 	notCambios.close();
 					_tarService.Update(tarjeta);
-					Notification not = Notification.show("Se realizaron los cambios correctamente");
+					Notification not = Notification.show(getTranslation(("dashboardCard.success")));
 	    	    	not.setPosition(Position.MIDDLE);
 	    	    	not.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 	aTarjeta.removeAll(aTarjeta);
                 	aTarjeta.addAll((Collection<Tarjeta>) _tarService.findByCliente(_cliente));
                 	gridTarjeta.setItems(aTarjeta);
 				} catch (Exception e1) {
-					Notification not = Notification.show("Se ha encontrado el siguiente error: " + e1.getMessage());
+					Notification not = Notification.show(getTranslation("dashboardCard.error") + e1.getMessage());
 	    	    	not.setPosition(Position.TOP_STRETCH);
 	    	    	not.addThemeVariants(NotificationVariant.LUMO_ERROR);
 				}
@@ -202,7 +202,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 					hlAviso.getStyle().set("font-size", "14px");
 					hlAviso.getStyle().set("background-color", "hsla(145, 76%, 44%, 0.22)");
 					hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-					hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph("Se ha encontrado el siguiente cliente"));
+					hlAviso.add(new Icon(VaadinIcon.CHECK), new Paragraph(getTranslation("dashboardCard.findClient")));
 					aClientes.removeAll(Collections.singletonList(null));
 					gridCliente.getDataProvider().refreshAll();
 
@@ -211,7 +211,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 					hlAviso.getStyle().set("font-size", "14px");
 					hlAviso.getStyle().set("background-color", "hsla(3, 100%, 60%, 0.2)");
 					hlAviso.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-					hlAviso.add(new Icon(VaadinIcon.WARNING), new Paragraph("No se ha encontrado ningún cliente con los datos introducido"));
+					hlAviso.add(new Icon(VaadinIcon.WARNING), new Paragraph(getTranslation("dashboardCard.errorClient")));
 				}
 			}
 		});
@@ -231,7 +231,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	                    	aTarjetas.removeAll(aTarjetas);
 	                    	aTarjetas.addAll((Collection<Tarjeta>) _tarService.findByCliente(cliente));
 	                    	gridTarjeta.setItems(aTarjetas);
-	                    	hGrid.setText("| Tarjetas de " + cliente.getNombre());
+	                    	hGrid.setText(getTranslation("dashboardCard.cards") + cliente.getNombre());
 	                    });
 	}
 	
@@ -253,9 +253,9 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	
 	 private static class ClienteDetallesFormLayout extends FormLayout {
         //private final TextField txtId = new TextField("ID");
-        private final TextField txtNombre = new TextField("Nombre");
-        private final TextField txtFechaNacimiento = new TextField("Fecha Nacimiento");
-        private final TextField txtTipoUsuario = new TextField("Tipo de usuario");
+        private final TextField txtNombre = new TextField(getTranslation("dashboardUser.name"));
+        private final TextField txtFechaNacimiento = new TextField(getTranslation("dashboardUser.birth"));
+        private final TextField txtTipoUsuario = new TextField(getTranslation("dashboardCard.typeUser"));
 
         public ClienteDetallesFormLayout() {
             Stream.of(txtNombre, txtFechaNacimiento, txtTipoUsuario).forEach(field -> {
