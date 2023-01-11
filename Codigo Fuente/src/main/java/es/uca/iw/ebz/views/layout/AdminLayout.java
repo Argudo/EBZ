@@ -1,6 +1,11 @@
 package es.uca.iw.ebz.views.layout;
 
 
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
@@ -19,13 +24,16 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinSession;
-import es.uca.iw.ebz.views.*;
-import es.uca.iw.ebz.views.Security.AuthenticatedUser;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Locale;
+import es.uca.iw.ebz.views.DashBoardConsultasView;
+import es.uca.iw.ebz.views.DashBoardCuentasView;
+import es.uca.iw.ebz.views.DashBoardNoticasView;
+import es.uca.iw.ebz.views.DashBoardTarjetasView;
+import es.uca.iw.ebz.views.DashBoardUserView;
+import es.uca.iw.ebz.views.DashBoardView;
+import es.uca.iw.ebz.views.Security.AuthenticatedUser;
 
 
 public class AdminLayout  extends AppLayout{

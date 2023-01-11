@@ -4,17 +4,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 
-import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.router.*;
-import es.uca.iw.ebz.consulta.Consulta;
-import es.uca.iw.ebz.consulta.ConsultaService;
-import es.uca.iw.ebz.mensaje.MensajeService;
-import es.uca.iw.ebz.usuario.TipoUsuario;
-import es.uca.iw.ebz.usuario.admin.AdminService;
-import es.uca.iw.ebz.views.component.ConsultaChiquita;
-import es.uca.iw.ebz.views.component.DetallesCuentaDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
@@ -23,14 +14,10 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexDirection;
-import com.vaadin.flow.component.orderedlayout.FlexLayout.FlexWrap;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -46,13 +33,16 @@ import es.uca.iw.ebz.Movimiento.Movimiento;
 import es.uca.iw.ebz.Movimiento.MovimientoService;
 import es.uca.iw.ebz.consulta.Consulta;
 import es.uca.iw.ebz.consulta.ConsultaService;
+import es.uca.iw.ebz.mensaje.MensajeService;
 import es.uca.iw.ebz.tarjeta.Tarjeta;
 import es.uca.iw.ebz.tarjeta.TarjetaService;
 import es.uca.iw.ebz.usuario.TipoUsuario;
 import es.uca.iw.ebz.usuario.UsuarioService;
+import es.uca.iw.ebz.usuario.admin.AdminService;
 import es.uca.iw.ebz.usuario.cliente.Cliente;
 import es.uca.iw.ebz.usuario.cliente.ClienteService;
 import es.uca.iw.ebz.views.Security.AuthenticatedUser;
+import es.uca.iw.ebz.views.component.ConsultaChiquita;
 import es.uca.iw.ebz.views.component.DetallesCuentaDialog;
 import es.uca.iw.ebz.views.component.MovimientosComponent;
 import es.uca.iw.ebz.views.component.MovimientosComponent.TipoGrid;
@@ -64,8 +54,7 @@ import es.uca.iw.ebz.views.layout.MainLayout;
 @PageTitle("EBZ")
 @Route(value = "", layout = MainLayout.class)
 @RouteAlias(value = "home", layout = MainLayout.class)
-@PermitAll
-
+@RolesAllowed({ "Cliente" })
 public class HomeView extends VerticalLayout implements BeforeEnterObserver {
 @Autowired
 private MovimientoService _movimientoService;

@@ -21,7 +21,7 @@ public enum EnumTarjeta {
 		case "debito" : return EnumTarjeta.Debito;
 		case "credito" : return EnumTarjeta.Credito;
 		case "prepago" : return EnumTarjeta.Prepago;
-			default : throw new IllegalArgumentException("El tipo de tarjeta no está entre los registrados");
+		default : throw new IllegalArgumentException("El tipo de tarjeta no está entre los registrados");
 		}
 	}
 	

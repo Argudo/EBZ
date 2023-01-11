@@ -89,7 +89,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
 	
 	private NuevaTarjetaDialog dlogNT;
 	
-	public DashBoardTarjetasView(CuentaService _cuentaService, ClienteService _clienteService, TarjetaService _tarService, TipoCrediticioRepository _tipoCredRepo) {
+	public DashBoardTarjetasView(CuentaService _cuentaService, ClienteService _clienteService, TarjetaService _tarService, TipoCrediticioRepository _tipoCredRepo, PrepagoService _prepagoService) {
 		dlogNT = new NuevaTarjetaDialog(_cuentaService, _clienteService, _tarService, _tipoCredRepo, _prepagoService);
 		hGrid.setClassName("title");
 		hInfo.setClassName("title");
@@ -163,6 +163,7 @@ public class DashBoardTarjetasView extends HorizontalLayout{
         	Icon iconWarning = VaadinIcon.WARNING.create();
     		iconCheck.setSize("40px"); iconCheck.setColor("var(--lumo-success-color-50pct)");
     		iconWarning.setSize("30px"); iconWarning.setColor("#eed202");
+    		if(mapTarjeta.get(tarjeta) == null) return iconCheck;
             return mapTarjeta.get(tarjeta)? iconWarning : iconCheck;
         })).setHeader("Cambios").setTextAlign(ColumnTextAlign.CENTER);
         

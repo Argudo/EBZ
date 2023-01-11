@@ -186,6 +186,28 @@ public class NuevaTarjetaDialog extends Dialog {
 	}
 	
 	public void setTitular(Cliente titular) {_cliente = titular; txtTitular.setValue(titular.getNombre()); }
+	
+	public Boolean comprobarCampos() {
+		Boolean fallo = false;
+		TipoTarjeta tp;
+		Cuenta cuenta;
+		Optional<Cuenta> optCuenta = java.util.Optional.empty();
+		String sPin;
+
+		if(rdGroup.getValue() == null) { rdGroup.getElement().setAttribute("invalid", ""); rdGroup.setErrorMessage(getTranslation("card.errorType")); fallo = true; }
+		tp = new TipoTarjeta(EnumTarjeta.toTipo(rdGroup.getValue()));
+		
+		if(tp.getTipo() != EnumTarjeta.Prepago) {
+			if(cmbCuentas.getValue() == null && tp.getTipo() != EnumTarjeta.Prepago) {	cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage(getTranslation("card.errorAccount")); fallo = true; }
+			optCuenta = _cuentaService.findByNumeroCuenta(cmbCuentas.getValue());
+			if(optCuenta.isEmpty() || aCuentas.indexOf(optCuenta.get()) != -1) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage(getTranslation("card.errorFindAccount")); fallo = true; }
+			if(EnumTarjeta.toTipo(rdGroup.getValue()) == EnumTarjeta.Debito && !_tarService.findByCuenta(optCuenta.get()).isEmpty()) { cmbCuentas.getElement().setAttribute("invalid", ""); cmbCuentas.setErrorMessage(getTranslation("card.errorExist")); fallo = true; }
+		}
+		
+		if(txtPin.getValue().length() != 4) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage(getTranslation("card.errorPin")); fallo = true; }
+		if(!txtPin.getValue().matches("\\d{4}")) { txtPin.getElement().setAttribute("invalid", ""); txtPin.setErrorMessage(getTranslation("card.errorPinNumeric")); fallo = true; }
+		return fallo;
+	}
 
 	public Registration addUpdateListener(ComponentEventListener<UpdateEvent> listener) {
 	        return addListener(UpdateEvent.class, listener);
